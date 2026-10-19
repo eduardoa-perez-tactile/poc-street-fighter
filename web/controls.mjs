@@ -129,7 +129,11 @@ export function installControls(canvas, queue) {
   window.addEventListener('blur', () => { remapHeld.clear(); queue.reset(); bridge.suspend(); });
   document.addEventListener('visibilitychange', () => { if (document.hidden) bridge.suspend(); });
   fullscreenSheet.querySelector('#sf-fullscreen').onclick = async () => {
-    try { if (document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); fullscreenSheet.close(); canvas.focus(); } catch { fullscreenSheet.querySelector('#sf-fullscreen-status').textContent = 'Fullscreen is unavailable. Use BACK to return.'; }
+    // Close the modal first: removing a top-layer dialog after entering
+    // fullscreen can make Chrome immediately leave fullscreen again.
+    fullscreenSheet.close();
+    try { if (document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); canvas.focus(); }
+    catch { fullscreenSheet.showModal(); fullscreenSheet.querySelector('#sf-fullscreen-status').textContent = 'Fullscreen is unavailable. Use BACK to return.'; wake(); }
   };
   return {
     hidden: () => document.hidden || dialog.open || fullscreenSheet.open,
