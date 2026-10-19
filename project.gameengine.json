@@ -6,7 +6,7 @@
     "android": "com.tactile.poc.streetfighter",
     "web": "com.tactile.poc.streetfighter"
   },
-  "version": "0.2.0",
+  "version": "0.3.0",
   "sim": {
     "dt": 0.016666667,
     "maxStepsPerFrame": 5,
@@ -54,7 +54,7 @@
     "orientation": "landscape"
   },
   "text": {
-    "defaultFont": "fonts/NotoSans-Regular"
+    "defaultFont": "fonts/PixelifySans-Bold"
   },
   "bundles": [
     {

@@ -1,0 +1,138 @@
+{
+  "$schemaVersion": 1,
+  "guid": "257ff22d-4468-4075-a7ae-d8ee34e528b4",
+  "name": "alpha-volume",
+  "title": "Alpha volume",
+  "kind": "widget",
+  "root": "root",
+  "nodes": {
+    "root": {
+      "type": "element",
+      "name": "Alpha volume",
+      "style": {
+        "dir": "row",
+        "pad": [
+          3,
+          14,
+          3,
+          44
+        ],
+        "align": "center",
+        "radius": 0.01,
+        "gap": 10,
+        "h": 44
+      },
+      "children": [
+        "volume_cursor",
+        "volume_label",
+        "volume_down",
+        "volume_value",
+        "volume_up"
+      ]
+    },
+    "volume_cursor": {
+      "type": "label",
+      "name": "Label",
+      "text": ">",
+      "style": {
+        "fontSize": 24,
+        "color": "#fff3b0ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": 22,
+        "h": 38,
+        "textAlign": "center",
+        "position": "anchored",
+        "anchor": [
+          0,
+          0.5
+        ],
+        "pivot": [
+          0,
+          0.5
+        ],
+        "offset": [
+          14,
+          0
+        ]
+      },
+      "show": "active"
+    },
+    "volume_label": {
+      "type": "label",
+      "name": "Label",
+      "text": "",
+      "style": {
+        "fontSize": 25,
+        "color": "#fff3b0ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": 0,
+        "grow": 1,
+        "h": "100%",
+        "fitMin": 15
+      },
+      "property": "label"
+    },
+    "volume_down": {
+      "type": "use",
+      "doc": "alpha-arrow",
+      "key": "down",
+      "props": {
+        "label": "<"
+      }
+    },
+    "volume_value": {
+      "type": "label",
+      "name": "Label",
+      "text": "",
+      "style": {
+        "fontSize": 22,
+        "color": "#fff3b0ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": 90,
+        "h": "100%",
+        "textAlign": "center"
+      },
+      "property": "value"
+    },
+    "volume_up": {
+      "type": "use",
+      "doc": "alpha-arrow",
+      "key": "up",
+      "props": {
+        "label": ">"
+      }
+    }
+  },
+  "transition": {
+    "type": "instant"
+  },
+  "properties": {
+    "label": {
+      "type": "text",
+      "default": "MUSIC VOLUME"
+    },
+    "value": {
+      "type": "text",
+      "default": "60%"
+    },
+    "active": {
+      "type": "yesno",
+      "default": false,
+      "poses": {
+        "yes": {
+          "set": {
+            "root": {
+              "bg": "#f04b67ff"
+            }
+          }
+        }
+      }
+    }
+  }
+}

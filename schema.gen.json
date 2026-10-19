@@ -476,6 +476,145 @@
       "package": "StreetFighter"
     },
     {
+      "name": "MenuIntent",
+      "kind": "event",
+      "sim": true,
+      "fields": [
+        {
+          "name": "action",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "value",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "id",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "screen",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        }
+      ],
+      "package": "StreetFighter"
+    },
+    {
+      "name": "MenuState",
+      "kind": "resource",
+      "sim": true,
+      "fields": [
+        {
+          "name": "screen",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "cursor",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "returnScreen",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "returnCursor",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "lastIntent",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "lastPhase",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1,
+          "default": 99
+        },
+        {
+          "name": "music",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1,
+          "default": 60
+        },
+        {
+          "name": "sfx",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1,
+          "default": 70
+        },
+        {
+          "name": "browserAvailable",
+          "kind": "bool",
+          "scalar": "u8",
+          "lanes": 1
+        },
+        {
+          "name": "browserRequest",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "browserAction",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "keyboard",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "pad",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "axis",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "previous",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "repeat",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        }
+      ],
+      "package": "StreetFighter"
+    },
+    {
       "name": "Projectile",
       "kind": "component",
       "sim": true,

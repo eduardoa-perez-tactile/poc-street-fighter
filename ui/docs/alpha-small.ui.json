@@ -1,0 +1,67 @@
+{
+  "$schemaVersion": 1,
+  "guid": "8c133d69-a531-423a-9009-05de6cb64394",
+  "name": "alpha-small",
+  "title": "Alpha small",
+  "kind": "widget",
+  "root": "root",
+  "nodes": {
+    "root": {
+      "type": "element",
+      "name": "Alpha small",
+      "style": {
+        "dir": "row",
+        "pad": [
+          3,
+          8,
+          3,
+          8
+        ],
+        "align": "center",
+        "bg": "#19126788",
+        "radius": 0,
+        "justify": "center",
+        "h": 30
+      },
+      "children": [
+        "small_label"
+      ]
+    },
+    "small_label": {
+      "type": "label",
+      "name": "Label",
+      "text": "",
+      "style": {
+        "fontSize": 16,
+        "color": "#fff3b0ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "fitMin": 10,
+        "w": "100%",
+        "h": "100%",
+        "textAlign": "center"
+      },
+      "property": "label"
+    }
+  },
+  "transition": {
+    "type": "instant"
+  },
+  "behaviour": "button",
+  "properties": {
+    "label": {
+      "type": "text",
+      "default": "PAUSE"
+    }
+  },
+  "states": {
+    "pressed": {
+      "set": {
+        "root": {
+          "bg": "#f04b67ff"
+        }
+      }
+    }
+  }
+}

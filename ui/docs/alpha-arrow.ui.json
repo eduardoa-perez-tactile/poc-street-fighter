@@ -1,0 +1,60 @@
+{
+  "$schemaVersion": 1,
+  "guid": "423794a6-0c4d-4b31-9ad5-4f56c5b6e2ef",
+  "name": "alpha-arrow",
+  "title": "Alpha arrow",
+  "kind": "widget",
+  "root": "root",
+  "nodes": {
+    "root": {
+      "type": "element",
+      "name": "Alpha arrow",
+      "style": {
+        "dir": "row",
+        "pad": 0,
+        "align": "center",
+        "radius": 12,
+        "w": 40,
+        "h": 36
+      },
+      "children": [
+        "arrow_text"
+      ]
+    },
+    "arrow_text": {
+      "type": "label",
+      "name": "Label",
+      "text": "",
+      "style": {
+        "fontSize": 27,
+        "color": "#fff3b0ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": "100%",
+        "h": "100%",
+        "textAlign": "center"
+      },
+      "property": "label"
+    }
+  },
+  "transition": {
+    "type": "instant"
+  },
+  "behaviour": "button",
+  "properties": {
+    "label": {
+      "type": "text",
+      "default": ">"
+    }
+  },
+  "states": {
+    "pressed": {
+      "set": {
+        "root": {
+          "bg": "#100b2f88"
+        }
+      }
+    }
+  }
+}

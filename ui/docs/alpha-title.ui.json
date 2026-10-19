@@ -1,0 +1,94 @@
+{
+  "$schemaVersion": 1,
+  "guid": "0bd85adc-c503-4090-a7fd-5cc8f1d4084d",
+  "name": "alpha-title",
+  "title": "Alpha title",
+  "kind": "view",
+  "root": "root",
+  "nodes": {
+    "root": {
+      "type": "element",
+      "name": "Alpha title",
+      "style": {
+        "w": "100%",
+        "h": "100%",
+        "pad": [
+          30,
+          44,
+          30,
+          44
+        ],
+        "bg": "#191267ff",
+        "image": "ui/alpha-backdrop",
+        "fit": "cover",
+        "align": "center",
+        "justify": "center",
+        "gap": 12
+      },
+      "children": [
+        "wordmark",
+        "title_tag",
+        "press_start",
+        "title_hint"
+      ]
+    },
+    "wordmark": {
+      "type": "element",
+      "name": "Element",
+      "children": [],
+      "style": {
+        "pad": 8,
+        "image": "ui/street-fighter-wordmark",
+        "w": 920,
+        "h": 350,
+        "fit": "contain"
+      }
+    },
+    "title_tag": {
+      "type": "label",
+      "name": "Label",
+      "text": "THE WORLD WARRIOR",
+      "style": {
+        "fontSize": 19,
+        "color": "#fff3b0ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "h": 28,
+        "textAlign": "center"
+      }
+    },
+    "press_start": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "press-start",
+      "props": {
+        "label": "PRESS START",
+        "active": true
+      },
+      "style": {
+        "w": 420
+      }
+    },
+    "title_hint": {
+      "type": "label",
+      "name": "Label",
+      "text": "ENTER / START TO CONTINUE",
+      "style": {
+        "fontSize": 13,
+        "color": "#b8bbffff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "h": 22,
+        "textAlign": "center"
+      }
+    }
+  },
+  "view": {
+    "behaviour": "screen"
+  },
+  "transition": {
+    "type": "instant"
+  }
+}

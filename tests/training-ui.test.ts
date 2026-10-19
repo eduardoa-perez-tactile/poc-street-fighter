@@ -15,12 +15,14 @@ for (const [name, width, height] of [['normal', 1152, 672], ['compact', 1024, 76
       const fighter = world.get(e, Fighter);
       return input.worldToScreen([fighter.x / 100, (216 - fighter.y) / 100])[1];
     });
-    for (const button of [dummy, reset, boxes, pause]) {
+    for (const button of [dummy, reset, boxes]) {
       expect(button.x).toBeGreaterThanOrEqual(0);
       expect(button.y).toBeGreaterThan(Math.max(...feet));
       expect(button.x + button.width).toBeLessThanOrEqual(width);
       expect(button.y + button.height).toBeLessThanOrEqual(height);
     }
+    expect(pause.x + pause.width).toBeLessThanOrEqual(width);
+    expect(pause.y).toBeGreaterThanOrEqual(0);
     render.expectScreenshot(`training-${name}`, { width, height });
     await ui.press('dummy'); await step(2);
     expect(world.resource(TrainingState).dummyMode).toBe(1);

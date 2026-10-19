@@ -18,7 +18,7 @@
           18
         ],
         "align": "center",
-        "bg": "#07101cdd",
+        "bg": "#191267c9",
         "radius": 0,
         "gap": 16,
         "w": "100%",
@@ -54,7 +54,7 @@
       "style": {
         "fontSize": 13,
         "fitMin": 10,
-        "color": "#ffcf4dff",
+        "color": "#fff3b0ff",
         "w": "100%",
         "h": 18
       }
@@ -67,7 +67,7 @@
       "style": {
         "fontSize": 11,
         "fitMin": 9,
-        "color": "#d3e0eaff",
+        "color": "#b8bbffff",
         "w": "100%",
         "h": 18,
         "textAlign": "left"
@@ -79,72 +79,55 @@
       "children": [
         "dummy",
         "reset_training",
-        "boxes",
-        "training_pause"
+        "boxes"
       ],
       "style": {
         "pad": 0,
         "dir": "row",
         "gap": 8,
-        "w": 620,
+        "w": 524,
         "justify": "end",
         "h": 38
       }
     },
     "dummy": {
       "type": "use",
-      "doc": "fight-button",
+      "doc": "alpha-small",
       "key": "dummy",
       "props": {
         "label": {
           "property": "dummyLabel"
-        },
-        "compact": true
+        }
       },
       "style": {
-        "w": 160,
-        "h": 38
+        "w": 190,
+        "h": 30
       }
     },
     "reset_training": {
       "type": "use",
-      "doc": "fight-button",
+      "doc": "alpha-small",
       "key": "reset-training",
       "props": {
-        "label": "RESET",
-        "compact": true
+        "label": "RESET"
       },
       "style": {
-        "w": 160,
-        "h": 38
+        "w": 120,
+        "h": 30
       }
     },
     "boxes": {
       "type": "use",
-      "doc": "fight-button",
+      "doc": "alpha-small",
       "key": "boxes",
       "props": {
         "label": {
           "property": "boxesLabel"
-        },
-        "compact": true
+        }
       },
       "style": {
-        "w": 150,
-        "h": 38
-      }
-    },
-    "training_pause": {
-      "type": "use",
-      "doc": "fight-button",
-      "key": "pause",
-      "props": {
-        "label": "PAUSE",
-        "compact": true
-      },
-      "style": {
-        "w": 110,
-        "h": 38
+        "w": 180,
+        "h": 30
       }
     }
   },

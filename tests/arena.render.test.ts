@@ -1,6 +1,6 @@
 import { Sprite } from '@gameengine/runtime';
 import { expect, renderTest, worldTest } from '@gameengine/test';
-import { Fighter, MatchIntent, MatchState, TrainingIntent } from '../src/schema.gen.ts';
+import { Fighter, MatchIntent, MatchState, MenuIntent, MenuState, TrainingIntent } from '../src/schema.gen.ts';
 import { ArrangeFight, FinishFight } from '../src/combat/fight.cheats.ts';
 
 for (const [name, width, height] of [['classic',1152,672],['wide',1600,900],['ultrawide',2100,900],['compact',1024,768]] as const) {
@@ -28,8 +28,17 @@ for (const [name, width, height] of [['classic',1152,672],['wide',1600,900],['ul
 // all panel states and health-fill pipelines without unreplayable direct world mutation.
 worldTest('port pipeline coverage', async ({ loaded, step, input, cheat, world }) => {
   await loaded(); await step(2);
-  input.emit(MatchIntent,{action:13}); await step(5);
-  input.emit(MatchIntent,{action:14}); await step(2);
+  const menu = async (action: number, value = 0) => {
+    const state = world.resource(MenuState);
+    input.emit(MenuIntent, { action, value, id: state.lastIntent + 1, screen: state.screen });
+    await step(5);
+  };
+  await menu(0); // Title -> main menu.
+  await menu(7, 2); // Fixed matchup setup.
+  await menu(1);
+  await menu(7, 5); // Options; actual audio changes are recorded inputs too.
+  await menu(4);
+  await menu(1);
   input.emit(MatchIntent,{action:8}); await step(2);
   input.action('start'); await step(95);
   await cheat(ArrangeFight,{distance:48});
@@ -38,6 +47,8 @@ worldTest('port pipeline coverage', async ({ loaded, step, input, cheat, world }
   input.action('p1.down',0); await step(2); input.action('p1.hp'); await step(16);
   input.action('p1.hp',0); input.action('p1.right',0); await step(60);
   input.emit(MatchIntent,{action:2}); await step(12);
+  await menu(7, 4); // Move list, then return to the paused arena.
+  await menu(1);
   input.emit(MatchIntent,{action:3}); await step(12);
   await cheat(FinishFight,{winner:0}); await step(50);
   expect(world.resource(MatchState).phase).toBe(2);

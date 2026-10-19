@@ -95,7 +95,14 @@ Track asset provenance when importing; no license file was present in the inspec
 
 ## Working state
 
-Version 0.2 implements the complete follow-up roadmap: local versus, solo CPU (three difficulties),
+The UI redesign follows the Street Fighter Alpha 2 reference supplied by the user:
+`https://www.gameuidatabase.com/gameData.php?id=1806`. Use its arcade hierarchy and visual
+language for title, mode selection, fixed Ryu/Ken setup, pause, move help, options and results.
+Keep the battle HUD compact. Expose existing features only; no roster grid, stage selector,
+super meter or extra modes. Keyboard, controller and pointer must reach the same menu actions.
+Browser remapping/fullscreen belong in Options, without a permanent utility toolbar.
+
+Version 0.3 retains the complete follow-up roadmap: local versus, solo CPU (three difficulties),
 and training; guards, crouch/air normals, sweeps, wakeup, throws/tech, three specials, buffered
 inputs and first-to-two matches. Fifty-two additional inspected source poses accompany the new
 moves. Native and browser use the same deterministic fighting rules; CPU decisions use player
@@ -109,12 +116,14 @@ controller hardware still requires human playtesting. AI has no hidden health/da
 
 Controls: P1 WASD + FGH/VBN, R throw; P2 arrows + JKL/UIO, P throw. Hold back to block, down-back
 for lows; air attacks are overheads. Hadouken: down/down-forward/forward + punch; dragon punch:
-forward/down/down-forward + punch; hurricane: down/down-back/back + kick. Enter starts/rematches;
-Escape pauses/resumes and closes settings before affecting the fight.
+forward/down/down-forward + punch; hurricane: down/down-back/back + kick. Enter / pad A confirms
+the focused menu row; arrows / WASD / pad directions select, Escape / pad B goes back.
+Escape / pad Start pauses during a fight. Pause returns to the same fight after move help or Options.
 
 Native/web tests, reviewed screen-fit goldens, recorded replay and actual Chrome WebGPU QA gate
-delivery. Fresh cooked arena texture residency is 9.56 MB against the 52 MB group budget; the
-coverage replay peaks at 16 draws against 30, with zero pipelines created during play. A paused
+delivery. Fresh cooked arena texture residency is 15.77 MB against the 52 MB group budget; the
+coverage replay peaks at 15 draws against 30, with zero pipelines created during play and no
+GC pauses over 4 ms. A paused
 1800-step solo capture on this Mac measured sim p95 0.167 ms, max 0.488 ms and zero hitch steps;
 process memory was 154 MB including the desktop engine. These are not phone GPU/frame timings.
 

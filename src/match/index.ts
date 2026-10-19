@@ -1,5 +1,8 @@
 import { defineSystem, write } from '@gameengine/runtime';
-import { CombatInput, MatchIntent, MatchState } from '../schema.gen.ts';
+import { CombatInput, MatchIntent, MatchState, MenuState } from '../schema.gen.ts';
+
+import { closeOptions, openOptions, showMenu } from './menu.ts';
+export { MenuNavigation, MENU_ACTION, MENU_SCREEN } from './menu.ts';
 
 export const MATCH_PHASE = Object.freeze({ title: 0, playing: 1, roundResult: 2, paused: 3, intro: 4, matchResult: 5 });
 export const INTRO_STEPS = 90;
@@ -7,22 +10,22 @@ export const RESULT_STEPS = 150;
 
 export const MatchCommands = defineSystem({
   name: 'MatchCommands', after: ['CombatControls'], runOn: [MatchIntent],
-  resources: [write(MatchState), write(CombatInput)],
+  resources: [write(MatchState), write(CombatInput), write(MenuState)],
   run(ctx) {
     const m = ctx.resource(MatchState), controls = ctx.resource(CombatInput);
     let restart = false;
     for (const intent of ctx.events.read(MatchIntent)) {
       const action = intent.action, phase = m.phase[0]!;
-      if (action === 14) { m.settingsOpen[0] = 0; continue; }
+      if (action === 14) { closeOptions(ctx.resource(MenuState), m); continue; }
       if (m.settingsOpen[0]) continue;
-      if (action === 13 && (phase === 0 || phase === 3)) { m.settingsOpen[0] = 1; continue; }
+      if (action === 13 && (phase === 0 || phase === 3)) { openOptions(ctx.resource(MenuState), m); continue; }
       if (phase === 0 && action >= 7 && action <= 9) m.mode[0] = action - 7;
       else if (phase === 0 && action >= 10 && action <= 12) m.difficulty[0] = action - 10;
       else if ((action === 0 && phase === 0) || (action === 1 && phase === 5) || (action === 5 && phase === 3)) restart = true;
       else if (action === 2 && (phase === 1 || phase === 4)) { m.resumePhase[0] = phase; m.phase[0] = 3; }
       else if (action === 3 && phase === 3) m.phase[0] = m.resumePhase[0]!;
       else if (action === 6 && (phase === 3 || phase === 5)) {
-        m.phase[0] = 0; m.phaseTicks[0] = 0; m.hitStop[0] = 0;
+        m.phase[0] = 0; m.phaseTicks[0] = 0; m.hitStop[0] = 0; showMenu(ctx.resource(MenuState), 1);
       }
     }
     if (!restart) return;

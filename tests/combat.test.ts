@@ -284,8 +284,8 @@ worldTest('combat: rendered active punch and damage begin on the same simulation
 
 worldTest('combat: Enter and Escape retain independent key edges while held together', async ({ world, step, input, loaded }) => {
   await loaded(); await step(2);
-  world.setResource(MatchState, { mode: 1 });
-  input.key(38, true); await step(92); expect(world.resource(MatchState).phase).toBe(1);
+  await startLocal(world, input, step);
+  input.key(38, true); await step(1); expect(world.resource(MatchState).phase).toBe(1);
   input.key(39, true); await step(2); expect(world.resource(MatchState).phase).toBe(3);
   input.key(39, false); await step(1);
   input.key(39, true); await step(2); expect(world.resource(MatchState).phase).toBe(1);

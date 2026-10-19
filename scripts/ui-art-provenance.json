@@ -1,0 +1,38 @@
+{
+  "fonts": [
+    {
+      "file": "assets/fonts/Anton-Regular.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/47d54ca1ebb14fd864695f1d39dc734f39017c33/ofl/anton/Anton-Regular.ttf",
+      "sha256": "a4ba3a92350ebb031da0cb47630ac49eb265082ca1bc0450442f4a83ab947cab"
+    },
+    {
+      "file": "assets/fonts/Anton-OFL.txt",
+      "source": "https://raw.githubusercontent.com/google/fonts/47d54ca1ebb14fd864695f1d39dc734f39017c33/ofl/anton/OFL.txt",
+      "sha256": "9267baca92b7a7ce9db6dd9e6cc32c9fe3ddf1ac96e421d5f87c5746b9089d6a",
+      "sourceSha256": "ee67e6ee22790b7929f1a3769ca2801d565c64b5a9096942c1adf5596de9c9e4",
+      "normalization": "Line endings normalized to LF and trailing horizontal whitespace removed; legal text unchanged."
+    },
+    {
+      "file": "assets/fonts/PixelifySans-Bold.ttf",
+      "source": "https://raw.githubusercontent.com/eifetx/Pixelify-Sans/39df74aba80df8157546034b878e8be1eb565ced/fonts/ttf/PixelifySans-Bold.ttf",
+      "sha256": "3c3c203a3f3b862b944e836e4ec0fce201eddc1952cbca0d682e382d668b293c"
+    },
+    {
+      "file": "assets/fonts/PixelifySans-OFL.txt",
+      "source": "https://raw.githubusercontent.com/eifetx/Pixelify-Sans/39df74aba80df8157546034b878e8be1eb565ced/OFL.txt",
+      "sha256": "62247d172c6173c3deaa58dc9e5e77d7942977048281a40e68fd766c4168e582",
+      "sourceSha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+      "normalization": "Line endings normalized to LF and trailing horizontal whitespace removed; legal text unchanged."
+    }
+  ],
+  "license": "SIL Open Font License 1.1; license notices included beside each font.",
+  "art": {
+    "generator": "scripts/create-ui-art.py",
+    "description": "Original code-drawn diagonal pattern, focus slash and Anton typographic wordmark; fighter portraits crop existing imported source idle artwork.",
+    "referenceImagesCopied": false
+  },
+  "glyphs": {
+    "pixelify": "ASCII, middle dot, em dash, ellipsis, multiplication; no Unicode directional arrows.",
+    "anton": "ASCII and Unicode directional arrows."
+  }
+}

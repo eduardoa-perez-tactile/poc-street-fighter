@@ -1,5 +1,6 @@
 import { expect, worldTest, renderTest } from '@gameengine/test';
-import { CombatInput, Fighter, MatchIntent, MatchState } from '../src/schema.gen.ts';
+import { press } from './ui-flow.helpers.ts';
+import { CombatInput, Fighter, MatchIntent, MatchState, MenuState } from '../src/schema.gen.ts';
 
 worldTest('match flow: round intro is timed and pause preserves its countdown', async ({ input, loaded, step, world }) => {
   await loaded();
@@ -57,57 +58,6 @@ worldTest('match flow: a draw repeats its round and awards neither player', asyn
   expect(world.resource(MatchState).p2Wins).toBe(0);
 });
 
-renderTest('match menus select modes difficulty and adjust saved audio settings', async ({ input, loaded, step, world, render, ui, audio }) => {
-  input.view(1152, 672, 1); await loaded(); await step(2);
-  render.stats({ width: 1152, height: 672 });
-  await ui.press('training'); await step(2);
-  expect(world.resource(MatchState).mode).toBe(2);
-  render.stats({ width: 1152, height: 672 });
-  await ui.press('difficulty'); await step(2);
-  expect(world.resource(MatchState).difficulty).toBe(2);
-  render.stats({ width: 1152, height: 672 });
-  await ui.press('settings'); await step(2);
-  render.stats({ width: 1152, height: 672 });
-  const musicBefore = audio.status().buses.Music!;
-  await ui.press('music-down'); await step(2);
-  expect(audio.status().buses.Music!).toBeLessThan(musicBefore);
-  render.stats({ width: 1152, height: 672 });
-  const sfxBefore = audio.status().buses.SFX!;
-  await ui.press('sfx-down'); await step(2);
-  expect(audio.status().buses.SFX!).toBeLessThan(sfxBefore);
-  render.stats({ width: 1152, height: 672 });
-  await ui.press('close-settings'); await step(2);
-  render.stats({ width: 1152, height: 672 });
-  await ui.press('start'); await step(2);
-  expect(world.resource(MatchState).phase).toBe(1);
-});
-
-renderTest('settings modal captures Enter and Escape without starting or resuming a fight', async ({ input, loaded, step, world, render, ui }) => {
-  input.view(1152, 672, 1); await loaded(); await step(2);
-  render.stats({ width: 1152, height: 672 });
-  await ui.press('settings'); await step(2);
-  expect(world.resource(MatchState).settingsOpen).toBe(true);
-  input.key(38, true); await step(2); input.key(38, false); await step(1);
-  expect(world.resource(MatchState).phase).toBe(0);
-  expect(world.resource(MatchState).settingsOpen).toBe(true);
-  input.key(39, true); await step(2); input.key(39, false); await step(1);
-  expect(world.resource(MatchState).phase).toBe(0);
-  expect(world.resource(MatchState).settingsOpen).toBe(false);
-  render.stats({ width: 1152, height: 672 });
-  await ui.press('start'); await step(92);
-  input.key(39, true); await step(2); input.key(39, false); await step(1);
-  expect(world.resource(MatchState).phase).toBe(3);
-  render.stats({ width: 1152, height: 672 });
-  await ui.press('settings'); await step(2);
-  const remaining = world.resource(MatchState).remaining;
-  input.key(38, true); await step(2); input.key(38, false); await step(1);
-  expect(world.resource(MatchState).phase).toBe(3);
-  input.key(39, true); await step(2); input.key(39, false); await step(1);
-  expect(world.resource(MatchState).settingsOpen).toBe(false);
-  expect(world.resource(MatchState).phase).toBe(3);
-  expect(world.resource(MatchState).remaining).toBe(remaining);
-});
-
 worldTest('match flow: held movement survives the automatic next round without another input edge', async ({ input, loaded, step, world }) => {
   await loaded();
   input.emit(MatchIntent, { action: 8 }); await step(2);
@@ -127,4 +77,33 @@ worldTest('match flow: held movement survives the automatic next round without a
   input.action('p1.right', 0); await step(2);
   const stopped = world.get(player, Fighter).x; await step(10);
   expect(world.get(player, Fighter).x).toBe(stopped);
+});
+
+renderTest('arcade menus select difficulty training and decrease or increase audio with pointer arrows', async (c) => {
+  c.input.view(1152, 672, 1); await c.loaded(); await c.step(2);
+  await press(c, 'press-start'); await press(c, 'solo'); await press(c, 'difficulty');
+  expect(c.world.resource(MatchState).difficulty).toBe(2);
+  await press(c, 'back'); await press(c, 'options');
+  const music = c.world.resource(MenuState).music;
+  await press(c, 'music.down'); expect(c.world.resource(MenuState).music).toBe(Math.max(0, music - 10));
+  await press(c, 'music.up'); expect(c.world.resource(MenuState).music).toBe(music);
+  const effects = c.world.resource(MenuState).sfx;
+  await press(c, 'effects.down'); expect(c.world.resource(MenuState).sfx).toBe(Math.max(0, effects - 10));
+  await press(c, 'effects.up'); expect(c.world.resource(MenuState).sfx).toBe(effects);
+  await press(c, 'back'); await press(c, 'training'); await press(c, 'fight'); await c.step(92);
+  expect(c.world.resource(MatchState).phase).toBe(1);
+});
+renderTest('options capture Enter and Escape without starting or resuming a fight', async (c) => {
+  c.input.view(1152, 672, 1); await c.loaded(); await c.step(2);
+  await press(c, 'press-start'); await press(c, 'options');
+  c.input.key(38, true); await c.step(2); c.input.key(38, false); await c.step(1);
+  expect(c.world.resource(MatchState).phase).toBe(0); expect(c.world.resource(MenuState).screen).toBe(5);
+  c.input.key(39, true); await c.step(2); c.input.key(39, false); await c.step(1);
+  expect(c.world.resource(MenuState).screen).toBe(1);
+  await press(c, 'local'); await press(c, 'fight'); await c.step(92); await press(c, 'pause'); await press(c, 'options');
+  const remaining = c.world.resource(MatchState).remaining;
+  c.input.key(38, true); await c.step(2); c.input.key(38, false); await c.step(1);
+  expect(c.world.resource(MatchState).phase).toBe(3);
+  c.input.key(39, true); await c.step(2); c.input.key(39, false); await c.step(1);
+  expect(c.world.resource(MenuState).screen).toBe(3); expect(c.world.resource(MatchState).remaining).toBe(remaining);
 });

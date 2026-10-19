@@ -52,13 +52,10 @@ export function installControls(canvas, queue) {
   let settings;
   try { settings = sanitizeSettings(JSON.parse(localStorage.getItem(SETTINGS_KEY))); } catch { settings = sanitizeSettings(null); }
   const style = document.createElement('style');
-  style.textContent = `#gameengine-canvas{height:calc(100% - 34px)}#sf-tools{position:fixed;bottom:0;left:0;right:0;height:34px;display:flex;align-items:center;justify-content:center;gap:16px;background:#101924;color:#e6edf5;font:13px system-ui;z-index:4}#sf-tools button{padding:4px 12px;font:inherit}#sf-controls{width:min(720px,90vw);max-height:85vh;box-sizing:border-box;overflow:auto;border:1px solid #e8bb4e;border-radius:8px;background:#101924;color:#f1eee5;padding:24px;font:15px system-ui;z-index:8}#sf-controls::backdrop{background:#000b}#sf-controls h2{margin:0 0 12px;color:#ffce51}#sf-controls p{color:#bfccda}#sf-controls .sf-maps{display:grid;grid-template-columns:1fr 1fr;gap:24px}#sf-controls label{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:6px 0}#sf-controls button,#sf-controls select{font:inherit;padding:5px 12px;background:#233448;color:#fff;border:1px solid #586c82;border-radius:4px}#sf-controls button:focus{outline:2px solid #ffce51}#sf-controls .sf-actions{display:flex;gap:12px;margin-top:20px}#sf-controls [role=status]{min-height:20px;color:#ffce51}@media(max-width:600px){#sf-controls .sf-maps{grid-template-columns:1fr}#sf-pad-status{display:none}}`;
+  style.textContent = `@font-face{font-family:SFMenu;src:url('./PixelifySans-Bold.ttf')}#gameengine-canvas{height:100%}#sf-controls,#sf-fullscreen-sheet{width:min(760px,92vw);max-height:88vh;box-sizing:border-box;overflow:auto;border:3px solid #fff3b0;border-radius:0;background:#292cb4;color:#fff3b0;padding:24px;font:18px SFMenu,monospace;box-shadow:10px 10px 0 #100b2f}#sf-controls::backdrop,#sf-fullscreen-sheet::backdrop{background:#100b2fcc}#sf-controls h2,#sf-fullscreen-sheet h2{margin:0 0 12px;color:#ffd34d;font-size:32px}#sf-controls p,#sf-fullscreen-sheet p{line-height:1.4}#sf-controls .sf-maps{display:grid;grid-template-columns:1fr 1fr;gap:24px}#sf-controls label{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:6px 0}#sf-controls button,#sf-controls select,#sf-fullscreen-sheet button{font:inherit;padding:6px 12px;background:#191267;color:#fff3b0;border:2px solid #fff3b0;border-radius:0}#sf-controls button:focus-visible,#sf-controls select:focus-visible,#sf-fullscreen-sheet button:focus-visible{outline:3px solid #f04b67;outline-offset:2px}#sf-controls .sf-actions{display:flex;gap:12px;margin-top:20px;position:sticky;bottom:-24px;padding:12px 0;background:#292cb4}#sf-controls [role=status]{min-height:24px;color:#ffd34d}#sf-fullscreen-sheet button{margin:8px}@media(max-width:600px){#sf-controls .sf-maps{grid-template-columns:1fr}#sf-controls,#sf-fullscreen-sheet{padding:16px}}`;
   document.head.append(style);
-  const tools = document.createElement('nav'); tools.id = 'sf-tools'; tools.setAttribute('aria-label', 'Browser game controls');
-  tools.innerHTML = '<button type="button" id="sf-open-controls">CONTROLS</button><span id="sf-pad-status">Controllers: 0</span><button type="button" id="sf-fullscreen">FULLSCREEN</button>';
-  document.body.append(tools);
   const dialog = document.createElement('dialog'); dialog.id = 'sf-controls';
-  dialog.innerHTML = '<h2>CONTROLS</h2><p>Choose a key to remap it. Audio and game options are in the in-game SETTINGS menu. The fight waits while this panel is open.</p><div class="sf-maps"></div><label>Stick deadzone<input id="sf-deadzone" aria-label="Stick deadzone" type="range" min="0.1" max="0.5" step="0.05"></label><p>Standard controllers: A/X/LB punches, B/Y/RB kicks, D-pad or left stick moves, START pauses, Back/Select throws. Controller seats stay assigned until unplugged.</p><div id="sf-remap-status" role="status" aria-live="polite"></div><div class="sf-actions"><button type="button" id="sf-reset-controls">RESET DEFAULTS</button><button type="button" id="sf-close-controls">DONE</button></div>';
+  dialog.innerHTML = '<h2>CONTROL CONFIG</h2><p>Select an action, then press its new key.</p><div class="sf-maps"></div><label>Stick deadzone<input id="sf-deadzone" aria-label="Stick deadzone" type="range" min="0.1" max="0.5" step="0.05"></label><p>Standard controllers: A/X/LB punches, B/Y/RB kicks, D-pad or left stick moves, START pauses, Back/Select throws. Controller seats stay assigned until unplugged.</p><div id="sf-remap-status" role="status" aria-live="polite"></div><div class="sf-actions"><button type="button" id="sf-reset-controls">RESET DEFAULTS</button><button type="button" id="sf-close-controls">DONE</button></div>';
   document.body.append(dialog);
   let pending, padCount = -1;
   const bridge = new GamepadBridge(event => queue.push(event));
@@ -83,7 +80,20 @@ export function installControls(canvas, queue) {
     dialog.querySelector('#sf-deadzone').value = String(settings.deadzone);
   }
   const wake = () => document.dispatchEvent(new Event('sf-controls-visibility'));
-  tools.querySelector('#sf-open-controls').onclick = () => { queue.reset(); dialog.showModal(); render(); wake(); };
+  const fullscreenSheet = document.createElement('dialog'); fullscreenSheet.id = 'sf-fullscreen-sheet';
+  fullscreenSheet.innerHTML = '<h2>FULLSCREEN</h2><p>Use the full screen for your next fight.</p><button id="sf-fullscreen">ENTER FULLSCREEN</button><button id="sf-fullscreen-close">BACK</button><p id="sf-fullscreen-status" role="status"></p>';
+  document.body.append(fullscreenSheet);
+  const openControls = () => { if (dialog.open || fullscreenSheet.open) return; queue.reset(); dialog.showModal(); render(); wake(); };
+  const openFullscreen = () => { if (dialog.open || fullscreenSheet.open) return; queue.reset(); fullscreenSheet.querySelector('#sf-fullscreen').textContent = document.fullscreenElement ? 'EXIT FULLSCREEN' : 'ENTER FULLSCREEN'; fullscreenSheet.showModal(); wake(); };
+  Object.defineProperty(globalThis, '__sfBrowserOptions', { configurable: true, value: Object.freeze({ protocol: 1, controls: true, fullscreen: !!document.documentElement.requestFullscreen, get controllers() { return Math.max(0, padCount); } }) });
+  window.addEventListener('message', event => {
+    if (event.origin !== location.origin || !Array.from(document.querySelectorAll('iframe')).some(frame => frame.contentWindow === event.source)) return;
+    if (event.data?.type !== 'sf-browser-options-v1') return;
+    if (event.data.action === 'controls') openControls();
+    else if (event.data.action === 'fullscreen' && document.documentElement.requestFullscreen) openFullscreen();
+  });
+  fullscreenSheet.querySelector('#sf-fullscreen-close').onclick = () => fullscreenSheet.close();
+  fullscreenSheet.addEventListener('close', () => { canvas.focus(); wake(); });
   dialog.querySelector('#sf-close-controls').onclick = () => { dialog.close(); };
   dialog.addEventListener('close', () => { pending = undefined; canvas.focus(); wake(); });
   dialog.querySelector('#sf-reset-controls').onclick = () => { settings = sanitizeSettings(null); persist(); render(); status.textContent = 'Default controls restored.'; };
@@ -118,14 +128,18 @@ export function installControls(canvas, queue) {
   canvas.addEventListener('blur', () => { remapHeld.clear(); bridge.suspend(); });
   window.addEventListener('blur', () => { remapHeld.clear(); queue.reset(); bridge.suspend(); });
   document.addEventListener('visibilitychange', () => { if (document.hidden) bridge.suspend(); });
-  tools.querySelector('#sf-fullscreen').onclick = async () => {
-    try { if (document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); canvas.focus(); } catch { status.textContent = 'Fullscreen is unavailable in this browser.'; }
+  fullscreenSheet.querySelector('#sf-fullscreen').onclick = async () => {
+    // Close the modal first: removing a top-layer dialog after entering
+    // fullscreen can make Chrome immediately leave fullscreen again.
+    fullscreenSheet.close();
+    try { if (document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); canvas.focus(); }
+    catch { fullscreenSheet.showModal(); fullscreenSheet.querySelector('#sf-fullscreen-status').textContent = 'Fullscreen is unavailable. Use BACK to return.'; wake(); }
   };
   return {
-    hidden: () => document.hidden || dialog.open,
+    hidden: () => document.hidden || dialog.open || fullscreenSheet.open,
     poll() {
-      const count = bridge.poll(navigator.getGamepads?.() ?? [], settings, !dialog.open && !document.hidden && document.hasFocus() && document.activeElement === canvas);
-      if (count !== padCount) { padCount = count; tools.querySelector('#sf-pad-status').textContent = `Controllers: ${count}`; }
+      const count = bridge.poll(navigator.getGamepads?.() ?? [], settings, !dialog.open && !fullscreenSheet.open && !document.hidden && document.hasFocus() && document.activeElement === canvas);
+      padCount = count;
     },
   };
 }

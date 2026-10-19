@@ -1,0 +1,452 @@
+{
+  "$schemaVersion": 1,
+  "guid": "a989aaae-d1eb-4793-af46-c60b44ece06d",
+  "name": "alpha-moves",
+  "title": "Alpha moves",
+  "kind": "view",
+  "root": "root",
+  "nodes": {
+    "root": {
+      "type": "element",
+      "name": "Alpha moves",
+      "style": {
+        "w": "100%",
+        "h": "100%",
+        "pad": [
+          30,
+          44,
+          30,
+          44
+        ],
+        "bg": "#191267ff",
+        "image": "ui/alpha-backdrop",
+        "fit": "cover",
+        "align": "center",
+        "justify": "center",
+        "gap": 12
+      },
+      "children": [
+        "moves_heading",
+        "moves_character",
+        "moves_table",
+        "back",
+        "moves_hint"
+      ]
+    },
+    "moves_heading": {
+      "type": "label",
+      "name": "Label",
+      "text": "MOVE LIST",
+      "style": {
+        "fontSize": 36,
+        "color": "#ffd34dff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "h": 48,
+        "w": "100%",
+        "textAlign": "center"
+      }
+    },
+    "moves_character": {
+      "type": "label",
+      "name": "Label",
+      "text": "RYU / KEN  -  DEFAULT KEYS",
+      "style": {
+        "fontSize": 18,
+        "color": "#f04b67ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "h": 30,
+        "w": "100%",
+        "textAlign": "center"
+      }
+    },
+    "moves_table": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "move_movement",
+        "move_0",
+        "move_1",
+        "move_2",
+        "move_3",
+        "move_4",
+        "move_5"
+      ],
+      "style": {
+        "pad": [
+          6,
+          20,
+          6,
+          20
+        ],
+        "dir": "column",
+        "gap": 6,
+        "w": 920
+      }
+    },
+    "move_0": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "move_name_0",
+        "move_motion_0"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "row",
+        "align": "center",
+        "gap": 24,
+        "h": 42,
+        "w": "100%"
+      }
+    },
+    "move_name_0": {
+      "type": "label",
+      "name": "Label",
+      "text": "PUNCH / KICK",
+      "style": {
+        "fontSize": 17,
+        "color": "#ffd34dff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": 300,
+        "h": "100%",
+        "fitMin": 13
+      }
+    },
+    "move_motion_0": {
+      "type": "label",
+      "name": "Label",
+      "text": "P1: F G H / V B N    P2: J K L / U I O",
+      "style": {
+        "fontSize": 15,
+        "color": "#fff3b0ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": 0,
+        "grow": 1,
+        "h": "100%",
+        "fitMin": 11
+      }
+    },
+    "move_1": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "move_name_1",
+        "move_motion_1"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "row",
+        "align": "center",
+        "gap": 24,
+        "h": 42,
+        "w": "100%"
+      }
+    },
+    "move_name_1": {
+      "type": "label",
+      "name": "Label",
+      "text": "BLOCK / LOW BLOCK",
+      "style": {
+        "fontSize": 17,
+        "color": "#ffd34dff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": 300,
+        "h": "100%",
+        "fitMin": 13
+      }
+    },
+    "move_motion_1": {
+      "type": "label",
+      "name": "Label",
+      "text": "HOLD BACK / DOWN-BACK",
+      "style": {
+        "fontSize": 15,
+        "color": "#fff3b0ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": 0,
+        "grow": 1,
+        "h": "100%",
+        "fitMin": 11
+      }
+    },
+    "move_2": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "move_name_2",
+        "move_motion_2"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "row",
+        "align": "center",
+        "gap": 24,
+        "h": 42,
+        "w": "100%"
+      }
+    },
+    "move_name_2": {
+      "type": "label",
+      "name": "Label",
+      "text": "THROW",
+      "style": {
+        "fontSize": 17,
+        "color": "#ffd34dff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": 300,
+        "h": "100%",
+        "fitMin": 13
+      }
+    },
+    "move_motion_2": {
+      "type": "label",
+      "name": "Label",
+      "text": "CLOSE RANGE + P1 R / P2 P",
+      "style": {
+        "fontSize": 15,
+        "color": "#fff3b0ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": 0,
+        "grow": 1,
+        "h": "100%",
+        "fitMin": 11
+      }
+    },
+    "move_3": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "move_name_3",
+        "move_motion_3"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "row",
+        "align": "center",
+        "gap": 24,
+        "h": 42,
+        "w": "100%"
+      }
+    },
+    "move_name_3": {
+      "type": "label",
+      "name": "Label",
+      "text": "HADOUKEN",
+      "style": {
+        "fontSize": 17,
+        "color": "#ffd34dff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": 300,
+        "h": "100%",
+        "fitMin": 13
+      }
+    },
+    "move_motion_3": {
+      "type": "label",
+      "name": "Label",
+      "text": "DOWN > DOWN-FORWARD > FORWARD + PUNCH",
+      "style": {
+        "fontSize": 15,
+        "color": "#fff3b0ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": 0,
+        "grow": 1,
+        "h": "100%",
+        "fitMin": 11
+      }
+    },
+    "move_4": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "move_name_4",
+        "move_motion_4"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "row",
+        "align": "center",
+        "gap": 24,
+        "h": 42,
+        "w": "100%"
+      }
+    },
+    "move_name_4": {
+      "type": "label",
+      "name": "Label",
+      "text": "SHORYUKEN",
+      "style": {
+        "fontSize": 17,
+        "color": "#ffd34dff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": 300,
+        "h": "100%",
+        "fitMin": 13
+      }
+    },
+    "move_motion_4": {
+      "type": "label",
+      "name": "Label",
+      "text": "FORWARD > DOWN > DOWN-FORWARD + PUNCH",
+      "style": {
+        "fontSize": 15,
+        "color": "#fff3b0ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": 0,
+        "grow": 1,
+        "h": "100%",
+        "fitMin": 11
+      }
+    },
+    "move_5": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "move_name_5",
+        "move_motion_5"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "row",
+        "align": "center",
+        "gap": 24,
+        "h": 42,
+        "w": "100%"
+      }
+    },
+    "move_name_5": {
+      "type": "label",
+      "name": "Label",
+      "text": "HURRICANE",
+      "style": {
+        "fontSize": 17,
+        "color": "#ffd34dff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": 300,
+        "h": "100%",
+        "fitMin": 13
+      }
+    },
+    "move_motion_5": {
+      "type": "label",
+      "name": "Label",
+      "text": "DOWN > DOWN-BACK > BACK + KICK",
+      "style": {
+        "fontSize": 15,
+        "color": "#fff3b0ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": 0,
+        "grow": 1,
+        "h": "100%",
+        "fitMin": 11
+      }
+    },
+    "back": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "back",
+      "props": {
+        "label": "BACK",
+        "active": true
+      },
+      "style": {
+        "w": 340
+      }
+    },
+    "moves_hint": {
+      "type": "label",
+      "name": "Label",
+      "text": "DIRECTIONS ARE RELATIVE TO YOUR OPPONENT",
+      "style": {
+        "fontSize": 12,
+        "color": "#c7c9ffff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "h": 22,
+        "textAlign": "center"
+      }
+    },
+    "move_movement": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "movement_name",
+        "movement_keys"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "row",
+        "align": "center",
+        "gap": 24,
+        "h": 42,
+        "w": "100%"
+      }
+    },
+    "movement_name": {
+      "type": "label",
+      "name": "Label",
+      "text": "MOVE / JUMP / CROUCH",
+      "style": {
+        "fontSize": 17,
+        "color": "#ffd34dff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": 300,
+        "h": "100%",
+        "fitMin": 13
+      }
+    },
+    "movement_keys": {
+      "type": "label",
+      "name": "Label",
+      "text": "P1: W A S D    P2: ARROW KEYS",
+      "style": {
+        "fontSize": 15,
+        "color": "#fff3b0ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": 0,
+        "grow": 1,
+        "h": "100%",
+        "fitMin": 11
+      }
+    }
+  },
+  "view": {
+    "behaviour": "screen"
+  },
+  "transition": {
+    "type": "instant"
+  }
+}

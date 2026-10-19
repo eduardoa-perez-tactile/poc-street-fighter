@@ -1,0 +1,6 @@
+guid = "b08e556d-e309-59ba-a9dc-cd201596c6c1"
+importer = "font"
+
+[settings]
+charset = "ascii"
+extra = "→←↑↓·—…×"

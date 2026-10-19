@@ -6,7 +6,7 @@
   top: 0;
   width: 100%;
   max-width: 1152px;
-  height: 110px;
+  height: 82px;
 }
 .sf-hud-bottom {
   position: absolute;
@@ -18,3 +18,6 @@
 .sf-banner-screen, .sf-training-screen { align-items: center; }
 .sf-banner { position: absolute; top: 128px; width: 100%; max-width: 1000px; height: 100px; }
 .sf-training { position: absolute; bottom: 0; width: 100%; max-width: 1152px; height: 58px; }
+.alpha-flow, .sf-hud, .sf-banner-screen, .sf-training-screen {
+  font-family: "fonts/PixelifySans-Bold";
+}

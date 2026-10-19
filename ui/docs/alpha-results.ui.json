@@ -1,0 +1,211 @@
+{
+  "$schemaVersion": 1,
+  "guid": "34c7b454-2748-45c2-8a0e-e4c8a813ec55",
+  "name": "alpha-results",
+  "title": "Alpha results",
+  "kind": "view",
+  "root": "root",
+  "nodes": {
+    "root": {
+      "type": "element",
+      "name": "Alpha results",
+      "style": {
+        "w": "100%",
+        "h": "100%",
+        "pad": [
+          30,
+          44,
+          30,
+          44
+        ],
+        "bg": "#191267ff",
+        "image": "ui/alpha-backdrop",
+        "fit": "cover",
+        "align": "center",
+        "justify": "center",
+        "gap": 12
+      },
+      "children": [
+        "results_kicker",
+        "result_body",
+        "result_list",
+        "result_hint"
+      ]
+    },
+    "results_kicker": {
+      "type": "label",
+      "name": "Label",
+      "text": "MATCH COMPLETE",
+      "style": {
+        "fontSize": 16,
+        "color": "#c7c9ffff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "h": 30,
+        "textAlign": "center"
+      }
+    },
+    "result_body": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "winner_portrait",
+        "winner_text"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "row",
+        "align": "center",
+        "justify": "center",
+        "gap": 34,
+        "w": 960,
+        "h": 330
+      }
+    },
+    "winner_portrait": {
+      "type": "icon",
+      "name": "Icon",
+      "image": "ui/sprites/star",
+      "style": {
+        "size": 32,
+        "w": 280,
+        "h": 320
+      },
+      "property": "portrait"
+    },
+    "winner_text": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "winner_headline",
+        "winner_score"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "column",
+        "align": "center",
+        "justify": "center",
+        "gap": 18,
+        "w": 600
+      }
+    },
+    "winner_headline": {
+      "type": "label",
+      "name": "Label",
+      "text": "",
+      "style": {
+        "fontSize": 48,
+        "color": "#ffd34dff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": "100%",
+        "h": 80,
+        "textAlign": "center",
+        "fitMin": 28
+      },
+      "property": "winner"
+    },
+    "winner_score": {
+      "type": "label",
+      "name": "Label",
+      "text": "",
+      "style": {
+        "fontSize": 58,
+        "color": "#fff3b0ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": "100%",
+        "h": 90,
+        "textAlign": "center"
+      },
+      "property": "score"
+    },
+    "result_list": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "rematch",
+        "main_menu"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "column",
+        "gap": 4,
+        "w": 500
+      }
+    },
+    "rematch": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "rematch",
+      "props": {
+        "label": "REMATCH",
+        "active": {
+          "property": "f0"
+        }
+      },
+      "style": {
+        "w": "100%"
+      }
+    },
+    "main_menu": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "main-menu",
+      "props": {
+        "label": "MAIN MENU",
+        "active": {
+          "property": "f1"
+        }
+      },
+      "style": {
+        "w": "100%"
+      }
+    },
+    "result_hint": {
+      "type": "label",
+      "name": "Label",
+      "text": "ENTER / A: CONFIRM    ESC / B: MAIN MENU",
+      "style": {
+        "fontSize": 13,
+        "color": "#c7c9ffff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "h": 24,
+        "textAlign": "center"
+      }
+    }
+  },
+  "view": {
+    "behaviour": "screen"
+  },
+  "transition": {
+    "type": "instant"
+  },
+  "properties": {
+    "f0": {
+      "type": "yesno",
+      "default": true
+    },
+    "f1": {
+      "type": "yesno",
+      "default": false
+    },
+    "winner": {
+      "type": "text",
+      "default": "RYU WINS"
+    },
+    "score": {
+      "type": "text",
+      "default": "2 - 0"
+    },
+    "portrait": {
+      "type": "image",
+      "default": "ui/ryu-portrait"
+    }
+  }
+}
