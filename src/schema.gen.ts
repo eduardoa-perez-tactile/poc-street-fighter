@@ -483,6 +483,145 @@ export const schemaIr = {
       "package": "StreetFighter"
     },
     {
+      "name": "MenuIntent",
+      "kind": "event",
+      "sim": true,
+      "fields": [
+        {
+          "name": "action",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "value",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "id",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "screen",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        }
+      ],
+      "package": "StreetFighter"
+    },
+    {
+      "name": "MenuState",
+      "kind": "resource",
+      "sim": true,
+      "fields": [
+        {
+          "name": "screen",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "cursor",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "returnScreen",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "returnCursor",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "lastIntent",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "lastPhase",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1,
+          "default": 99
+        },
+        {
+          "name": "music",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1,
+          "default": 60
+        },
+        {
+          "name": "sfx",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1,
+          "default": 70
+        },
+        {
+          "name": "browserAvailable",
+          "kind": "bool",
+          "scalar": "u8",
+          "lanes": 1
+        },
+        {
+          "name": "browserRequest",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "browserAction",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "keyboard",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "pad",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "axis",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "previous",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "repeat",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        }
+      ],
+      "package": "StreetFighter"
+    },
+    {
       "name": "Projectile",
       "kind": "component",
       "sim": true,
@@ -1025,6 +1164,60 @@ export interface MatchStateValue {
 }
 /** MatchState (resource, sim) */
 export const MatchState = typeToken<MatchStateViews, MatchStateValue>('MatchState', 'resource', { sig: 'settingsOpen:bool:1,mode:u32:1,difficulty:u32:1,phaseTicks:u32:1,resumePhase:u32:1,matchWinner:i32:1,phase:u32:1,remaining:u32:1,winner:i32:1,round:u32:1,p1Health:u32:1,p2Health:u32:1,p1Score:u32:1,p2Score:u32:1,p1Wins:u32:1,p2Wins:u32:1,hitStop:u32:1,initialized:bool:1,intentKeys:u32:1,resetStep:u32:1,freezeStep:u32:1', read: (v: MatchStateViews, i: number, o: Record<string, unknown>) => { o.settingsOpen = v.settingsOpen[i] !== 0; o.mode = v.mode[i]; o.difficulty = v.difficulty[i]; o.phaseTicks = v.phaseTicks[i]; o.resumePhase = v.resumePhase[i]; o.matchWinner = v.matchWinner[i]; o.phase = v.phase[i]; o.remaining = v.remaining[i]; o.winner = v.winner[i]; o.round = v.round[i]; o.p1Health = v.p1Health[i]; o.p2Health = v.p2Health[i]; o.p1Score = v.p1Score[i]; o.p2Score = v.p2Score[i]; o.p1Wins = v.p1Wins[i]; o.p2Wins = v.p2Wins[i]; o.hitStop = v.hitStop[i]; o.initialized = v.initialized[i] !== 0; o.intentKeys = v.intentKeys[i]; o.resetStep = v.resetStep[i]; o.freezeStep = v.freezeStep[i]; return o; } });
+
+export interface MenuIntentViews {
+  action: Uint32Array;
+  value: Uint32Array;
+  id: Uint32Array;
+  screen: Uint32Array;
+}
+export interface MenuIntentValue {
+  action: number;
+  value: number;
+  id: number;
+  screen: number;
+}
+/** MenuIntent (event, sim) */
+export const MenuIntent = typeToken<MenuIntentViews, MenuIntentValue>('MenuIntent', 'event', { sig: 'action:u32:1,value:u32:1,id:u32:1,screen:u32:1', read: (v: MenuIntentViews, i: number, o: Record<string, unknown>) => { o.action = v.action[i]; o.value = v.value[i]; o.id = v.id[i]; o.screen = v.screen[i]; return o; } });
+
+export interface MenuStateViews {
+  screen: Uint32Array;
+  cursor: Uint32Array;
+  returnScreen: Uint32Array;
+  returnCursor: Uint32Array;
+  lastIntent: Uint32Array;
+  lastPhase: Uint32Array;
+  music: Uint32Array;
+  sfx: Uint32Array;
+  browserAvailable: Uint8Array;
+  browserRequest: Uint32Array;
+  browserAction: Uint32Array;
+  keyboard: Uint32Array;
+  pad: Uint32Array;
+  axis: Uint32Array;
+  previous: Uint32Array;
+  repeat: Uint32Array;
+}
+export interface MenuStateValue {
+  screen: number;
+  cursor: number;
+  returnScreen: number;
+  returnCursor: number;
+  lastIntent: number;
+  lastPhase: number;
+  music: number;
+  sfx: number;
+  browserAvailable: boolean;
+  browserRequest: number;
+  browserAction: number;
+  keyboard: number;
+  pad: number;
+  axis: number;
+  previous: number;
+  repeat: number;
+}
+/** MenuState (resource, sim) */
+export const MenuState = typeToken<MenuStateViews, MenuStateValue>('MenuState', 'resource', { sig: 'screen:u32:1,cursor:u32:1,returnScreen:u32:1,returnCursor:u32:1,lastIntent:u32:1,lastPhase:u32:1,music:u32:1,sfx:u32:1,browserAvailable:bool:1,browserRequest:u32:1,browserAction:u32:1,keyboard:u32:1,pad:u32:1,axis:u32:1,previous:u32:1,repeat:u32:1', read: (v: MenuStateViews, i: number, o: Record<string, unknown>) => { o.screen = v.screen[i]; o.cursor = v.cursor[i]; o.returnScreen = v.returnScreen[i]; o.returnCursor = v.returnCursor[i]; o.lastIntent = v.lastIntent[i]; o.lastPhase = v.lastPhase[i]; o.music = v.music[i]; o.sfx = v.sfx[i]; o.browserAvailable = v.browserAvailable[i] !== 0; o.browserRequest = v.browserRequest[i]; o.browserAction = v.browserAction[i]; o.keyboard = v.keyboard[i]; o.pad = v.pad[i]; o.axis = v.axis[i]; o.previous = v.previous[i]; o.repeat = v.repeat[i]; return o; } });
 
 export interface ProjectileViews {
   player: Uint32Array;

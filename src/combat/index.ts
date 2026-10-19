@@ -101,7 +101,7 @@ export const CombatControls = defineSystem({
         }
         if (event.code === 38 || event.code === 39) {
           const bit = event.code === 38 ? 1 : 2;
-          if (event.down && (match.intentKeys[0]! & bit) === 0) intent = match.settingsOpen[0] ? (event.code === 39 ? 14 : -1) : event.code === 38 ? (match.phase[0] === 5 ? 1 : 0) : (match.phase[0] === 3 ? 3 : 2);
+          if (event.down && (match.intentKeys[0]! & bit) === 0 && (match.phase[0] === 1 || match.phase[0] === 4) && event.code === 39) intent = 2;
           match.intentKeys[0] = setBit(match.intentKeys[0]!, bit, event.down);
         }
       } else if (event.type === 'action') {
@@ -118,7 +118,7 @@ export const CombatControls = defineSystem({
         const map = [4, 7, 5, 8, 10, -1, -1, -1, -1, 6, 9, 2, 3, 0, 1];
         const button = map[event.button] ?? -1;
         if (button >= 0) controls.pad[event.pad] = setBit(controls.pad[event.pad]!, 1 << button, event.down);
-        if (event.button === 6 && event.down) intent = match.settingsOpen[0] ? 14 : match.phase[0] === 0 ? 0 : match.phase[0] === 5 ? 1 : match.phase[0] === 3 ? 3 : 2;
+        if (event.button === 6 && event.down && (match.phase[0] === 1 || match.phase[0] === 4)) intent = 2;
       } else if (event.type === 'gamepadAxis' && event.pad < 2 && event.axis < 2) {
         const negative = event.axis === 0 ? LEFT : JUMP, positive = event.axis === 0 ? RIGHT : DUCK;
         controls.axis[event.pad] = setBit(setBit(controls.axis[event.pad]!, negative, event.value < -0.35), positive, event.value > 0.35);

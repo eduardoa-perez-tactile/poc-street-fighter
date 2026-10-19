@@ -9,19 +9,187 @@ import type { LocText } from '@gameengine/ui';
 declare module '@gameengine/ui' {
   interface UiDocumentTypes {
     /**
-     * Audio settings: a view, dialog (ui/docs/audio-settings.ui.json)
+     * Alpha arrow: a widget, button (ui/docs/alpha-arrow.ui.json)
      *
      * Properties:
-     *   - `musicLabel`: text, default "MUSIC: 60%"
-     *   - `sfxLabel`: text, default "EFFECTS: 70%"
-     * Events: `music-down`, `music-up`, `sfx-down`, `sfx-up`, `close-settings`
+     *   - `label`: text, default ">"
+     * Events: `<id>`
      * Code areas: none
-     * Refs: `music-down`, `music-up`, `sfx-down`, `sfx-up`, `close-settings`
+     * Refs: none
      */
-    'audio-settings': {
-      props: { musicLabel: string | { loc: string } | LocText; sfxLabel: string | { loc: string } | LocText };
+    'alpha-arrow': {
+      props: { label: string | { loc: string } | LocText };
       areas: never;
-      refs: 'music-down' | 'music-up' | 'sfx-down' | 'sfx-up' | 'close-settings';
+      refs: never;
+    };
+    /**
+     * Alpha main: a view, screen (ui/docs/alpha-main.ui.json)
+     *
+     * Properties:
+     *   - `f0`: yesno, default true
+     *   - `f1`: yesno, default false
+     *   - `f2`: yesno, default false
+     *   - `f3`: yesno, default false
+     * Events: `solo`, `local`, `training`, `options`
+     * Code areas: none
+     * Refs: `solo`, `local`, `training`, `options`
+     */
+    'alpha-main': {
+      props: { f0: boolean; f1: boolean; f2: boolean; f3: boolean };
+      areas: never;
+      refs: 'solo' | 'local' | 'training' | 'options';
+    };
+    /**
+     * Alpha moves: a view, screen (ui/docs/alpha-moves.ui.json)
+     *
+     * Properties: none
+     * Events: `back`
+     * Code areas: none
+     * Refs: `back`
+     */
+    'alpha-moves': {
+      props: {};
+      areas: never;
+      refs: 'back';
+    };
+    /**
+     * Alpha options: a view, screen (ui/docs/alpha-options.ui.json)
+     *
+     * Properties:
+     *   - `f0`: yesno, default true
+     *   - `f1`: yesno, default false
+     *   - `f2`: yesno, default false
+     *   - `music`: text, default "60%"
+     *   - `effects`: text, default "70%"
+     *   - `browser`: yesno, default false
+     *   - `f3`: yesno, default false
+     *   - `f4`: yesno, default false
+     * Events: `music: down`, `music: up`, `effects: down`, `effects: up`, `browser-controls`, `fullscreen`, `back`
+     * Code areas: none
+     * Refs: `music`, `music.down`, `music.up`, `effects`, `effects.down`, `effects.up`, `browser-controls`, `fullscreen`, `back`
+     */
+    'alpha-options': {
+      props: { f0: boolean; f1: boolean; f2: boolean; music: string | { loc: string } | LocText; effects: string | { loc: string } | LocText; browser: boolean; f3: boolean; f4: boolean };
+      areas: never;
+      refs: 'music' | 'music.down' | 'music.up' | 'effects' | 'effects.down' | 'effects.up' | 'browser-controls' | 'fullscreen' | 'back';
+    };
+    /**
+     * Alpha pause: a view, dialog (ui/docs/alpha-pause.ui.json)
+     *
+     * Properties:
+     *   - `f0`: yesno, default true
+     *   - `f1`: yesno, default false
+     *   - `f2`: yesno, default false
+     *   - `f3`: yesno, default false
+     *   - `f4`: yesno, default false
+     * Events: `resume`, `moves`, `options`, `restart`, `main-menu`
+     * Code areas: none
+     * Refs: `resume`, `moves`, `options`, `restart`, `main-menu`
+     */
+    'alpha-pause': {
+      props: { f0: boolean; f1: boolean; f2: boolean; f3: boolean; f4: boolean };
+      areas: never;
+      refs: 'resume' | 'moves' | 'options' | 'restart' | 'main-menu';
+    };
+    /**
+     * Alpha results: a view, screen (ui/docs/alpha-results.ui.json)
+     *
+     * Properties:
+     *   - `f0`: yesno, default true
+     *   - `f1`: yesno, default false
+     *   - `winner`: text, default "RYU WINS"
+     *   - `score`: text, default "2 - 0"
+     *   - `portrait`: image, default "ui/ryu-portrait"
+     * Events: `rematch`, `main-menu`
+     * Code areas: none
+     * Refs: `rematch`, `main-menu`
+     */
+    'alpha-results': {
+      props: { f0: boolean; f1: boolean; winner: string | { loc: string } | LocText; score: string | { loc: string } | LocText; portrait: string };
+      areas: never;
+      refs: 'rematch' | 'main-menu';
+    };
+    /**
+     * Alpha row: a widget, button (ui/docs/alpha-row.ui.json)
+     *
+     * Properties:
+     *   - `label`: text, default "SOLO BATTLE"
+     *   - `value`: text, default ""
+     *   - `active`: yesno, default false
+     *   - `valued`: yesno, default false
+     * Events: `<id>`
+     * Code areas: none
+     * Refs: none
+     */
+    'alpha-row': {
+      props: { label: string | { loc: string } | LocText; value: string | { loc: string } | LocText; active: boolean; valued: boolean };
+      areas: never;
+      refs: never;
+    };
+    /**
+     * Alpha setup: a view, screen (ui/docs/alpha-setup.ui.json)
+     *
+     * Properties:
+     *   - `f0`: yesno, default true
+     *   - `f1`: yesno, default false
+     *   - `f2`: yesno, default false
+     *   - `heading`: text, default "SOLO BATTLE"
+     *   - `difficulty`: text, default "NORMAL"
+     *   - `solo`: yesno, default true
+     *   - `opponent`: text, default "CPU"
+     *   - `detail`: text, default "KEN'S STAGE / FIRST TO TWO WINS"
+     *   - `hint`: text, default "LEFT / RIGHT: ADJUST    ENTER / A: CONFIRM    ESC / B: BACK"
+     * Events: `difficulty`, `fight`, `back`
+     * Code areas: none
+     * Refs: `difficulty`, `fight`, `back`
+     */
+    'alpha-setup': {
+      props: { f0: boolean; f1: boolean; f2: boolean; heading: string | { loc: string } | LocText; difficulty: string | { loc: string } | LocText; solo: boolean; opponent: string | { loc: string } | LocText; detail: string | { loc: string } | LocText; hint: string | { loc: string } | LocText };
+      areas: never;
+      refs: 'difficulty' | 'fight' | 'back';
+    };
+    /**
+     * Alpha small: a widget, button (ui/docs/alpha-small.ui.json)
+     *
+     * Properties:
+     *   - `label`: text, default "PAUSE"
+     * Events: `<id>`
+     * Code areas: none
+     * Refs: none
+     */
+    'alpha-small': {
+      props: { label: string | { loc: string } | LocText };
+      areas: never;
+      refs: never;
+    };
+    /**
+     * Alpha title: a view, screen (ui/docs/alpha-title.ui.json)
+     *
+     * Properties: none
+     * Events: `press-start`
+     * Code areas: none
+     * Refs: `press-start`
+     */
+    'alpha-title': {
+      props: {};
+      areas: never;
+      refs: 'press-start';
+    };
+    /**
+     * Alpha volume: a widget (ui/docs/alpha-volume.ui.json)
+     *
+     * Properties:
+     *   - `label`: text, default "MUSIC VOLUME"
+     *   - `value`: text, default "60%"
+     *   - `active`: yesno, default false
+     * Events: `<id>: down`, `<id>: up`
+     * Code areas: none
+     * Refs: `down`, `up`
+     */
+    'alpha-volume': {
+      props: { label: string | { loc: string } | LocText; value: string | { loc: string } | LocText; active: boolean };
+      areas: never;
+      refs: 'down' | 'up';
     };
     /**
      * Fight banner: a widget (ui/docs/fight-banner.ui.json)
@@ -39,35 +207,6 @@ declare module '@gameengine/ui' {
       refs: never;
     };
     /**
-     * Fight button: a widget, button (ui/docs/fight-button.ui.json)
-     *
-     * Properties:
-     *   - `label`: text, default "FIGHT"
-     *   - `compact`: yesno, default false
-     * Events: `<id>`
-     * Code areas: none
-     * Refs: none
-     */
-    'fight-button': {
-      props: { label: string | { loc: string } | LocText; compact: boolean };
-      areas: never;
-      refs: never;
-    };
-    /**
-     * Fight footer: a widget (ui/docs/fight-footer.ui.json)
-     *
-     * Properties:
-     *   - `visible`: yesno, default true
-     * Events: `<id>: pause`
-     * Code areas: none
-     * Refs: `pause`
-     */
-    'fight-footer': {
-      props: { visible: boolean };
-      areas: never;
-      refs: 'pause';
-    };
-    /**
      * Fight hud: a widget (ui/docs/fight-hud.ui.json)
      *
      * Properties:
@@ -79,41 +218,15 @@ declare module '@gameengine/ui' {
      *   - `p1Wins`: number, default 0
      *   - `p2Wins`: number, default 0
      *   - `round`: number, default 1
-     * Events: none
+     * Events: `<id>: pause`
      * Code areas: none
-     * Refs: none
+     * Refs: `pause`
      * Samples (`view render doc:fight-hud --sample …`): `opening`, `closeFight`, `half`, `empty`
      */
     'fight-hud': {
       props: { healthone: number; healthtwo: number; timer: number; p1Score: number; p2Score: number; p1Wins: number; p2Wins: number; round: number };
       areas: never;
-      refs: never;
-    };
-    /**
-     * Match panel: a view, dialog (ui/docs/match-panel.ui.json)
-     *
-     * Properties:
-     *   - `title`: text, default "STREET FIGHTER"
-     *   - `subtitle`: text, default "LOCAL VERSUS  /  RYU vs KEN"
-     *   - `hint`: text, default "ENTER TO START"
-     *   - `ready`: yesno, default true
-     *   - `paused`: yesno, default false
-     *   - `result`: yesno, default false
-     *   - `soloLabel`: text, default "SOLO [SELECTED]"
-     *   - `localLabel`: text, default "LOCAL VERSUS"
-     *   - `trainingLabel`: text, default "TRAINING"
-     *   - `difficultyLabel`: text, default "DIFFICULTY: NORMAL"
-     *   - `settingsable`: yesno, default true
-     *   - `canReturn`: yesno, default false
-     * Events: `solo`, `local`, `training`, `difficulty`, `start`, `resume`, `restart`, `rematch`, `settings`, `title`
-     * Code areas: none
-     * Refs: `solo`, `local`, `training`, `difficulty`, `start`, `resume`, `restart`, `rematch`, `settings`, `title`
-     * Samples (`view render doc:match-panel --sample …`): `ready`, `paused`, `ryuWins`, `kenWins`
-     */
-    'match-panel': {
-      props: { title: string | { loc: string } | LocText; subtitle: string | { loc: string } | LocText; hint: string | { loc: string } | LocText; ready: boolean; paused: boolean; result: boolean; soloLabel: string | { loc: string } | LocText; localLabel: string | { loc: string } | LocText; trainingLabel: string | { loc: string } | LocText; difficultyLabel: string | { loc: string } | LocText; settingsable: boolean; canReturn: boolean };
-      areas: never;
-      refs: 'solo' | 'local' | 'training' | 'difficulty' | 'start' | 'resume' | 'restart' | 'rematch' | 'settings' | 'title';
+      refs: 'pause';
     };
     /**
      * Training console: a widget (ui/docs/training-console.ui.json)
@@ -123,14 +236,14 @@ declare module '@gameengine/ui' {
      *   - `inputs`: text, default "INPUT: NEUTRAL"
      *   - `dummyLabel`: text, default "DUMMY: STAND"
      *   - `boxesLabel`: text, default "HITBOXES: OFF"
-     * Events: `<id>: dummy`, `<id>: reset-training`, `<id>: boxes`, `<id>: pause`
+     * Events: `<id>: dummy`, `<id>: reset-training`, `<id>: boxes`
      * Code areas: none
-     * Refs: `dummy`, `reset-training`, `boxes`, `pause`
+     * Refs: `dummy`, `reset-training`, `boxes`
      */
     'training-console': {
       props: { stats: string | { loc: string } | LocText; inputs: string | { loc: string } | LocText; dummyLabel: string | { loc: string } | LocText; boxesLabel: string | { loc: string } | LocText };
       areas: never;
-      refs: 'dummy' | 'reset-training' | 'boxes' | 'pause';
+      refs: 'dummy' | 'reset-training' | 'boxes';
     };
   }
 }

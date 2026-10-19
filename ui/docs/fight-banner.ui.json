@@ -32,16 +32,16 @@
       "text": "Label",
       "property": "label",
       "style": {
-        "fontSize": 45,
+        "fontSize": 46,
         "fitMin": 26,
-        "color": "#ffcf4dff",
+        "color": "#ffd34dff",
         "weight": 800,
         "w": "100%",
         "h": 56,
         "textAlign": "center",
-        "shadowX": 2,
+        "shadowX": 3,
         "shadowY": 3,
-        "shadowColor": "#07101cff"
+        "shadowColor": "#100b2fff"
       }
     },
     "banner_detail": {
@@ -50,9 +50,9 @@
       "text": "Label",
       "property": "detail",
       "style": {
-        "fontSize": 17,
+        "fontSize": 15,
         "fitMin": 12,
-        "color": "#ffffffff",
+        "color": "#fff3b0ff",
         "w": "100%",
         "h": 28,
         "textAlign": "center"

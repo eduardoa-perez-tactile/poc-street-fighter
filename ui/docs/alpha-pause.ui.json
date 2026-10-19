@@ -1,0 +1,179 @@
+{
+  "$schemaVersion": 1,
+  "guid": "7f8718fd-4a4d-482b-93fc-6983bdbbe45d",
+  "name": "alpha-pause",
+  "title": "Alpha pause",
+  "kind": "view",
+  "root": "root",
+  "nodes": {
+    "root": {
+      "type": "element",
+      "name": "Alpha pause",
+      "style": {
+        "w": "100%",
+        "h": "100%",
+        "pad": 24,
+        "align": "center",
+        "justify": "center"
+      },
+      "children": [
+        "pause_frame"
+      ]
+    },
+    "pause_frame": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "pause_heading",
+        "resume",
+        "moves",
+        "options",
+        "restart",
+        "main_menu",
+        "pause_hint"
+      ],
+      "style": {
+        "pad": [
+          18,
+          8,
+          18,
+          8
+        ],
+        "dir": "column",
+        "gap": 4,
+        "w": 460,
+        "bg": "#191267f5",
+        "radius": 0
+      }
+    },
+    "pause_heading": {
+      "type": "label",
+      "name": "Label",
+      "text": "PAUSE",
+      "style": {
+        "fontSize": 28,
+        "color": "#ffd34dff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": "100%",
+        "h": 40,
+        "textAlign": "center"
+      }
+    },
+    "resume": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "resume",
+      "props": {
+        "label": "RESUME",
+        "active": {
+          "property": "f0"
+        }
+      },
+      "style": {
+        "w": "100%"
+      }
+    },
+    "moves": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "moves",
+      "props": {
+        "label": "MOVE LIST",
+        "active": {
+          "property": "f1"
+        }
+      },
+      "style": {
+        "w": "100%"
+      }
+    },
+    "options": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "options",
+      "props": {
+        "label": "OPTIONS",
+        "active": {
+          "property": "f2"
+        }
+      },
+      "style": {
+        "w": "100%"
+      }
+    },
+    "restart": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "restart",
+      "props": {
+        "label": "RESTART MATCH",
+        "active": {
+          "property": "f3"
+        }
+      },
+      "style": {
+        "w": "100%"
+      }
+    },
+    "main_menu": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "main-menu",
+      "props": {
+        "label": "MAIN MENU",
+        "active": {
+          "property": "f4"
+        }
+      },
+      "style": {
+        "w": "100%"
+      }
+    },
+    "pause_hint": {
+      "type": "label",
+      "name": "Label",
+      "text": "ESC / B: RESUME",
+      "style": {
+        "fontSize": 12,
+        "color": "#c7c9ffff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": "100%",
+        "h": 24,
+        "textAlign": "center"
+      }
+    }
+  },
+  "view": {
+    "behaviour": "dialog",
+    "dims": true
+  },
+  "transition": {
+    "type": "instant"
+  },
+  "properties": {
+    "f0": {
+      "type": "yesno",
+      "default": true
+    },
+    "f1": {
+      "type": "yesno",
+      "default": false
+    },
+    "f2": {
+      "type": "yesno",
+      "default": false
+    },
+    "f3": {
+      "type": "yesno",
+      "default": false
+    },
+    "f4": {
+      "type": "yesno",
+      "default": false
+    }
+  }
+}

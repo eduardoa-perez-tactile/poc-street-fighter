@@ -1,0 +1,239 @@
+{
+  "$schemaVersion": 1,
+  "guid": "772bf7cb-f35b-4c26-a927-924ef2c3985a",
+  "name": "alpha-options",
+  "title": "Alpha options",
+  "kind": "view",
+  "root": "root",
+  "nodes": {
+    "root": {
+      "type": "element",
+      "name": "Alpha options",
+      "style": {
+        "w": "100%",
+        "h": "100%",
+        "pad": [
+          30,
+          44,
+          30,
+          44
+        ],
+        "bg": "#191267ff",
+        "image": "ui/alpha-backdrop",
+        "fit": "cover",
+        "align": "center",
+        "justify": "center",
+        "gap": 12
+      },
+      "children": [
+        "options_heading",
+        "options_subtitle",
+        "options_list",
+        "options_hint",
+        "options_save"
+      ]
+    },
+    "options_heading": {
+      "type": "label",
+      "name": "Label",
+      "text": "OPTIONS",
+      "style": {
+        "fontSize": 40,
+        "color": "#ffd34dff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "h": 56,
+        "w": "100%",
+        "textAlign": "center"
+      }
+    },
+    "options_subtitle": {
+      "type": "label",
+      "name": "Label",
+      "text": "GAME SETTINGS",
+      "style": {
+        "fontSize": 17,
+        "color": "#c7c9ffff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "h": 28,
+        "textAlign": "center"
+      }
+    },
+    "options_list": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "music",
+        "effects",
+        "browser_controls",
+        "fullscreen",
+        "back"
+      ],
+      "style": {
+        "pad": [
+          8,
+          0,
+          8,
+          0
+        ],
+        "dir": "column",
+        "gap": 6,
+        "w": 640
+      }
+    },
+    "back": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "back",
+      "props": {
+        "label": "BACK",
+        "active": {
+          "property": "f4"
+        }
+      },
+      "style": {
+        "w": "100%",
+        "h": 44
+      }
+    },
+    "options_hint": {
+      "type": "label",
+      "name": "Label",
+      "text": "LEFT / RIGHT: ADJUST    ESC / B: BACK",
+      "style": {
+        "fontSize": 13,
+        "color": "#c7c9ffff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "h": 24,
+        "textAlign": "center"
+      }
+    },
+    "options_save": {
+      "type": "label",
+      "name": "Label",
+      "text": "SETTINGS SAVE AUTOMATICALLY",
+      "style": {
+        "fontSize": 11,
+        "color": "#969ce5ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "h": 20,
+        "textAlign": "center"
+      }
+    },
+    "browser_controls": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "browser-controls",
+      "props": {
+        "label": "CONTROLS",
+        "active": {
+          "property": "f2"
+        }
+      },
+      "style": {
+        "w": "100%",
+        "h": 44
+      },
+      "show": "browser"
+    },
+    "fullscreen": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "fullscreen",
+      "props": {
+        "label": "FULLSCREEN",
+        "active": {
+          "property": "f3"
+        }
+      },
+      "style": {
+        "w": "100%",
+        "h": 44
+      },
+      "show": "browser"
+    },
+    "music": {
+      "type": "use",
+      "doc": "alpha-volume",
+      "key": "music",
+      "props": {
+        "label": "MUSIC VOLUME",
+        "value": {
+          "property": "music"
+        },
+        "active": {
+          "property": "f0"
+        }
+      },
+      "style": {
+        "w": "100%",
+        "h": 44
+      }
+    },
+    "effects": {
+      "type": "use",
+      "doc": "alpha-volume",
+      "key": "effects",
+      "props": {
+        "label": "EFFECT VOLUME",
+        "value": {
+          "property": "effects"
+        },
+        "active": {
+          "property": "f1"
+        }
+      },
+      "style": {
+        "w": "100%",
+        "h": 44
+      }
+    }
+  },
+  "view": {
+    "behaviour": "screen"
+  },
+  "transition": {
+    "type": "instant"
+  },
+  "properties": {
+    "f0": {
+      "type": "yesno",
+      "default": true
+    },
+    "f1": {
+      "type": "yesno",
+      "default": false
+    },
+    "f2": {
+      "type": "yesno",
+      "default": false
+    },
+    "music": {
+      "type": "text",
+      "default": "60%"
+    },
+    "effects": {
+      "type": "text",
+      "default": "70%"
+    },
+    "browser": {
+      "type": "yesno",
+      "default": false
+    },
+    "f3": {
+      "type": "yesno",
+      "default": false
+    },
+    "f4": {
+      "type": "yesno",
+      "default": false
+    }
+  }
+}

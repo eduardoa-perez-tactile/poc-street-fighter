@@ -1,44 +1,78 @@
 import { gameengine, loading, SetBusVolume } from '@gameengine/runtime';
-import { createEffect, createMemo, createSignal, defineUI, emit, untrack, useResource, views, type ViewHandle } from '@gameengine/ui';
-import { MatchIntent, MatchState, TrainingIntent, TrainingState } from '../schema.gen.ts';
-import { AudioSettings, FightBanner, MatchPanel, PAUSED_PANEL, READY_PANEL, StreetFighterHud, TrainingConsole, type AudioSettingsModel, type BannerModel, type HudModel, type MatchPanelModel, type TrainingModel } from './views.tsx';
-export { AudioSettings, FightBanner, MatchPanel, StreetFighterHud, TrainingConsole } from './views.tsx';
-const MODES = ['SOLO', 'LOCAL VERSUS', 'TRAINING'] as const;
+import { createEffect, createMemo, defineUI, emit, untrack, useResource, views, type ViewHandle } from '@gameengine/ui';
+import { MatchIntent, MatchState, MenuIntent, MenuState, TrainingIntent, TrainingState } from '../schema.gen.ts';
+import { browserOptionsAvailable, openBrowserControls, toggleBrowserFullscreen } from '../platform/browser-options.ts';
+import { FightBanner, StreetFighterHud, TrainingConsole, type BannerModel, type HudModel, type TrainingModel } from './views.tsx';
+import { AlphaTitle, AlphaMain, AlphaSetup, AlphaPause, AlphaMoves, AlphaOptions, AlphaResults, type ArcadeModel } from './alpha.views.tsx';
+export { AlphaTitle, AlphaMain, AlphaSetup, AlphaPause, AlphaMoves, AlphaOptions, AlphaResults } from './alpha.views.tsx';
+export { AlphaMain as MatchPanel } from './alpha.views.tsx';
+export { FightBanner, StreetFighterHud, TrainingConsole } from './views.tsx';
+const SCREENS = [AlphaTitle, AlphaMain, AlphaSetup, AlphaPause, AlphaMoves, AlphaOptions, AlphaResults] as const;
 const DIFFICULTIES = ['EASY', 'NORMAL', 'HARD'] as const;
 const DUMMIES = ['STAND', 'BLOCK', 'LOW BLOCK', 'JUMP', 'CPU'] as const;
 const INPUT_NAMES = ['LEFT', 'RIGHT', 'UP', 'DOWN', 'LP', 'MP', 'HP', 'LK', 'MK', 'HK', 'THROW'] as const;
+const savedVolume = (key: string, fallback: number) => {
+  const value = gameengine.kv.get<number>(key, fallback / 100);
+  return Number.isFinite(value) ? Math.max(0, Math.min(100, Math.round(value <= 1 ? value * 100 : value))) : fallback;
+};
 
+/** The sim owns menu focus and flow; this controller binds its model and plays platform requests. */
 export const MatchUI = defineUI({
   name: 'MatchUI',
   root: () => {
     void loading.boot({ load: ['arena'], model: { label: 'Preparing the arena' } });
-    const match = useResource(MatchState), training = useResource(TrainingState);
-    const [music, setMusic] = createSignal(Math.max(0, Math.min(1, gameengine.kv.get<number>('sf.settings.music', 0.6))));
-    const [sfx, setSfx] = createSignal(Math.max(0, Math.min(1, gameengine.kv.get<number>('sf.settings.sfx', 0.7))));
-    let settings: ViewHandle<AudioSettingsModel> | undefined;
-    const audioModel = (): AudioSettingsModel => ({ musicLabel: `MUSIC: ${Math.round(music() * 100)}%`, sfxLabel: `EFFECTS: ${Math.round(sfx() * 100)}%` });
+    const match = useResource(MatchState), menu = useResource(MenuState), training = useResource(TrainingState);
+    let eventId = untrack(menu)?.lastIntent ?? 0;
+    const sendMenu = (action: number, value = 0) => {
+      const state = untrack(menu);
+      eventId = Math.max(eventId, state?.lastIntent ?? 0) + 1;
+      emit(MenuIntent, { action, value, id: eventId, screen: state?.screen ?? 0 });
+    };
+    sendMenu(8, savedVolume('sf.settings.music', 60));
+    sendMenu(9, savedVolume('sf.settings.sfx', 70));
+    sendMenu(10, browserOptionsAvailable() ? 1 : 0);
+    const seeded = eventId;
+    const seededReady = createMemo(() => (menu()?.lastIntent ?? 0) >= seeded);
+    const musicVolume = createMemo(() => menu()?.music ?? 60);
+    const effectsVolume = createMemo(() => menu()?.sfx ?? 70);
+    const musicDuck = createMemo(() => match()?.phase === 3 ? 0.3 : 1);
     createEffect(() => {
-      emit(SetBusVolume, { bus: 'Music', volume: music() * (match()?.phase === 3 ? 0.3 : 1) });
+      if (seededReady()) emit(SetBusVolume, { bus: 'Music', volume: musicVolume() / 100 * musicDuck() });
     });
-    createEffect(() => { emit(SetBusVolume, { bus: 'SFX', volume: sfx() }); emit(SetBusVolume, { bus: 'Voice', volume: sfx() }); });
-    createEffect(() => { const model = audioModel(); if (settings) settings.update(model); });
+    createEffect(() => {
+      if (!seededReady()) return;
+      const volume = effectsVolume() / 100;
+      emit(SetBusVolume, { bus: 'SFX', volume }); emit(SetBusVolume, { bus: 'Voice', volume });
+    });
+    createEffect(() => { if (seededReady()) gameengine.kv.set('sf.settings.music', musicVolume() / 100); });
+    createEffect(() => { if (seededReady()) gameengine.kv.set('sf.settings.sfx', effectsVolume() / 100); });
+    let browserRequest = untrack(menu)?.browserRequest ?? 0;
+    createEffect(() => {
+      const state = menu();
+      if (!state || state.browserRequest === browserRequest) return;
+      browserRequest = state.browserRequest;
+      if (state.browserAction === 0) openBrowserControls(); else toggleBrowserFullscreen();
+    });
     const onIntent = (name: string) => {
-      const state = untrack(match), t = untrack(training);
-      if (name === 'settings') { emit(MatchIntent, { action: 13 }); return; }
-      if (name === 'close-settings') { emit(MatchIntent, { action: 14 }); return; }
-      if (name === 'music-down' || name === 'music-up') { const next = Math.max(0, Math.min(1, Math.round((music() + (name === 'music-up' ? 0.1 : -0.1)) * 10) / 10)); setMusic(next); gameengine.kv.set('sf.settings.music', next); return; }
-      if (name === 'sfx-down' || name === 'sfx-up') { const next = Math.max(0, Math.min(1, Math.round((sfx() + (name === 'sfx-up' ? 0.1 : -0.1)) * 10) / 10)); setSfx(next); gameengine.kv.set('sf.settings.sfx', next); return; }
+      const state = untrack(menu), game = untrack(match), t = untrack(training);
+      if (name === 'pause') { emit(MatchIntent, { action: 2 }); return; }
       if (name === 'dummy') { emit(TrainingIntent, { action: 0, value: ((t?.dummyMode ?? 0) + 1) % 5 }); return; }
       if (name === 'reset-training') { emit(TrainingIntent, { action: 1, value: 0 }); return; }
       if (name === 'boxes') { emit(TrainingIntent, { action: 2, value: t?.showBoxes ? 0 : 1 }); return; }
-      const action = name === 'start' ? 0 : name === 'rematch' ? 1 : name === 'pause' ? 2 : name === 'resume' ? 3 : name === 'restart' ? 5 : name === 'title' ? 6 : name === 'solo' ? 7 : name === 'local' ? 8 : name === 'training' ? 9 : name === 'difficulty' ? 10 + ((state?.difficulty ?? 1) + 1) % 3 : -1;
-      if (action >= 0) emit(MatchIntent, { action });
+      if (name === 'music-down' || name === 'music-up') { sendMenu(8, Math.max(0, Math.min(100, (state?.music ?? 60) + (name === 'music-up' ? 10 : -10)))); return; }
+      if (name === 'effects-down' || name === 'effects-up') { sendMenu(9, Math.max(0, Math.min(100, (state?.sfx ?? 70) + (name === 'effects-up' ? 10 : -10)))); return; }
+      const screen = state?.screen ?? 0;
+      if (name === 'press-start') { sendMenu(0); return; }
+      if (name === 'back') { sendMenu(1); return; }
+      let index = -1;
+      if (screen === 1) index = ['solo', 'local', 'training', 'options'].indexOf(name);
+      else if (screen === 2) index = name === 'difficulty' ? 0 : name === 'fight' ? (game?.mode === 0 ? 1 : 0) : -1;
+      else if (screen === 3) index = ['resume', 'moves', 'options', 'restart', 'main-menu'].indexOf(name);
+      else if (screen === 4 && name === 'back') index = 0;
+      else if (screen === 5) index = ['music', 'effects', 'browser-controls', 'fullscreen'].indexOf(name);
+      else if (screen === 6) index = ['rematch', 'main-menu'].indexOf(name);
+      if (index >= 0) sendMenu(6, index);
     };
-    createEffect(() => {
-      if (match()?.settingsOpen) {
-        if (!settings) settings = views.push(AudioSettings, untrack(audioModel), { onIntent });
-      } else { settings?.close({ immediate: true }); settings = undefined; }
-    });
     const seconds = createMemo(() => Math.max(0, Math.ceil((match()?.remaining ?? 5940) / 60)));
     const snapshot = (): HudModel => {
       const s = match();
@@ -46,26 +80,27 @@ export const MatchUI = defineUI({
     };
     const hud = views.push(StreetFighterHud, untrack(snapshot), { onIntent });
     createEffect(() => hud.update(snapshot()));
-    let panel: ViewHandle<MatchPanelModel> | undefined;
+    let flow: ViewHandle<ArcadeModel> | undefined;
+    let shownScreen = -1;
     createEffect(() => {
-      const s = match(), phase = s?.phase ?? 0;
-      if (phase !== 0 && phase !== 3 && phase !== 5) {
-        panel?.close({ immediate: true }); panel = undefined;
-        settings?.close({ immediate: true }); settings = undefined;
-        return;
-      }
-      let model: MatchPanelModel = READY_PANEL;
-      if (phase === 3) model = PAUSED_PANEL;
-      else if (phase === 5 && s) model = { title: s.matchWinner === 0 ? 'RYU WINS THE MATCH' : 'KEN WINS THE MATCH', subtitle: `FINAL SCORE  /  RYU ${s.p1Wins} - KEN ${s.p2Wins}`, hint: 'ENTER TO REMATCH', ready: false, paused: false, result: true, settingsable: false, canReturn: true };
-      else if (s) model = { ...READY_PANEL, subtitle: `${MODES[s.mode]}  /  ${s.mode === 0 ? 'RYU vs CPU' : s.mode === 1 ? 'RYU vs KEN' : 'PRACTICE WITHOUT A TIMER'}`, soloLabel: s.mode === 0 ? 'SOLO [SELECTED]' : 'SOLO', localLabel: s.mode === 1 ? 'LOCAL [SELECTED]' : 'LOCAL VERSUS', trainingLabel: s.mode === 2 ? 'TRAINING [SELECTED]' : 'TRAINING', difficultyLabel: `CPU: ${DIFFICULTIES[s.difficulty]}` };
-      if (panel) panel.update(model); else panel = views.push(MatchPanel, model, { onIntent });
+      const s = match(), m = menu(), phase = s?.phase ?? 0;
+      if (!m || (phase !== 0 && phase !== 3 && phase !== 5)) { flow?.close({ immediate: true }); flow = undefined; shownScreen = -1; return; }
+      const screen = Math.min(6, m.screen), winner = s?.matchWinner ?? 0;
+      const model: ArcadeModel = {
+        cursor: m.cursor, mode: s?.mode ?? 0, difficulty: DIFFICULTIES[s?.difficulty ?? 1]!,
+        music: `${m.music}%`, effects: `${m.sfx}%`, browser: m.browserAvailable,
+        winner: winner === 0 ? 'RYU WINS' : 'KEN WINS', score: `${s?.p1Wins ?? 0} - ${s?.p2Wins ?? 0}`,
+        portrait: winner === 1 ? 'ui/ken-portrait' : 'ui/ryu-portrait',
+      };
+      if (flow && shownScreen === screen) flow.update(model);
+      else { flow?.close({ immediate: true }); shownScreen = screen; flow = views.push(SCREENS[screen]!, model, { onIntent }); }
     });
     const fight = createMemo(() => match()?.phase === 1 && (match()?.phaseTicks ?? 0) > 0);
     let banner: ViewHandle<BannerModel> | undefined;
     createEffect(() => {
       const s = match(), phase = s?.phase ?? 0;
       if (!s || (phase !== 4 && phase !== 2 && !fight())) { banner?.close({ immediate: true }); banner = undefined; return; }
-      const model = phase === 4 ? { label: `ROUND ${s.round}`, detail: 'BEST OF THREE / FIRST TO TWO WINS' } : phase === 2 ? { label: s.winner === 2 ? 'DRAW' : s.winner === 0 ? 'RYU WINS' : 'KEN WINS', detail: `${s.remaining === 0 ? 'TIME UP' : 'KO'} / RYU ${s.p1Wins} - KEN ${s.p2Wins}` } : { label: 'FIGHT', detail: '' };
+      const model = phase === 4 ? { label: `ROUND ${s.round}`, detail: 'FIRST TO TWO WINS' } : phase === 2 ? { label: s.winner === 2 ? 'DRAW' : s.winner === 0 ? 'RYU WINS' : 'KEN WINS', detail: `${s.remaining === 0 ? 'TIME UP' : 'KO'} / ${s.p1Wins} - ${s.p2Wins}` } : { label: 'FIGHT', detail: '' };
       if (banner) banner.update(model); else banner = views.push(FightBanner, model);
     });
     let consoleView: ViewHandle<TrainingModel> | undefined;
@@ -73,7 +108,7 @@ export const MatchUI = defineUI({
       const s = match();
       if (s?.mode !== 2 || s.phase !== 1) { consoleView?.close({ immediate: true }); consoleView = undefined; return; }
       const t = training(), bits = t?.inputBits ?? 0;
-      const model: TrainingModel = { stats: `DAMAGE ${t?.lastDamage ?? 0} / TOTAL ${t?.damage ?? 0} / COMBO ${t?.combo ?? 0} / BEST ${t?.maxCombo ?? 0}`, inputs: `INPUT: ${INPUT_NAMES.filter((_, i) => (bits & 1 << i) !== 0).join('+') || 'NEUTRAL'}`, dummyLabel: `DUMMY: ${DUMMIES[t?.dummyMode ?? 0]}`, boxesLabel: `HITBOXES: ${t?.showBoxes ? 'ON' : 'OFF'}` };
+      const model: TrainingModel = { stats: `DAMAGE ${t?.lastDamage ?? 0} / TOTAL ${t?.damage ?? 0} / COMBO ${t?.combo ?? 0} / BEST ${t?.maxCombo ?? 0}`, inputs: `INPUT: ${INPUT_NAMES.filter((_, i) => (bits & 1 << i) !== 0).join('+') || 'NEUTRAL'}`, dummyLabel: `DUMMY: ${DUMMIES[t?.dummyMode ?? 0]}`, boxesLabel: `BOXES: ${t?.showBoxes ? 'ON' : 'OFF'}` };
       if (consoleView) consoleView.update(model); else consoleView = views.push(TrainingConsole, model, { onIntent });
     });
     return null;

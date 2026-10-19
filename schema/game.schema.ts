@@ -38,3 +38,14 @@ export const TrainingState = resource('TrainingState', {
   previousHealth: u32({ default: 144 }), previousStun: u32(), resetStep: u32(), showBoxes: bool(),
 }, { sim: true });
 export const TrainingIntent = event('TrainingIntent', { action: u32(), value: u32() }, { sim: true });
+
+// Recorded frontend input keeps keyboard, controller and pointer navigation equivalent.
+export const MenuState = resource('MenuState', {
+  screen: u32(), cursor: u32(), returnScreen: u32(), returnCursor: u32(), lastIntent: u32(), lastPhase: u32({ default: 99 }),
+  music: u32({ default: 60 }), sfx: u32({ default: 70 }),
+  browserAvailable: bool(), browserRequest: u32(), browserAction: u32(),
+  keyboard: u32(), pad: u32(), axis: u32(), previous: u32(), repeat: u32(),
+}, { sim: true });
+export const MenuIntent = event('MenuIntent', {
+  action: u32(), value: u32(), id: u32(), screen: u32(),
+}, { sim: true });

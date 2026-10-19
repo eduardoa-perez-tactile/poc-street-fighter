@@ -33,52 +33,9 @@ export const StreetFighterHud = defineView<HudModel>({
           p1Score: () => model().p1Score, p2Score: () => model().p2Score,
           p1Wins: () => model().p1Wins, p2Wins: () => model().p2Wins,
           timer: () => model().timer, round: () => model().round,
-        }} />
-      </View>
-      <View class="sf-hud-bottom">
-        <Widget doc="fight-footer" props={{ visible: () => !model().training }} onIntent={(_, event) => intent(event.path.at(-1)!)} />
+        }} onIntent={(_, event) => intent(event.path.at(-1)!)} />
       </View>
     </Screen>
-  ),
-});
-
-export interface MatchPanelModel {
-  soloLabel?: string; localLabel?: string; trainingLabel?: string; difficultyLabel?: string;
-  settingsable?: boolean; canReturn?: boolean;
-  title: string;
-  subtitle: string;
-  hint: string;
-  ready: boolean;
-  paused: boolean;
-  result: boolean;
-}
-
-export const READY_PANEL: MatchPanelModel = {
-  title: 'STREET FIGHTER', subtitle: 'SOLO  /  RYU vs CPU', hint: 'ENTER TO START', ready: true, paused: false, result: false, settingsable: true, canReturn: false,
-};
-export const PAUSED_PANEL: MatchPanelModel = {
-  title: 'PAUSED', subtitle: 'Take a breath. The round is waiting.', hint: 'ESC TO RESUME', ready: false, paused: true, result: false, settingsable: true, canReturn: true,
-};
-
-export const MatchPanel = defineView<MatchPanelModel>({
-  name: 'MatchPanel',
-  description: 'Start instructions, pause and round results. Intents: start, resume, restart, rematch.',
-  blockInput: true,
-  dims: true,
-  samples: {
-    ready: READY_PANEL,
-    paused: PAUSED_PANEL,
-    ryuWins: { ...PAUSED_PANEL, title: 'RYU WINS THE MATCH', subtitle: 'FINAL SCORE / RYU 2 - KEN 0', hint: 'ENTER TO REMATCH', paused: false, result: true, settingsable: false },
-    kenWins: { ...PAUSED_PANEL, title: 'KEN WINS THE MATCH', subtitle: 'FINAL SCORE / RYU 1 - KEN 2', hint: 'ENTER TO REMATCH', paused: false, result: true, settingsable: false },
-  },
-  render: (model, { intent }) => (
-    <Widget doc="match-panel" props={{
-      title: () => model().title, subtitle: () => model().subtitle, hint: () => model().hint,
-      ready: () => model().ready, paused: () => model().paused, result: () => model().result,
-      soloLabel: () => model().soloLabel ?? 'SOLO [SELECTED]', localLabel: () => model().localLabel ?? 'LOCAL VERSUS',
-      trainingLabel: () => model().trainingLabel ?? 'TRAINING', difficultyLabel: () => model().difficultyLabel ?? 'CPU: NORMAL',
-      settingsable: () => model().settingsable ?? false, canReturn: () => model().canReturn ?? false,
-    }} onIntent={(_, event) => intent(event.path.at(-1)!)} />
   ),
 });
 
@@ -94,11 +51,4 @@ export const TrainingConsole = defineView<TrainingModel>({
   name: 'TrainingConsole',
   samples: { idle: { stats: 'DAMAGE 0 / COMBO 0 / BEST 0', inputs: 'INPUT: NEUTRAL', dummyLabel: 'DUMMY: STAND', boxesLabel: 'HITBOXES: OFF' }, combo: { stats: 'DAMAGE 72 / COMBO 3 / BEST 5', inputs: 'INPUT: RIGHT + HP', dummyLabel: 'DUMMY: BLOCK', boxesLabel: 'HITBOXES: ON' } },
   render: (m, { intent }) => <Screen safeArea class="sf-training-screen"><View class="sf-training"><Widget doc="training-console" props={{ stats: () => m().stats, inputs: () => m().inputs, dummyLabel: () => m().dummyLabel, boxesLabel: () => m().boxesLabel }} onIntent={(_, e) => intent(e.path.at(-1)!)} /></View></Screen>,
-});
-
-export interface AudioSettingsModel { musicLabel: string; sfxLabel: string }
-export const AudioSettings = defineView<AudioSettingsModel>({
-  name: 'AudioSettings', blockInput: true, dims: true,
-  samples: { normal: { musicLabel: 'MUSIC: 60%', sfxLabel: 'EFFECTS: 70%' }, muted: { musicLabel: 'MUSIC: 0%', sfxLabel: 'EFFECTS: 0%' } },
-  render: (m, { intent }) => <Widget doc="audio-settings" props={{ musicLabel: () => m().musicLabel, sfxLabel: () => m().sfxLabel }} onIntent={(_, e) => intent(e.path.at(-1)!)} />,
 });

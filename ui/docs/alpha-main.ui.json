@@ -1,0 +1,184 @@
+{
+  "$schemaVersion": 1,
+  "guid": "18ffff8e-3e13-457a-9e10-b3e39cf49aff",
+  "name": "alpha-main",
+  "title": "Alpha main",
+  "kind": "view",
+  "root": "root",
+  "nodes": {
+    "root": {
+      "type": "element",
+      "name": "Alpha main",
+      "style": {
+        "w": "100%",
+        "h": "100%",
+        "pad": [
+          24,
+          60,
+          24,
+          60
+        ],
+        "bg": "#191267ff",
+        "image": "ui/alpha-backdrop",
+        "fit": "cover",
+        "align": "center",
+        "justify": "center",
+        "gap": 10
+      },
+      "children": [
+        "wordmark",
+        "main_body",
+        "main_hint"
+      ]
+    },
+    "wordmark": {
+      "type": "element",
+      "name": "Element",
+      "children": [],
+      "style": {
+        "pad": 8,
+        "image": "ui/street-fighter-wordmark",
+        "w": 640,
+        "h": 190,
+        "fit": "contain"
+      }
+    },
+    "main_list": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "solo",
+        "local",
+        "training",
+        "options"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "column",
+        "gap": 4,
+        "w": 500
+      }
+    },
+    "solo": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "solo",
+      "props": {
+        "label": "SOLO BATTLE",
+        "active": {
+          "property": "f0"
+        }
+      },
+      "style": {
+        "w": "100%"
+      }
+    },
+    "local": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "local",
+      "props": {
+        "label": "VERSUS BATTLE",
+        "active": {
+          "property": "f1"
+        }
+      },
+      "style": {
+        "w": "100%"
+      }
+    },
+    "training": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "training",
+      "props": {
+        "label": "TRAINING",
+        "active": {
+          "property": "f2"
+        }
+      },
+      "style": {
+        "w": "100%"
+      }
+    },
+    "options": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "options",
+      "props": {
+        "label": "OPTIONS",
+        "active": {
+          "property": "f3"
+        }
+      },
+      "style": {
+        "w": "100%"
+      }
+    },
+    "main_hint": {
+      "type": "label",
+      "name": "Label",
+      "text": "UP / DOWN: SELECT    ENTER / A: CONFIRM    ESC / B: BACK",
+      "style": {
+        "fontSize": 13,
+        "color": "#c7c9ffff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "h": 22,
+        "textAlign": "center"
+      }
+    },
+    "main_body": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "main_list",
+        "main_portrait"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "row",
+        "align": "center",
+        "justify": "space-between",
+        "gap": 50,
+        "w": 960,
+        "h": 310
+      }
+    },
+    "main_portrait": {
+      "type": "icon",
+      "name": "Icon",
+      "image": "ui/ryu-portrait",
+      "style": {
+        "size": 32,
+        "w": 270,
+        "h": 310
+      }
+    }
+  },
+  "view": {
+    "behaviour": "screen"
+  },
+  "transition": {
+    "type": "instant"
+  },
+  "properties": {
+    "f0": {
+      "type": "yesno",
+      "default": true
+    },
+    "f1": {
+      "type": "yesno",
+      "default": false
+    },
+    "f2": {
+      "type": "yesno",
+      "default": false
+    },
+    "f3": {
+      "type": "yesno",
+      "default": false
+    }
+  }
+}

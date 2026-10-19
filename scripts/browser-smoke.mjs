@@ -140,7 +140,15 @@ try {
   await advance(90);
   await shot('01-ready'); // The title panel intentionally dims most arena pixels.
   check('native WebGPU startup', { adapter, state: await state() });
-  await page.locator('#sf-open-controls').click();
+  assert.equal(await page.locator('#sf-tools').count(), 0, 'Permanent browser chrome must not shrink the playfield.');
+  await page.evaluate(() => window.postMessage({ type: 'sf-browser-options-v1', action: 'controls' }, location.origin));
+  await page.waitForTimeout(80);
+  assert.equal(await page.locator('#sf-controls').evaluate(node => node.open), false, 'Parent-page spoof must fail iframe source validation.');
+  await page.keyboard.press('Enter'); await advance(4); await shot('01-main-menu');
+  for (let i = 0; i < 3; i++) { await page.keyboard.press('ArrowDown'); await advance(2); }
+  await page.keyboard.press('Enter'); await advance(4); await shot('01-options-menu');
+  for (let i = 0; i < 2; i++) { await page.keyboard.press('ArrowDown'); await advance(2); }
+  await page.keyboard.press('Enter');
   await page.locator('#sf-controls[open]').waitFor();
   await page.waitForTimeout(200); const controlsHeld = await state(); await page.waitForTimeout(150);
   assert.equal((await state()).step, controlsHeld.step, 'The fight advanced behind the browser controls dialog.');
@@ -150,15 +158,19 @@ try {
   await shot('01-browser-controls');
   await page.locator('#sf-reset-controls').click(); await page.locator('#sf-close-controls').click(); await advance(4);
   check('persistent remapping and controls-dialog suspension', { throwRemapped: saved.keys[0][10] });
+  await page.keyboard.press('ArrowDown'); await advance(2); await page.keyboard.press('Enter');
+  await page.locator('#sf-fullscreen-sheet[open]').waitFor();
   await page.locator('#sf-fullscreen').click();
   await page.waitForFunction(() => !!document.fullscreenElement); await advance(4);
   await page.evaluate(() => document.exitFullscreen()); await advance(4);
   await page.setViewportSize({ width: 1152, height: 672 });
   check('browser fullscreen enters and exits', true);
-  await clickCanvas(0.5, 0.317); // Actual LOCAL title button, not a simulation fixture.
-  await virtualPad(); await padPulse(9); await advance(135);
+  await page.keyboard.press('Escape'); await advance(4); // Options -> Main, focus OPTIONS.
+  await virtualPad(); await padPulse(12); await padPulse(12); // D-pad UP twice -> LOCAL.
+  await padPulse(0); await shot('01-local-setup');
+  await padPulse(9); await advance(135);
   await shot('02-fight', { art: true });
-  assert.equal(await page.locator('#sf-pad-status').textContent(), 'Controllers: 1');
+  assert.equal(await page.evaluate(() => globalThis.__sfBrowserOptions.controllers), 1);
   check('local match starts through standard controller START', await state());
   await virtualPad([], [0.25, 0]); await advance(8); await virtualPad(); await advance(4);
   await padPulse(14); await padPulse(0); await padPulse(8);
@@ -217,28 +229,35 @@ try {
   check('first-to-two local match and controller rematch exercised', 'Forty-two recovered heavy punches against neutral P2 with the stick continuously held across round resets, then actual controller START; result/rematch screenshots require visual verification.');
   await page.setViewportSize({ width: 1152, height: 672 }); await advance(5);
   await page.keyboard.press('Escape'); await advance(4);
-  await clickCanvas(0.6, 0.700); // MAIN MENU from pause.
-  await shot('11-return-title');
-  await clickCanvas(0.687, 0.317); await page.keyboard.press('Enter'); await advance(12);
+  for (let i = 0; i < 4; i++) { await page.keyboard.press('ArrowDown'); await advance(2); }
+  await page.keyboard.press('Enter'); await advance(5); await shot('11-return-main');
+  for (let i = 0; i < 2; i++) { await page.keyboard.press('ArrowDown'); await advance(2); }
+  await page.keyboard.press('Enter'); await advance(4); await shot('12-training-setup');
+  await page.keyboard.press('Enter'); await advance(12);
   await shot('12-training', { art: true });
-  await clickCanvas(0.817, 0.957); await shot('12-training-collision-boxes', { art: true });
-  await clickCanvas(0.530, 0.957);
+  await clickCanvas(0.908, 0.951); await shot('12-training-collision-boxes', { art: true });
+  await clickCanvas(0.630, 0.951);
   await hold(['d'], 350); await hold(['s', 'n'], 100); await advance(55);
   await shot('13-training-attack', { art: true });
-  await clickCanvas(0.675, 0.957); await clickCanvas(0.817, 0.957);
+  await clickCanvas(0.771, 0.951); await clickCanvas(0.908, 0.951);
   check('training mode selects and runs without round intro', await state());
-  await page.keyboard.press('Escape'); await advance(4); await clickCanvas(0.6, 0.700);
-  await clickCanvas(0.313, 0.317); await page.keyboard.press('Enter'); await advance(350);
-  await shot('14-solo-cpu', { art: true });
-  check('solo mode and autonomous CPU exercised', 'Five seconds of gameplay without P2 controls; see CPU movement/attack screenshot.');
-  await page.keyboard.press('Escape'); await advance(4); await clickCanvas(0.4, 0.700);
+  await page.keyboard.press('Escape'); await advance(4); await shot('13-pause-menu');
+  await page.keyboard.press('ArrowDown'); await advance(2); await page.keyboard.press('Enter'); await advance(4);
+  await shot('13-move-list'); await page.keyboard.press('Escape'); await advance(4);
+  await page.keyboard.press('ArrowDown'); await advance(2); await page.keyboard.press('Enter'); await advance(4);
   const audioBefore = await shot('15-audio-settings');
-  await clickCanvas(0.3461, 0.4148); await clickCanvas(0.3461, 0.5160);
+  await page.keyboard.press('ArrowLeft'); await advance(3); await page.keyboard.press('ArrowDown'); await advance(2); await page.keyboard.press('ArrowLeft'); await advance(3);
   const audioChanged = await shot('16-audio-adjusted');
   assert.notEqual(audioChanged, audioBefore, 'Audio settings controls produced no visible change.');
-  await clickCanvas(0.6534, 0.4148); await clickCanvas(0.6534, 0.5160);
-  await clickCanvas(0.4998, 0.6172);
-  check('in-game audio controls adjust and close from pause', 'Music/effects decrement, increment, and DONE traverse native canvas hit targets; screenshots record labels.');
+  await page.keyboard.press('ArrowRight'); await advance(3); await page.keyboard.press('ArrowUp'); await advance(2); await page.keyboard.press('ArrowRight'); await advance(3);
+  await page.keyboard.press('Escape'); await advance(4); // Options -> Pause, cursor OPTIONS.
+  await page.keyboard.press('ArrowDown'); await advance(2); await page.keyboard.press('ArrowDown'); await advance(2);
+  await page.keyboard.press('Enter'); await advance(5); // Main menu, cursor SOLO.
+  await page.keyboard.press('Enter'); await advance(4); await shot('14-solo-setup');
+  await page.keyboard.press('ArrowUp'); await advance(2); await page.keyboard.press('ArrowRight'); await advance(2); await page.keyboard.press('ArrowDown'); await advance(2);
+  await page.keyboard.press('Enter'); await advance(350); await shot('14-solo-cpu', { art: true });
+  check('solo difficulty setup and autonomous CPU exercised', 'Difficulty cycle then five seconds without P2 controls; CPU damage recorded in screenshot.');
+  check('pause, move list and options navigation', 'Actual keyboard routes through pause/moves/options/back/main; audio levels changed and restored.');
   const audioRunning = report.audio.some(value => value.contextType === 'realtime' && value.contextState === 'running');
   assert.ok(audioRunning, 'No running real-time WebAudio context observed after user startup and match audio.');
   check('browser audio unlocked', 'Chrome WebAudio reported a running realtime context; audible output still requires human playtest.');

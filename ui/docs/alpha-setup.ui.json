@@ -1,0 +1,335 @@
+{
+  "$schemaVersion": 1,
+  "guid": "d386913f-fb60-4ebc-858e-c13a653641e4",
+  "name": "alpha-setup",
+  "title": "Alpha setup",
+  "kind": "view",
+  "root": "root",
+  "nodes": {
+    "root": {
+      "type": "element",
+      "name": "Alpha setup",
+      "style": {
+        "w": "100%",
+        "h": "100%",
+        "pad": [
+          30,
+          44,
+          30,
+          44
+        ],
+        "bg": "#191267ff",
+        "image": "ui/alpha-backdrop",
+        "fit": "cover",
+        "align": "center",
+        "justify": "center",
+        "gap": 12
+      },
+      "children": [
+        "setup_heading",
+        "versus",
+        "setup_rule",
+        "setup_list",
+        "setup_hint"
+      ]
+    },
+    "setup_heading": {
+      "type": "label",
+      "name": "Label",
+      "text": "",
+      "style": {
+        "fontSize": 32,
+        "color": "#ffd34dff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": "100%",
+        "h": 42,
+        "textAlign": "center"
+      },
+      "property": "heading"
+    },
+    "versus": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "ryu_fighter",
+        "setup_vs",
+        "ken_fighter"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "row",
+        "align": "center",
+        "justify": "center",
+        "gap": 32,
+        "w": 900,
+        "h": 278
+      }
+    },
+    "ryu_fighter": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "ryu_portrait",
+        "ryu_name",
+        "ryu_role"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "column",
+        "align": "center",
+        "gap": 6,
+        "w": 260,
+        "h": 278
+      }
+    },
+    "ryu_portrait": {
+      "type": "icon",
+      "name": "Icon",
+      "image": "ui/ryu-portrait",
+      "style": {
+        "size": 32,
+        "w": 182,
+        "h": 208
+      }
+    },
+    "ryu_name": {
+      "type": "label",
+      "name": "Label",
+      "text": "RYU",
+      "style": {
+        "fontSize": 28,
+        "color": "#fff3b0ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "h": 30,
+        "textAlign": "center",
+        "w": "100%"
+      }
+    },
+    "ken_fighter": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "ken_portrait",
+        "ken_name",
+        "ken_role"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "column",
+        "align": "center",
+        "gap": 6,
+        "w": 260,
+        "h": 278
+      }
+    },
+    "ken_portrait": {
+      "type": "icon",
+      "name": "Icon",
+      "image": "ui/ken-portrait",
+      "style": {
+        "size": 32,
+        "w": 182,
+        "h": 208
+      }
+    },
+    "ken_name": {
+      "type": "label",
+      "name": "Label",
+      "text": "KEN",
+      "style": {
+        "fontSize": 28,
+        "color": "#fff3b0ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "h": 30,
+        "textAlign": "center",
+        "w": "100%"
+      }
+    },
+    "setup_vs": {
+      "type": "label",
+      "name": "Label",
+      "text": "VS",
+      "style": {
+        "fontSize": 68,
+        "color": "#f04b67ff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "w": 130,
+        "h": 110,
+        "textAlign": "center"
+      }
+    },
+    "setup_rule": {
+      "type": "label",
+      "name": "Label",
+      "text": "",
+      "style": {
+        "fontSize": 14,
+        "color": "#c7c9ffff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "h": 24,
+        "textAlign": "center"
+      },
+      "property": "detail"
+    },
+    "setup_list": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "difficulty",
+        "fight",
+        "back"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "column",
+        "gap": 2,
+        "w": 540
+      }
+    },
+    "difficulty": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "difficulty",
+      "props": {
+        "label": "DIFFICULTY",
+        "active": {
+          "property": "f0"
+        },
+        "value": {
+          "property": "difficulty"
+        },
+        "valued": true
+      },
+      "style": {
+        "w": "100%"
+      },
+      "show": "solo"
+    },
+    "fight": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "fight",
+      "props": {
+        "label": "FIGHT",
+        "active": {
+          "property": "f1"
+        }
+      },
+      "style": {
+        "w": "100%"
+      }
+    },
+    "back": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "back",
+      "props": {
+        "label": "BACK",
+        "active": {
+          "property": "f2"
+        }
+      },
+      "style": {
+        "w": "100%"
+      }
+    },
+    "setup_hint": {
+      "type": "label",
+      "name": "Label",
+      "text": "",
+      "style": {
+        "fontSize": 13,
+        "color": "#c7c9ffff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "h": 22,
+        "textAlign": "center"
+      },
+      "property": "hint"
+    },
+    "ryu_role": {
+      "type": "label",
+      "name": "Label",
+      "text": "PLAYER 1",
+      "style": {
+        "fontSize": 14,
+        "color": "#c7c9ffff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "h": 20,
+        "textAlign": "center"
+      }
+    },
+    "ken_role": {
+      "type": "label",
+      "name": "Label",
+      "text": "",
+      "style": {
+        "fontSize": 14,
+        "color": "#c7c9ffff",
+        "shadowX": 2,
+        "shadowY": 2,
+        "shadowColor": "#100b2fff",
+        "h": 20,
+        "textAlign": "center"
+      },
+      "property": "opponent"
+    }
+  },
+  "view": {
+    "behaviour": "screen"
+  },
+  "transition": {
+    "type": "instant"
+  },
+  "properties": {
+    "f0": {
+      "type": "yesno",
+      "default": true
+    },
+    "f1": {
+      "type": "yesno",
+      "default": false
+    },
+    "f2": {
+      "type": "yesno",
+      "default": false
+    },
+    "heading": {
+      "type": "text",
+      "default": "SOLO BATTLE"
+    },
+    "difficulty": {
+      "type": "text",
+      "default": "NORMAL"
+    },
+    "solo": {
+      "type": "yesno",
+      "default": true
+    },
+    "opponent": {
+      "type": "text",
+      "default": "CPU"
+    },
+    "detail": {
+      "type": "text",
+      "default": "KEN'S STAGE / FIRST TO TWO WINS"
+    },
+    "hint": {
+      "type": "text",
+      "default": "LEFT / RIGHT: ADJUST    ENTER / A: CONFIRM    ESC / B: BACK"
+    }
+  }
+}

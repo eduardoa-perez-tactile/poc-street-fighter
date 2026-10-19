@@ -7,6 +7,6 @@ export { MatchUI, StreetFighterHud, MatchPanel } from './ui/index.ts';
 export { CombatAI } from './combat/ai.ts';
 export { TrainingCommands, TrainingStats } from './training/index.ts';
 
-export { MatchCommands, MatchLifecycle } from './match/index.ts';
+export { MatchCommands, MatchLifecycle, MenuNavigation } from './match/index.ts';
 export { DrawDebugBoxes } from './presentation/debug-boxes.ts';
 export { PresentHeavyImpacts } from './presentation/impacts.ts';
