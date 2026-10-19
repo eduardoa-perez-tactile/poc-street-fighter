@@ -1,0 +1,157 @@
+{
+  "repository": "https://github.com/iuritorres/street-fighter-2-javascript",
+  "commit": "e1c9d48a24f446972c941d4bc714f760908c76da",
+  "license": "No license file present at pinned commit; reuse permissions unresolved. Street Fighter characters/art/audio remain third-party material.",
+  "conversion": {
+    "fighterCanvas": [
+      256,
+      256
+    ],
+    "fighterFeetPivot": [
+      128,
+      224
+    ],
+    "effectCanvas": [
+      128,
+      128
+    ],
+    "effectPivot": [
+      64,
+      64
+    ],
+    "resampling": "none",
+    "stageBackgroundKey": [
+      83,
+      103,
+      141
+    ],
+    "decalsBackgroundKey": [
+      42,
+      81,
+      114
+    ],
+    "shadowBackgroundKey": [
+      27,
+      2,
+      218
+    ]
+  },
+  "inputs": [
+    {
+      "path": "images/decals.png",
+      "sha256": "c826e1d68efe73d92042b691a07e7b2b40a646142448e8a5d558f14d2f15e524"
+    },
+    {
+      "path": "images/ken-stage.png",
+      "sha256": "fc8bf3f0fa589dddac268ed78a8046a081c5a7f1b4a951f1a819a4888d32baa3"
+    },
+    {
+      "path": "images/ken.png",
+      "sha256": "c69668ae985d5e77e9245e6352f33a776f7f29205e663002a0960bbbde211081"
+    },
+    {
+      "path": "images/misc.png",
+      "sha256": "1d2c8381841b38dcb2b14319abc73a5febbbd759283076f513bcfda721eb9f9b"
+    },
+    {
+      "path": "images/ryu.png",
+      "sha256": "dbc88314136cd18ca9ec24958adc5f2de3e6e91fd5cdc9d549f7e9ac73d01c80"
+    },
+    {
+      "path": "images/shadow.png",
+      "sha256": "ad69ff302d84646d8b67e8d003017331d0ff9a05b280605bbd9d156b9cde12c1"
+    },
+    {
+      "path": "sounds/heavy-attack.ogg",
+      "sha256": "bd5f944377088c0d9d82a48cc8d689ab47ae84e623fbbf618ead817b97bc7358"
+    },
+    {
+      "path": "sounds/heavy-kick-hit.ogg",
+      "sha256": "4f18080c9233439f6cdfd58b077c8604e227a6983494db4e59a119e5fb92f5b4"
+    },
+    {
+      "path": "sounds/heavy-punch-hit.ogg",
+      "sha256": "fbb9ded22ef35d115165608763f2af4cf87c5419d08f9fcafa02bfbf63e86684"
+    },
+    {
+      "path": "sounds/land.ogg",
+      "sha256": "43e48713e1486e5970c4f4e0be7edb7ac312de801f2f137a7d4d67de16d343f1"
+    },
+    {
+      "path": "sounds/light-attack.ogg",
+      "sha256": "c7426c204b2a83efa85a4ed5df36d62664712b5f954d46d564de4870f87a5a03"
+    },
+    {
+      "path": "sounds/light-kick-hit.ogg",
+      "sha256": "c89373719ffb6c7ba44b6f5a0cfc2229f41be866433980db1afb1820d521f7e2"
+    },
+    {
+      "path": "sounds/light-punch-hit.ogg",
+      "sha256": "50a6309dbb5219a959076a5a6164f8735a2ba700f74a1b17fbc9a96f97268f63"
+    },
+    {
+      "path": "sounds/medium-attack.ogg",
+      "sha256": "700108a8c778b0768b9c470e8c5ca6e41ad05e78abef5da18fb0dee8ccd3eabb"
+    },
+    {
+      "path": "sounds/medium-kick-hit.ogg",
+      "sha256": "8768d653fa854f8142b45a51a2fc010daba4f8fc9fdd16452546be2aa173aa15"
+    },
+    {
+      "path": "sounds/medium-punch-hit.ogg",
+      "sha256": "8ee552e227f7980a9b826f9899b380bbd666d020f220130e94ab97534e3736dd"
+    },
+    {
+      "path": "sounds/theme-ken-main-cps1.ogg",
+      "sha256": "42726074eb73a125213c565c83d5fb9312bf21280a7c2dbe7c3580eca32f6ff3"
+    },
+    {
+      "path": "sounds/voice-hadouken.ogg",
+      "sha256": "15b4b91a25cae5ae9e625dbc2e5d28b4c9bf8b010644f3737071b449e62e0cf0"
+    },
+    {
+      "path": "src/constants/fighter.js",
+      "sha256": "162b33a8638d058bd611a435107402723b838aa53c6e71401442a17eea01fd90"
+    },
+    {
+      "path": "src/entities/fighters/Ken.js",
+      "sha256": "ecbb44eccad92b2568219ad8bac664e7e591f9d0427508c92e9877704bf07475"
+    },
+    {
+      "path": "src/entities/fighters/Ryu.js",
+      "sha256": "9de531e4703c37a34dd3da1f1f2a2534093674d939cebcac6807f73efbf6bbed"
+    },
+    {
+      "path": "src/entities/fighters/shared/HeavyHitSplash.js",
+      "sha256": "6c0872f15c9f4095aa23927004f65411cf03581ddd4944243d7e87f8c7f6c6a5"
+    },
+    {
+      "path": "src/entities/fighters/shared/LightHitSplash.js",
+      "sha256": "8cb7631818a42db21c161931d0550082692ae2f6451658e83ea8efc54f4453df"
+    },
+    {
+      "path": "src/entities/fighters/shared/MediumHitSplash.js",
+      "sha256": "9fb26b1b5f843dc681d3461e8f22fa56e867a9f3d726102a87f26b25eef1713c"
+    },
+    {
+      "path": "src/entities/fighters/shared/Shadow.js",
+      "sha256": "6264a7806bbef17996191a5b56a7f54de963ad27f5a8295c57d58f692c817fb5"
+    },
+    {
+      "path": "src/entities/fighters/special/Fireball.js",
+      "sha256": "bb4d32108a0a08d3e45c367722ad7100ccac46c2d0a88dc468b38fd6f491a511"
+    },
+    {
+      "path": "src/entities/overlays/StatusBar.js",
+      "sha256": "56b58c8b3cdc95b6b4b782953805936ecd3a50dd7c424a0055842f7439005910"
+    },
+    {
+      "path": "src/entities/stage/KenStage.js",
+      "sha256": "800dfc85f5873b91b45c53acfbdf3e459b80964e8e1a8090fb17a623e6c2f09c"
+    },
+    {
+      "path": "src/entities/stage/shared/SkewedFloor.js",
+      "sha256": "67a967bd92c1dea03391c7fef7b9cd1d89772edfa0daf7cdbbbe293b39ac86fe"
+    }
+  ]
+}

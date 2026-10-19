@@ -1,0 +1,7 @@
+guid = "306d4c47-662c-5b1c-ad8e-240d444441e1"
+importer = "texture"
+
+[settings]
+atlas = "fighters-ryu"
+compression = "none"
+mipmaps = false

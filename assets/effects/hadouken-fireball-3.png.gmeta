@@ -1,0 +1,7 @@
+guid = "2569e81c-6ba8-5467-975a-ab2237a5cd8b"
+importer = "texture"
+
+[settings]
+atlas = "effects"
+compression = "none"
+mipmaps = false

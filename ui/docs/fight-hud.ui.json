@@ -1,0 +1,395 @@
+{
+  "$schemaVersion": 1,
+  "guid": "6447a4ec-12b2-49c7-9d39-e48b860541b5",
+  "name": "fight-hud",
+  "title": "Fight hud",
+  "kind": "widget",
+  "root": "root",
+  "nodes": {
+    "root": {
+      "type": "element",
+      "name": "Fight hud",
+      "style": {
+        "dir": "row",
+        "pad": [
+          12,
+          24,
+          8,
+          24
+        ],
+        "align": "start",
+        "bg": "#07101cbb",
+        "radius": 0,
+        "gap": 18,
+        "w": "100%",
+        "h": 110
+      },
+      "children": [
+        "p1",
+        "clock",
+        "p2"
+      ]
+    },
+    "p1": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "p1_row",
+        "p1_frame",
+        "p1_wins"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "column",
+        "grow": 1,
+        "w": 0,
+        "gap": 3
+      }
+    },
+    "p1_row": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "p1_name",
+        "p1_score"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "row",
+        "justify": "space-between",
+        "h": 26
+      }
+    },
+    "p1_name": {
+      "type": "label",
+      "name": "Label",
+      "text": "RYU",
+      "style": {
+        "fontSize": 23,
+        "weight": 800,
+        "color": "#fff0bdff"
+      }
+    },
+    "p1_score": {
+      "type": "label",
+      "name": "Label",
+      "text": "{p1Score}",
+      "style": {
+        "fontSize": 19,
+        "color": "#ffffff",
+        "textAlign": "right"
+      }
+    },
+    "p1_frame": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "p1_empty"
+      ],
+      "style": {
+        "pad": 3,
+        "bg": "#f7e7b0ff",
+        "h": 25
+      }
+    },
+    "p1_empty": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "p1_fill"
+      ],
+      "style": {
+        "pad": 0,
+        "bg": "#9a2839ff",
+        "h": "100%"
+      }
+    },
+    "p1_fill": {
+      "type": "element",
+      "name": "Element",
+      "children": [],
+      "style": {
+        "pad": 0,
+        "h": "100%",
+        "w": "100%",
+        "fill": "horizontal",
+        "fillAmount": 1,
+        "fillOrigin": "start",
+        "fit": "fill",
+        "bg": "#ffd13cff"
+      }
+    },
+    "p1_wins": {
+      "type": "label",
+      "name": "Label",
+      "text": "WINS  {p1Wins}",
+      "style": {
+        "fontSize": 15,
+        "color": "#c7d4e5ff",
+        "textAlign": "left"
+      }
+    },
+    "p2": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "p2_row",
+        "p2_frame",
+        "p2_wins"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "column",
+        "grow": 1,
+        "w": 0,
+        "gap": 3
+      }
+    },
+    "p2_row": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "p2_name",
+        "p2_score"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "row",
+        "justify": "space-between",
+        "h": 26
+      }
+    },
+    "p2_name": {
+      "type": "label",
+      "name": "Label",
+      "text": "KEN",
+      "style": {
+        "fontSize": 23,
+        "weight": 800,
+        "color": "#fff0bdff"
+      }
+    },
+    "p2_score": {
+      "type": "label",
+      "name": "Label",
+      "text": "{p2Score}",
+      "style": {
+        "fontSize": 19,
+        "color": "#ffffff",
+        "textAlign": "right"
+      }
+    },
+    "p2_frame": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "p2_empty"
+      ],
+      "style": {
+        "pad": 3,
+        "bg": "#f7e7b0ff",
+        "h": 25
+      }
+    },
+    "p2_empty": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "p2_fill"
+      ],
+      "style": {
+        "pad": 0,
+        "bg": "#9a2839ff",
+        "h": "100%"
+      }
+    },
+    "p2_fill": {
+      "type": "element",
+      "name": "Element",
+      "children": [],
+      "style": {
+        "pad": 0,
+        "h": "100%",
+        "w": "100%",
+        "fill": "horizontal",
+        "fillAmount": 1,
+        "fillOrigin": "end",
+        "fit": "fill",
+        "bg": "#ffd13cff"
+      }
+    },
+    "p2_wins": {
+      "type": "label",
+      "name": "Label",
+      "text": "WINS  {p2Wins}",
+      "style": {
+        "fontSize": 15,
+        "color": "#c7d4e5ff",
+        "textAlign": "right"
+      }
+    },
+    "clock": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "clock_label",
+        "clock_value",
+        "clock_round"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "column",
+        "w": 82,
+        "align": "center",
+        "gap": 0
+      }
+    },
+    "clock_label": {
+      "type": "label",
+      "name": "Label",
+      "text": "TIME",
+      "style": {
+        "fontSize": 14,
+        "color": "#ffcf4dff",
+        "weight": 800,
+        "textAlign": "center"
+      }
+    },
+    "clock_value": {
+      "type": "label",
+      "name": "Label",
+      "text": "{timer}",
+      "style": {
+        "fontSize": 44,
+        "color": "#ffffffff",
+        "weight": 800,
+        "textAlign": "center",
+        "h": 53
+      }
+    },
+    "clock_round": {
+      "type": "label",
+      "name": "Label",
+      "text": "ROUND {round}",
+      "style": {
+        "fontSize": 12,
+        "color": "#d8e5f1ff",
+        "textAlign": "center"
+      }
+    }
+  },
+  "properties": {
+    "healthone": {
+      "type": "number",
+      "default": 144,
+      "format": "value",
+      "drivers": [
+        {
+          "type": "range",
+          "min": 0,
+          "max": 144,
+          "empty": {
+            "set": {
+              "p1_fill": {
+                "fillAmount": 0
+              }
+            }
+          },
+          "full": {
+            "set": {
+              "p1_fill": {
+                "fillAmount": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "healthtwo": {
+      "type": "number",
+      "default": 144,
+      "format": "value",
+      "drivers": [
+        {
+          "type": "range",
+          "min": 0,
+          "max": 144,
+          "empty": {
+            "set": {
+              "p2_fill": {
+                "fillAmount": 0
+              }
+            }
+          },
+          "full": {
+            "set": {
+              "p2_fill": {
+                "fillAmount": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "timer": {
+      "type": "number",
+      "default": 99,
+      "format": "value"
+    },
+    "p1Score": {
+      "type": "number",
+      "default": 0,
+      "format": "value"
+    },
+    "p2Score": {
+      "type": "number",
+      "default": 0,
+      "format": "value"
+    },
+    "p1Wins": {
+      "type": "number",
+      "default": 0,
+      "format": "value"
+    },
+    "p2Wins": {
+      "type": "number",
+      "default": 0,
+      "format": "value"
+    },
+    "round": {
+      "type": "number",
+      "default": 1,
+      "format": "value"
+    }
+  },
+  "samples": {
+    "opening": {
+      "healthone": 144,
+      "healthtwo": 144,
+      "timer": 99
+    },
+    "closeFight": {
+      "healthone": 24,
+      "healthtwo": 80,
+      "timer": 12,
+      "p1Score": 1200,
+      "p2Score": 800,
+      "p1Wins": 1,
+      "p2Wins": 2,
+      "round": 4
+    },
+    "half": {
+      "healthone": 72,
+      "healthtwo": 72,
+      "timer": 50
+    },
+    "empty": {
+      "healthone": 0,
+      "healthtwo": 0,
+      "timer": 0
+    }
+  },
+  "transition": {
+    "type": "instant"
+  }
+}

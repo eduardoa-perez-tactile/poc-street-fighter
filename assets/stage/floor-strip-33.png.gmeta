@@ -1,0 +1,7 @@
+guid = "c36d1076-5236-5431-9704-7faab02bd0cb"
+importer = "texture"
+
+[settings]
+atlas = "stage"
+compression = "none"
+mipmaps = false

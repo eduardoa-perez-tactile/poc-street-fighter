@@ -4,40 +4,503 @@
   "enums": [],
   "types": [
     {
-      "name": "Bubble",
-      "kind": "component",
+      "name": "CombatEffect",
+      "kind": "event",
       "sim": true,
       "fields": [
         {
-          "name": "radius",
+          "name": "step",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "attack",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "kind",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "player",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "strength",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "x",
           "kind": "f32",
           "scalar": "f32",
           "lanes": 1
         },
         {
-          "name": "speed",
+          "name": "y",
           "kind": "f32",
           "scalar": "f32",
-          "lanes": 1,
-          "doc": "Units per step"
+          "lanes": 1
         }
       ],
       "package": "StreetFighter"
     },
     {
-      "name": "Game",
+      "name": "CombatInput",
       "kind": "resource",
       "sim": true,
       "fields": [
         {
-          "name": "score",
+          "name": "keyboard",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        },
+        {
+          "name": "pad",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        },
+        {
+          "name": "axis",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        },
+        {
+          "name": "actions",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        },
+        {
+          "name": "previous",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        },
+        {
+          "name": "held",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        },
+        {
+          "name": "pressed",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        },
+        {
+          "name": "direction",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        },
+        {
+          "name": "motion",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        },
+        {
+          "name": "motionAge",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        }
+      ],
+      "package": "StreetFighter"
+    },
+    {
+      "name": "Fighter",
+      "kind": "component",
+      "sim": true,
+      "fields": [
+        {
+          "name": "player",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "x",
+          "kind": "f32",
+          "scalar": "f32",
+          "lanes": 1
+        },
+        {
+          "name": "y",
+          "kind": "f32",
+          "scalar": "f32",
+          "lanes": 1,
+          "default": 216
+        },
+        {
+          "name": "vx",
+          "kind": "f32",
+          "scalar": "f32",
+          "lanes": 1
+        },
+        {
+          "name": "vy",
+          "kind": "f32",
+          "scalar": "f32",
+          "lanes": 1
+        },
+        {
+          "name": "facing",
+          "kind": "i32",
+          "scalar": "i32",
+          "lanes": 1,
+          "default": 1
+        },
+        {
+          "name": "state",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "frame",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "age",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "attackHit",
+          "kind": "bool",
+          "scalar": "u8",
+          "lanes": 1
+        },
+        {
+          "name": "strength",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "projectileFired",
+          "kind": "bool",
+          "scalar": "u8",
+          "lanes": 1
+        },
+        {
+          "name": "jumpDirection",
+          "kind": "i32",
+          "scalar": "i32",
+          "lanes": 1
+        }
+      ],
+      "package": "StreetFighter"
+    },
+    {
+      "name": "MatchIntent",
+      "kind": "event",
+      "sim": true,
+      "fields": [
+        {
+          "name": "action",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        }
+      ],
+      "package": "StreetFighter"
+    },
+    {
+      "name": "MatchState",
+      "kind": "resource",
+      "sim": true,
+      "fields": [
+        {
+          "name": "phase",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "remaining",
           "kind": "u32",
           "scalar": "u32",
           "lanes": 1,
-          "doc": "Bubbles popped"
+          "default": 5940
         },
         {
-          "name": "spawned",
+          "name": "winner",
+          "kind": "i32",
+          "scalar": "i32",
+          "lanes": 1,
+          "default": -1
+        },
+        {
+          "name": "round",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1,
+          "default": 1
+        },
+        {
+          "name": "p1Health",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1,
+          "default": 144
+        },
+        {
+          "name": "p2Health",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1,
+          "default": 144
+        },
+        {
+          "name": "p1Score",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "p2Score",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "p1Wins",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "p2Wins",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "hitStop",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "initialized",
+          "kind": "bool",
+          "scalar": "u8",
+          "lanes": 1
+        },
+        {
+          "name": "intentKeys",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "resetStep",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "freezeStep",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        }
+      ],
+      "package": "StreetFighter"
+    },
+    {
+      "name": "Projectile",
+      "kind": "component",
+      "sim": true,
+      "fields": [
+        {
+          "name": "player",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "x",
+          "kind": "f32",
+          "scalar": "f32",
+          "lanes": 1
+        },
+        {
+          "name": "y",
+          "kind": "f32",
+          "scalar": "f32",
+          "lanes": 1
+        },
+        {
+          "name": "facing",
+          "kind": "i32",
+          "scalar": "i32",
+          "lanes": 1
+        },
+        {
+          "name": "strength",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "state",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "frame",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        }
+      ],
+      "package": "StreetFighter"
+    },
+    {
+      "name": "ArenaFocus",
+      "kind": "component",
+      "sim": true,
+      "fields": [],
+      "package": "StreetFighter"
+    },
+    {
+      "name": "ArenaVisualState",
+      "kind": "resource",
+      "sim": true,
+      "fields": [
+        {
+          "name": "initialized",
+          "kind": "bool",
+          "scalar": "u8",
+          "lanes": 1
+        },
+        {
+          "name": "focus",
+          "kind": "entity",
+          "scalar": "u32",
+          "lanes": 2
+        },
+        {
+          "name": "tick",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "lastSparkStep",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "lastAudioStep",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "musicPhase",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1,
+          "default": 99
+        }
+      ],
+      "package": "StreetFighter"
+    },
+    {
+      "name": "FighterShadow",
+      "kind": "component",
+      "sim": true,
+      "fields": [
+        {
+          "name": "player",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        }
+      ],
+      "package": "StreetFighter"
+    },
+    {
+      "name": "HitSpark",
+      "kind": "component",
+      "sim": true,
+      "fields": [
+        {
+          "name": "life",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "player",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "strength",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "x",
+          "kind": "f32",
+          "scalar": "f32",
+          "lanes": 1
+        },
+        {
+          "name": "y",
+          "kind": "f32",
+          "scalar": "f32",
+          "lanes": 1
+        }
+      ],
+      "package": "StreetFighter"
+    },
+    {
+      "name": "RenderBound",
+      "kind": "component",
+      "sim": true,
+      "fields": [
+        {
+          "name": "kind",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        }
+      ],
+      "package": "StreetFighter"
+    },
+    {
+      "name": "StagePart",
+      "kind": "component",
+      "sim": false,
+      "fields": [
+        {
+          "name": "index",
           "kind": "u32",
           "scalar": "u32",
           "lanes": 1

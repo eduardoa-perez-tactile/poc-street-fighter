@@ -1,0 +1,17 @@
+.sf-hud {
+  align-items: center;
+}
+.sf-hud-top {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  max-width: 1152px;
+  height: 110px;
+}
+.sf-hud-bottom {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  max-width: 1152px;
+  height: 58px;
+}

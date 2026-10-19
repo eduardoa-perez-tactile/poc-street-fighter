@@ -1,0 +1,383 @@
+{
+  "$schemaVersion": 1,
+  "guid": "2663b14d-daef-4e00-a08e-59dbf9c0b0d6",
+  "name": "match-panel",
+  "title": "Match panel",
+  "kind": "view",
+  "root": "root",
+  "nodes": {
+    "root": {
+      "type": "element",
+      "name": "Match panel",
+      "style": {
+        "w": "100%",
+        "h": "100%",
+        "pad": 24,
+        "align": "center",
+        "justify": "center"
+      },
+      "children": [
+        "panel"
+      ]
+    },
+    "panel": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "panel_kicker",
+        "panel_title",
+        "panel_subtitle",
+        "instructions",
+        "special_hint",
+        "panel_actions",
+        "panel_hint"
+      ],
+      "style": {
+        "pad": [
+          26,
+          30,
+          26,
+          30
+        ],
+        "dir": "column",
+        "align": "center",
+        "gap": 13,
+        "w": "84%",
+        "bg": "#0c1829f5",
+        "radius": 3
+      }
+    },
+    "panel_kicker": {
+      "type": "label",
+      "name": "Label",
+      "text": "THE WORLD WARRIOR",
+      "style": {
+        "fontSize": 15,
+        "weight": 800,
+        "color": "#55d9efff",
+        "textAlign": "center"
+      }
+    },
+    "panel_title": {
+      "type": "label",
+      "name": "Label",
+      "text": "Label",
+      "property": "title",
+      "style": {
+        "fontSize": 52,
+        "fitMin": 30,
+        "weight": 800,
+        "color": "#ffce4aff",
+        "textAlign": "center",
+        "w": "100%",
+        "h": 66
+      }
+    },
+    "panel_subtitle": {
+      "type": "label",
+      "name": "Label",
+      "text": "Label",
+      "property": "subtitle",
+      "style": {
+        "fontSize": 20,
+        "fitMin": 14,
+        "color": "#f1e9d3ff",
+        "textAlign": "center",
+        "w": "100%",
+        "h": 30
+      }
+    },
+    "instructions": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "one",
+        "two"
+      ],
+      "style": {
+        "pad": [
+          10,
+          0,
+          10,
+          0
+        ],
+        "dir": "row",
+        "gap": 28,
+        "w": "100%"
+      },
+      "show": "ready"
+    },
+    "one": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "one_title",
+        "one_move",
+        "one_attack"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "column",
+        "w": 0,
+        "grow": 1,
+        "gap": 8
+      }
+    },
+    "one_title": {
+      "type": "label",
+      "name": "Label",
+      "text": "PLAYER ONE · RYU",
+      "style": {
+        "fontSize": 18,
+        "fitMin": 13,
+        "color": "#ffcf4dff",
+        "weight": 800,
+        "w": "100%",
+        "h": 26
+      }
+    },
+    "one_move": {
+      "type": "label",
+      "name": "Label",
+      "text": "W A S D  ·  move / jump / crouch",
+      "style": {
+        "fontSize": 15,
+        "fitMin": 10,
+        "color": "#d3e0eaff",
+        "w": "100%",
+        "h": 24
+      }
+    },
+    "one_attack": {
+      "type": "label",
+      "name": "Label",
+      "text": "F G H  ·  punches    V B N  ·  kicks",
+      "style": {
+        "fontSize": 15,
+        "fitMin": 10,
+        "color": "#d3e0eaff",
+        "w": "100%",
+        "h": 24
+      }
+    },
+    "two": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "two_title",
+        "two_move",
+        "two_attack"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "column",
+        "w": 0,
+        "grow": 1,
+        "gap": 8
+      }
+    },
+    "two_title": {
+      "type": "label",
+      "name": "Label",
+      "text": "PLAYER TWO · KEN",
+      "style": {
+        "fontSize": 18,
+        "fitMin": 13,
+        "color": "#ffcf4dff",
+        "weight": 800,
+        "w": "100%",
+        "h": 26
+      }
+    },
+    "two_move": {
+      "type": "label",
+      "name": "Label",
+      "text": "ARROWS  ·  move / jump / crouch",
+      "style": {
+        "fontSize": 15,
+        "fitMin": 10,
+        "color": "#d3e0eaff",
+        "w": "100%",
+        "h": 24
+      }
+    },
+    "two_attack": {
+      "type": "label",
+      "name": "Label",
+      "text": "J K L  ·  punches    U I O  ·  kicks",
+      "style": {
+        "fontSize": 15,
+        "fitMin": 10,
+        "color": "#d3e0eaff",
+        "w": "100%",
+        "h": 24
+      }
+    },
+    "special_hint": {
+      "type": "label",
+      "name": "Label",
+      "text": "HADOUKEN   Down > Down-forward > Forward + Punch",
+      "style": {
+        "fontSize": 17,
+        "fitMin": 12,
+        "color": "#91d8eaff",
+        "w": "100%",
+        "h": 30,
+        "textAlign": "center"
+      },
+      "show": "ready"
+    },
+    "panel_actions": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "start",
+        "resume",
+        "restart",
+        "rematch"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "row",
+        "gap": 16,
+        "justify": "center",
+        "w": "100%"
+      }
+    },
+    "start": {
+      "type": "use",
+      "doc": "fight-button",
+      "key": "start",
+      "props": {
+        "label": "START FIGHT"
+      },
+      "show": "ready",
+      "style": {
+        "w": 238
+      }
+    },
+    "resume": {
+      "type": "use",
+      "doc": "fight-button",
+      "key": "resume",
+      "props": {
+        "label": "RESUME FIGHT"
+      },
+      "show": "paused",
+      "style": {
+        "w": 238
+      }
+    },
+    "restart": {
+      "type": "use",
+      "doc": "fight-button",
+      "key": "restart",
+      "props": {
+        "label": "RESTART ROUND"
+      },
+      "show": "paused",
+      "style": {
+        "w": 238
+      }
+    },
+    "rematch": {
+      "type": "use",
+      "doc": "fight-button",
+      "key": "rematch",
+      "props": {
+        "label": "PLAY AGAIN"
+      },
+      "show": "result",
+      "style": {
+        "w": 238
+      }
+    },
+    "panel_hint": {
+      "type": "label",
+      "name": "Label",
+      "text": "Label",
+      "property": "hint",
+      "style": {
+        "fontSize": 14,
+        "fitMin": 11,
+        "color": "#98abc0ff",
+        "textAlign": "center",
+        "h": 24,
+        "w": "100%"
+      }
+    }
+  },
+  "view": {
+    "behaviour": "dialog",
+    "dims": true,
+    "safe": true
+  },
+  "transition": {
+    "type": "instant"
+  },
+  "properties": {
+    "title": {
+      "type": "text",
+      "default": "STREET FIGHTER"
+    },
+    "subtitle": {
+      "type": "text",
+      "default": "LOCAL VERSUS  /  RYU vs KEN"
+    },
+    "hint": {
+      "type": "text",
+      "default": "ENTER TO START"
+    },
+    "ready": {
+      "type": "yesno",
+      "default": true
+    },
+    "paused": {
+      "type": "yesno",
+      "default": false
+    },
+    "result": {
+      "type": "yesno",
+      "default": false
+    }
+  },
+  "samples": {
+    "ready": {
+      "ready": true,
+      "paused": false,
+      "result": false
+    },
+    "paused": {
+      "ready": false,
+      "paused": true,
+      "result": false,
+      "title": "PAUSED",
+      "subtitle": "Take a breath. The round is waiting.",
+      "hint": "ESC TO RESUME"
+    },
+    "ryuWins": {
+      "ready": false,
+      "paused": false,
+      "result": true,
+      "title": "RYU WINS",
+      "subtitle": "Another round?",
+      "hint": "ENTER TO PLAY AGAIN"
+    },
+    "kenWins": {
+      "ready": false,
+      "paused": false,
+      "result": true,
+      "title": "KEN WINS",
+      "subtitle": "Another round?",
+      "hint": "ENTER TO PLAY AGAIN"
+    },
+    "draw": {
+      "ready": false,
+      "paused": false,
+      "result": true,
+      "title": "DRAW",
+      "subtitle": "An even match. Settle it in the next round.",
+      "hint": "ENTER TO PLAY AGAIN"
+    }
+  }
+}

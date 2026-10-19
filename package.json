@@ -3,15 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "setup": "node scripts/setup.mjs",
     "test": "node --test scripts/*.test.mjs",
+    "test:browser": "node scripts/browser-smoke.mjs",
     "check:repo": "node scripts/check-repo.mjs",
     "verify": "node scripts/verify.mjs",
     "verify:web": "node scripts/verify.mjs --web",
+    "play:web": "node scripts/web-toolchain.mjs serve",
     "verify:hermes": "node scripts/verify.mjs --hermes",
     "pr:verify": "node scripts/verify.mjs --publish",
     "pr:merge": "node scripts/merge.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1"
   }
 }

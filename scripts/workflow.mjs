@@ -20,8 +20,8 @@ export const HERMES_CHECKS = [
 ];
 
 export const WEB_CHECKS = [
-  ['Browser-runtime simulation parity', 'gameengine', ['test', '--tier', 't0', '--js', 'v8,web']],
-  ['Playable WebGPU probe export', 'gameengine', ['build', 'web', '--config', 'probe', '--out', 'build/web']],
+  ['Browser-runtime simulation parity', 'node', ['scripts/web-toolchain.mjs', 'parity']],
+  ['Playable WebGPU probe export', 'node', ['scripts/web-toolchain.mjs', 'export']],
 ];
 
 export function capture(command, args) {

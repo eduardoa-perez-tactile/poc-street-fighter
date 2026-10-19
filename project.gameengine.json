@@ -1,21 +1,113 @@
 {
   "$schemaVersion": 2,
   "name": "StreetFighter",
-  "bundleId": { "ios": "com.example.streetfighter", "android": "com.example.streetfighter" },
+  "bundleId": {
+    "ios": "com.tactile.poc.streetfighter",
+    "android": "com.tactile.poc.streetfighter",
+    "web": "com.tactile.poc.streetfighter"
+  },
   "version": "0.1.0",
-  "sim": { "dt": 0.016666667, "maxStepsPerFrame": 5, "physicsThreads": 1, "hashInDev": true, "seed": 1 },
-  "js": { "entry": "src/main.ts", "target": "es2020" },
+  "sim": {
+    "dt": 0.016666667,
+    "maxStepsPerFrame": 5,
+    "physicsThreads": 1,
+    "hashInDev": true,
+    "seed": 1
+  },
+  "js": {
+    "entry": "src/main.ts",
+    "target": "es2020"
+  },
   "render": {
     "defaultTier": "auto",
-    "tiers": { "mobile": { "msaa": 1, "hdr": false }, "compat": { "msaa": 1, "hdr": false } },
-    "clearColor": [0.1, 0.13, 0.22, 1],
-    "sortingLayers": ["Default"],
+    "tiers": {
+      "mobile": {
+        "msaa": 1,
+        "hdr": false
+      },
+      "compat": {
+        "msaa": 1,
+        "hdr": false
+      }
+    },
+    "clearColor": [
+      0.3254901960784314,
+      0.403921568627451,
+      0.5529411764705883,
+      1
+    ],
+    "sortingLayers": [
+      "Background",
+      "Shadows",
+      "Fighters",
+      "Effects",
+      "Foreground",
+      "Default"
+    ],
     "pixelsPerUnit": 100
   },
-  "ui": { "referenceResolution": [1080, 1920], "orientation": "portrait" },
-  "text": { "defaultFont": "fonts/NotoSans-Regular" },
-  "bundles": [{ "name": "base", "include": ["**"], "delivery": "in-app" }],
-  "targets": ["ios", "android"],
-  "platforms": ["desktop", "web"],
-  "startScene": "scenes/main.scene.json"
+  "ui": {
+    "referenceResolution": [
+      1152,
+      672
+    ],
+    "orientation": "landscape"
+  },
+  "text": {
+    "defaultFont": "fonts/NotoSans-Regular"
+  },
+  "bundles": [
+    {
+      "name": "base",
+      "include": [
+        "**"
+      ],
+      "delivery": "in-app"
+    }
+  ],
+  "targets": [
+    "desktop",
+    "web"
+  ],
+  "platforms": [
+    "desktop",
+    "web"
+  ],
+  "startScene": "scenes/main.scene.json",
+  "atlas": {
+    "auto": true,
+    "maxPageSize": {
+      "desktop": 4096,
+      "mobile": 2048
+    },
+    "pot": false
+  },
+  "audio": {
+    "banks": [
+      "audio/combat.bank"
+    ],
+    "maxVoices": 16
+  },
+  "assets": {
+    "groups": {
+      "arena": {
+        "include": [
+          "assets/fighters/**",
+          "assets/stage/**",
+          "assets/effects/**",
+          "assets/ui/**",
+          "assets/fonts/**"
+        ]
+      }
+    }
+  },
+  "memory": {
+    "budgets": {
+      "phone-low": {
+        "total": "128MB",
+        "textures": "64MB",
+        "audio": "12MB"
+      }
+    }
+  }
 }
