@@ -1,0 +1,65 @@
+{
+  "$schemaVersion": 1,
+  "guid": "3322992f-06cb-438a-b13e-d4c8559fb5ae",
+  "name": "fight-button",
+  "title": "Fight button",
+  "kind": "widget",
+  "root": "root",
+  "nodes": {
+    "root": {
+      "type": "element",
+      "name": "Fight button",
+      "style": {
+        "dir": "row",
+        "pad": [
+          10,
+          22,
+          10,
+          22
+        ],
+        "align": "center",
+        "bg": "#f1c34bff",
+        "radius": 2,
+        "justify": "center",
+        "h": 52
+      },
+      "children": [
+        "fb_label"
+      ]
+    },
+    "fb_label": {
+      "type": "label",
+      "name": "Label",
+      "text": "Label",
+      "property": "label",
+      "style": {
+        "fontSize": 22,
+        "fitMin": 16,
+        "weight": 800,
+        "color": "#142240ff",
+        "textAlign": "center"
+      }
+    }
+  },
+  "behaviour": "button",
+  "transition": {
+    "type": "easeOut",
+    "ms": 100
+  },
+  "properties": {
+    "label": {
+      "type": "text",
+      "default": "FIGHT"
+    }
+  },
+  "states": {
+    "pressed": {
+      "set": {
+        "root": {
+          "bg": "#fff0a0ff",
+          "scale": 0.97
+        }
+      }
+    }
+  }
+}

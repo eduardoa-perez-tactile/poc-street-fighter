@@ -1,4 +1,4 @@
 {
-  "android": { "artifact": "80MB", "cooked": "20MB" },
-  "ios": { "artifact": "120MB", "cooked": "20MB" }
+  "macos": { "artifact": "300MB", "cooked": "20MB" },
+  "web": { "artifact": "64MB", "cooked": "20MB" }
 }

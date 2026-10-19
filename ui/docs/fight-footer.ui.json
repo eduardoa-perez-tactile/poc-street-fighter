@@ -1,0 +1,58 @@
+{
+  "$schemaVersion": 1,
+  "guid": "b20463b4-a30c-47c8-9fd3-3ff1b3d703ba",
+  "name": "fight-footer",
+  "title": "Fight footer",
+  "kind": "widget",
+  "root": "root",
+  "nodes": {
+    "root": {
+      "type": "element",
+      "name": "Fight footer",
+      "style": {
+        "dir": "row",
+        "pad": [
+          8,
+          24,
+          8,
+          24
+        ],
+        "align": "center",
+        "bg": "#07101caa",
+        "radius": 0,
+        "gap": 16,
+        "justify": "space-between",
+        "w": "100%",
+        "h": 58
+      },
+      "children": [
+        "footer_hint",
+        "footer_pause"
+      ]
+    },
+    "footer_hint": {
+      "type": "label",
+      "name": "Label",
+      "text": "P1  WASD + FGH / VBN     P2  ARROWS + JKL / UIO",
+      "style": {
+        "fontSize": 15,
+        "fitMin": 11,
+        "grow": 1,
+        "w": 0,
+        "color": "#d7e3edff"
+      }
+    },
+    "footer_pause": {
+      "type": "use",
+      "doc": "fight-button",
+      "key": "pause",
+      "props": {
+        "label": "PAUSE · ESC"
+      },
+      "style": {
+        "w": 170,
+        "h": 42
+      }
+    }
+  }
+}

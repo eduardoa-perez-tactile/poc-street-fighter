@@ -1,0 +1,15 @@
+{
+  "sounds": [
+    "audio/light-punch-hit",
+    "audio/light-attack",
+    "audio/heavy-punch-hit",
+    "audio/medium-kick-hit",
+    "audio/heavy-attack",
+    "audio/land",
+    "audio/light-kick-hit",
+    "audio/voice-hadouken",
+    "audio/medium-punch-hit",
+    "audio/heavy-kick-hit",
+    "audio/medium-attack"
+  ]
+}

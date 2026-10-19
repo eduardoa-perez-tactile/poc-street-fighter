@@ -1,0 +1,6 @@
+guid = "844db87d-9242-5f8e-b312-8665e011c8ec"
+importer = "audio"
+
+[settings]
+codec = "opus"
+normalize = false
