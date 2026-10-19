@@ -1,0 +1,40 @@
+name: Publish verified browser playtest
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Verified playtest release containing playtest-site.tar.gz
+        required: true
+        type: string
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Download verified local build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: |
+          mkdir site
+          gh release download "$RELEASE_TAG" --repo "$REPOSITORY" --pattern playtest-site.tar.gz
+          tar -xzf playtest-site.tar.gz -C site
+          test -s site/index.html
+          test -s site/playtest-build.json
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Deploy playtest
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -34,10 +34,12 @@
       "property": "label",
       "style": {
         "fontSize": 22,
-        "fitMin": 16,
+        "fitMin": 12,
         "weight": 800,
         "color": "#142240ff",
-        "textAlign": "center"
+        "textAlign": "center",
+        "w": "100%",
+        "h": "100%"
       }
     }
   },
@@ -50,6 +52,27 @@
     "label": {
       "type": "text",
       "default": "FIGHT"
+    },
+    "compact": {
+      "type": "yesno",
+      "default": false,
+      "poses": {
+        "yes": {
+          "set": {
+            "root": {
+              "pad": [
+                3,
+                8,
+                3,
+                8
+              ]
+            },
+            "fb_label": {
+              "fontSize": 18
+            }
+          }
+        }
+      }
     }
   },
   "states": {

@@ -1,0 +1,72 @@
+{
+  "$schemaVersion": 1,
+  "guid": "45bea727-4f26-4ea0-ba96-2eb271fcc09d",
+  "name": "fight-banner",
+  "title": "Fight banner",
+  "kind": "widget",
+  "root": "root",
+  "nodes": {
+    "root": {
+      "type": "element",
+      "name": "Fight banner",
+      "style": {
+        "dir": "column",
+        "pad": [
+          8,
+          20,
+          8,
+          20
+        ],
+        "align": "center",
+        "radius": 12,
+        "gap": 2
+      },
+      "children": [
+        "banner_label",
+        "banner_detail"
+      ]
+    },
+    "banner_label": {
+      "type": "label",
+      "name": "Label",
+      "text": "Label",
+      "property": "label",
+      "style": {
+        "fontSize": 45,
+        "fitMin": 26,
+        "color": "#ffcf4dff",
+        "weight": 800,
+        "w": "100%",
+        "h": 56,
+        "textAlign": "center",
+        "shadowX": 2,
+        "shadowY": 3,
+        "shadowColor": "#07101cff"
+      }
+    },
+    "banner_detail": {
+      "type": "label",
+      "name": "Label",
+      "text": "Label",
+      "property": "detail",
+      "style": {
+        "fontSize": 17,
+        "fitMin": 12,
+        "color": "#ffffffff",
+        "w": "100%",
+        "h": 28,
+        "textAlign": "center"
+      }
+    }
+  },
+  "properties": {
+    "label": {
+      "type": "text",
+      "default": "ROUND 1"
+    },
+    "detail": {
+      "type": "text",
+      "default": "BEST OF THREE"
+    }
+  }
+}

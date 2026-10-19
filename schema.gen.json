@@ -4,6 +4,56 @@
   "enums": [],
   "types": [
     {
+      "name": "AIState",
+      "kind": "resource",
+      "sim": true,
+      "fields": [
+        {
+          "name": "resetStep",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "think",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        },
+        {
+          "name": "held",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        },
+        {
+          "name": "previous",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        },
+        {
+          "name": "plan",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        },
+        {
+          "name": "planStep",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        },
+        {
+          "name": "aggression",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        }
+      ],
+      "package": "StreetFighter"
+    },
+    {
       "name": "CombatEffect",
       "kind": "event",
       "sim": true,
@@ -101,6 +151,36 @@
           "lanes": 2
         },
         {
+          "name": "buffered",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        },
+        {
+          "name": "bufferAge",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        },
+        {
+          "name": "history",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 16
+        },
+        {
+          "name": "historyStep",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 16
+        },
+        {
+          "name": "historyCount",
+          "kind": "array",
+          "scalar": "u32",
+          "lanes": 2
+        },
+        {
           "name": "direction",
           "kind": "array",
           "scalar": "u32",
@@ -183,6 +263,36 @@
           "lanes": 1
         },
         {
+          "name": "comboHits",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "stun",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "invulnerable",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "airState",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "throwCooldown",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
           "name": "attackHit",
           "kind": "bool",
           "scalar": "u8",
@@ -228,6 +338,45 @@
       "kind": "resource",
       "sim": true,
       "fields": [
+        {
+          "name": "settingsOpen",
+          "kind": "bool",
+          "scalar": "u8",
+          "lanes": 1
+        },
+        {
+          "name": "mode",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "difficulty",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1,
+          "default": 1
+        },
+        {
+          "name": "phaseTicks",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "resumePhase",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1,
+          "default": 1
+        },
+        {
+          "name": "matchWinner",
+          "kind": "i32",
+          "scalar": "i32",
+          "lanes": 1,
+          "default": -1
+        },
         {
           "name": "phase",
           "kind": "u32",
@@ -377,6 +526,95 @@
       "package": "StreetFighter"
     },
     {
+      "name": "TrainingIntent",
+      "kind": "event",
+      "sim": true,
+      "fields": [
+        {
+          "name": "action",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "value",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        }
+      ],
+      "package": "StreetFighter"
+    },
+    {
+      "name": "TrainingState",
+      "kind": "resource",
+      "sim": true,
+      "fields": [
+        {
+          "name": "dummyMode",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "damage",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "combo",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "maxCombo",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "lastDamage",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "inputBits",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "previousHealth",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1,
+          "default": 144
+        },
+        {
+          "name": "previousStun",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "resetStep",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "showBoxes",
+          "kind": "bool",
+          "scalar": "u8",
+          "lanes": 1
+        }
+      ],
+      "package": "StreetFighter"
+    },
+    {
       "name": "ArenaFocus",
       "kind": "component",
       "sim": true,
@@ -429,6 +667,40 @@
       "package": "StreetFighter"
     },
     {
+      "name": "CameraImpact",
+      "kind": "component",
+      "sim": false,
+      "fields": [
+        {
+          "name": "lastStep",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        }
+      ],
+      "package": "StreetFighter"
+    },
+    {
+      "name": "DebugBox",
+      "kind": "component",
+      "sim": false,
+      "fields": [
+        {
+          "name": "player",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "box",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        }
+      ],
+      "package": "StreetFighter"
+    },
+    {
       "name": "FighterShadow",
       "kind": "component",
       "sim": true,
@@ -447,6 +719,18 @@
       "kind": "component",
       "sim": true,
       "fields": [
+        {
+          "name": "born",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "kind",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
         {
           "name": "life",
           "kind": "u32",
@@ -511,5 +795,45 @@
   ],
   "commands": [],
   "protocol": [],
-  "services": []
+  "services": [],
+  "data": [
+    {
+      "name": "AITuningDef",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "easyReaction": {
+            "type": "integer",
+            "description": "Fixed steps between easy CPU observations"
+          },
+          "normalReaction": {
+            "type": "integer"
+          },
+          "hardReaction": {
+            "type": "integer"
+          },
+          "easyMistake": {
+            "type": "integer",
+            "description": "Chance in percent to miss a defensive decision"
+          },
+          "normalMistake": {
+            "type": "integer"
+          },
+          "hardMistake": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "easyReaction",
+          "normalReaction",
+          "hardReaction",
+          "easyMistake",
+          "normalMistake",
+          "hardMistake"
+        ],
+        "additionalProperties": false
+      },
+      "package": "StreetFighter"
+    }
+  ]
 }

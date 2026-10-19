@@ -95,13 +95,44 @@ Track asset provenance when importing; no license file was present in the inspec
 
 ## Working state
 
-The initial port is implemented: source crops, original timeline/boxes, two local keyboard seats,
-native gamepad input, combat, projectiles, match flow, HUD, stage, audio and web tooling.
-Verified: 44 native checks, 70 V8/wasm cases, 13 real Chrome WebGPU checks, replay, four screen-fit
-goldens, release macOS build and WebGPU export. Rendering peaks at 16 draws (budget 30); arena
-textures use 7.84 MB under phone-low residency limits. Desktop timings do not prove phone speed.
-Browser gamepad support is absent from the current engine shell; physical controllers were not tested.
-Controls: P1 WASD + FGH/VBN; P2 arrows + JKL/UIO; Enter starts/rematches, Escape pauses/resumes.
-Hadouken: down, down-forward, forward + punch. Mobile builds and AI remain outside scope.
-Keep this file concise and update this state as milestones land; the user has authorized the
-working notes needed for autonomous development. Other engine instructions remain in AGENTS.md.
+Version 0.2 implements the complete follow-up roadmap: local versus, solo CPU (three difficulties),
+and training; guards, crouch/air normals, sweeps, wakeup, throws/tech, three specials, buffered
+inputs and first-to-two matches. Fifty-two additional inspected source poses accompany the new
+moves. Native and browser use the same deterministic fighting rules; CPU decisions use player
+input bits with reaction delays and mistakes, configured in `assets/data/ai.json`.
+
+Training offers five dummy modes, damage/true-combo/input readouts, position reset and exact
+collision overlays. Its controls occupy the existing footer. Settings persist audio levels;
+browser controls add remapping, fullscreen, stable controller seats and focus/disconnect resets.
+Controller browser acceptance uses a virtual W3C device through the real input queue; physical
+controller hardware still requires human playtesting. AI has no hidden health/damage advantages.
+
+Controls: P1 WASD + FGH/VBN, R throw; P2 arrows + JKL/UIO, P throw. Hold back to block, down-back
+for lows; air attacks are overheads. Hadouken: down/down-forward/forward + punch; dragon punch:
+forward/down/down-forward + punch; hurricane: down/down-back/back + kick. Enter starts/rematches;
+Escape pauses/resumes and closes settings before affecting the fight.
+
+Native/web tests, reviewed screen-fit goldens, recorded replay and actual Chrome WebGPU QA gate
+delivery. Fresh cooked arena texture residency is 9.56 MB against the 52 MB group budget; the
+coverage replay peaks at 16 draws against 30, with zero pipelines created during play. A paused
+1800-step solo capture on this Mac measured sim p95 0.167 ms, max 0.488 ms and zero hitch steps;
+process memory was 154 MB including the desktop engine. These are not phone GPU/frame timings.
+
+`npm run publish:playtest` requires clean exact-commit native/web/browser evidence and deploys
+only the cooked browser artifact through GitHub Pages. Run it after merge and fresh verification
+on main. Mobile, online play, extra fighters and stages remain outside this desktop/web release.
+Keep working notes concise; the user authorized notes needed for autonomous development. Other
+engine instructions remain in AGENTS.md.
+
+## Complete game roadmap (authorized)
+
+Deliver the full follow-up roadmap with implementation subagents and supervisor integration:
+1. Defense/input: high/low guard, blockstun/pushback/chip and five-frame attack buffer.
+2. Moves: crouching/air normals, sweeps, knockdown/wakeup, throws/tech, dragon punch and hurricane.
+3. Match: solo/local/training selection, best-of-three, timed intro/KO and match rematches.
+4. CPU: deterministic shared-input opponent with three reaction/mistake difficulty levels.
+5. Polish: distinct impact/block feedback, restrained shake, audio/settings/remapping/fullscreen, web pads.
+6. Finish: training dummy/input/damage/combo/box tools, balance regression scenarios, controller and
+   browser checks, stable hosted playtest where supported. No claim of physical hardware testing without it.
+Use inspected original poses where available and existing sprites honestly where art is absent. Keep native/web parity, reviewed goldens,
+structural/residency budgets and exact-commit PR gates. Each shipped increment must be playable.

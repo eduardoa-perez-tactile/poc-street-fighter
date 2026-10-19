@@ -1,5 +1,5 @@
-import { defineSystem, LocalTransform, PlayMusic, PlaySound, query, read, SetBusVolume, Sprite, VisualOffset, without, WorldViewFollow, write } from '@gameengine/runtime';
-import { ArenaFocus, ArenaVisualState, CombatEffect, Fighter, FighterShadow, HitSpark, MatchState, Projectile, RenderBound } from '../schema.gen.ts';
+import { defineSystem, LocalTransform, PlayMusic, PlaySound, query, read, Sprite, VisualOffset, without, WorldViewFollow, write } from '@gameengine/runtime';
+import { ArenaFocus, ArenaVisualState, CombatEffect, Fighter, FighterShadow, HitSpark, DebugBox, MatchState, Projectile, RenderBound } from '../schema.gen.ts';
 import { FIGHTERS } from '../data/fighters.ts';
 import { frameForFighter } from '../combat/index.ts';
 import { STAGE_PIECES, piecePosition } from './stage-parts.ts';
@@ -13,6 +13,10 @@ export const SetupArena = defineSystem({
       const p = STAGE_PIECES[index]!, [x, y] = piecePosition(p, 448, 0);
       ctx.commands.spawn({ StagePart: { index }, LocalTransform: { position: [x / 100, (216 - y) / 100, 0] }, VisualOffset: {},
         Sprite: { image: p.image, size: [p.width / 100, p.height / 100], anchor: [0, 1], sortingLayer: p.layer, order: p.order } });
+    }
+    for (let player = 0; player < 2; player++) for (let box = 0; box < 5; box++) {
+      ctx.commands.spawn({ DebugBox: { player, box }, LocalTransform: {}, VisualOffset: {},
+        Shape: { kind: 'Rect', size: [1, 1], color: '#00000000', strokeColor: box === 4 ? '#ff453aff' : box === 0 ? '#ffce51ff' : '#4dedb4ff', strokeWidth: 0.012, sortingLayer: 'Effects', order: 90, visible: false } });
     }
     // Bleed below the source floor on unusually tall windows; the authored stage covers it normally.
     ctx.commands.spawn({ LocalTransform: { position: [3.84, -10.16, 0] }, Shape: { kind: 'Rect', size: [40, 20], color: '#655449', sortingLayer: 'Background', order: -10 } });
@@ -90,10 +94,10 @@ export const UpdateHitSparks = defineSystem({
     for (const event of ctx.events.read(CombatEffect)) {
       if (event.step + 1 <= cursor) continue;
       latest = Math.max(latest, event.step + 1);
-      if (event.kind !== 1 && event.kind !== 3) continue;
+      if (![1, 3, 6, 7, 8, 9, 10].includes(event.kind)) continue;
       let placed = false;
       for (const c of q.chunks()) for (let i = 0; i < c.length && !placed; i++) if (c.col(HitSpark).life[i] === 0) {
-        c.set(HitSpark, i, { life: 16, player: event.player, strength: event.strength, x: event.x, y: event.y });
+        c.set(HitSpark, i, { life: 16, born: event.step + 1, kind: event.kind, player: event.player, strength: event.strength, x: event.x, y: event.y });
         c.set(LocalTransform, i, { position: [event.x / 100, (216 - event.y) / 100, 0] });
         placed = true;
       }
@@ -111,8 +115,8 @@ export const CombatAudio = defineSystem({
       if (event.step + 1 <= cursor) continue;
       latest = Math.max(latest, event.step + 1);
       const strength = ['light', 'medium', 'heavy'][event.strength] ?? 'heavy';
-      const sound = event.kind === 0 ? `audio/${strength}-attack` : event.kind === 1 || event.kind === 3 ? `audio/${strength}-${event.attack === 1 ? 'kick' : 'punch'}-hit` : event.kind === 2 ? 'audio/voice-hadouken' : event.kind === 5 ? 'audio/land' : '';
-      if (sound) ctx.events.emit(PlaySound, { sound, volume: event.kind === 2 ? 0.65 : 0.45, maxVoices: 3 });
+      const sound = event.kind === 0 ? `audio/${strength}-attack` : event.kind === 1 || event.kind === 3 ? `audio/${strength}-${event.attack === 1 ? 'kick' : 'punch'}-hit` : event.kind === 2 ? 'audio/voice-hadouken' : event.kind === 5 ? 'audio/land' : event.kind === 6 || event.kind === 10 ? 'audio/light-punch-hit' : event.kind === 7 ? 'audio/heavy-kick-hit' : event.kind === 8 ? 'audio/heavy-attack' : event.kind === 9 ? 'audio/medium-attack' : '';
+      if (sound) ctx.events.emit(PlaySound, { sound, volume: event.kind === 2 ? 0.65 : event.kind === 6 || event.kind === 10 ? 0.25 : 0.45, maxVoices: 3 });
     }
     state.lastAudioStep[0] = latest;
   },
@@ -123,8 +127,7 @@ export const MatchMusic = defineSystem({
   run(ctx) {
     const phase = ctx.resource(MatchState).phase[0]!, state = ctx.resource(ArenaVisualState);
     if (state.musicPhase[0] === phase) return;
-    if (phase === 1 && (state.musicPhase[0] === 0 || state.musicPhase[0] === 99)) ctx.events.emit(PlayMusic, { track: 'audio/theme-ken-main-cps1', volume: 0.38, crossfade: 0.2 });
-    ctx.events.emit(SetBusVolume, { bus: 'Music', volume: phase === 3 ? 0.2 : 0.65 });
+    if (phase === 1 && state.musicPhase[0] !== 3) ctx.events.emit(PlayMusic, { track: 'audio/theme-ken-main-cps1', volume: 0.38, crossfade: 0.2 });
     state.musicPhase[0] = phase;
   },
 });
