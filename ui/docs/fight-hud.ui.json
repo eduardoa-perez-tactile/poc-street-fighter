@@ -274,7 +274,8 @@
         "weight": 800,
         "textAlign": "center",
         "h": 14
-      }
+      },
+      "property": "centerlabel"
     },
     "clock_value": {
       "type": "label",
@@ -289,7 +290,8 @@
         "shadowX": 2,
         "shadowY": 2,
         "shadowColor": "#100b2fff"
-      }
+      },
+      "property": "timertext"
     },
     "clock_round": {
       "type": "label",
@@ -300,7 +302,8 @@
         "color": "#fff3b0ff",
         "textAlign": "center",
         "h": 14
-      }
+      },
+      "property": "roundtext"
     },
     "hud_pause": {
       "type": "use",
@@ -406,36 +409,44 @@
       "type": "number",
       "default": 1,
       "format": "value"
-    }
-  },
-  "samples": {
-    "opening": {
-      "healthone": 144,
-      "healthtwo": 144,
-      "timer": 99
     },
-    "closeFight": {
-      "healthone": 24,
-      "healthtwo": 80,
-      "timer": 12,
-      "p1Score": 1200,
-      "p2Score": 800,
-      "p1Wins": 1,
-      "p2Wins": 2,
-      "round": 4
+    "timertext": {
+      "type": "text",
+      "default": "99"
     },
-    "half": {
-      "healthone": 72,
-      "healthtwo": 72,
-      "timer": 50
+    "centerlabel": {
+      "type": "text",
+      "default": "TIME"
     },
-    "empty": {
-      "healthone": 0,
-      "healthtwo": 0,
-      "timer": 0
+    "roundtext": {
+      "type": "text",
+      "default": "ROUND 1"
     }
   },
   "transition": {
     "type": "instant"
+  },
+  "samples": {
+    "opening": {
+      "timertext": "99",
+      "roundtext": "ROUND 1"
+    },
+    "closeFight": {
+      "timertext": "12",
+      "roundtext": "ROUND 4"
+    },
+    "half": {
+      "timertext": "50",
+      "roundtext": "ROUND 1"
+    },
+    "empty": {
+      "timertext": "0",
+      "roundtext": "ROUND 1"
+    },
+    "training": {
+      "timertext": "--",
+      "centerlabel": "TRAINING",
+      "roundtext": ""
+    }
   }
 }

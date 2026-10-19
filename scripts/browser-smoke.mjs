@@ -160,11 +160,21 @@ try {
   check('persistent remapping and controls-dialog suspension', { throwRemapped: saved.keys[0][10] });
   await page.keyboard.press('ArrowDown'); await advance(2); await page.keyboard.press('Enter');
   await page.locator('#sf-fullscreen-sheet[open]').waitFor();
-  await page.locator('#sf-fullscreen').click();
-  await page.waitForFunction(() => !!document.fullscreenElement); await advance(4);
-  await page.evaluate(() => document.exitFullscreen()); await advance(4);
+  // A manually attached macOS Chrome can immediately leave fullscreen without
+  // a focused browser window. Use the standard automation focus override only
+  // for this API check, then restore native visibility before lifecycle tests.
+  await cdp.send('Emulation.setFocusEmulationEnabled', { enabled: true });
+  try {
+    await page.locator('#sf-fullscreen').click();
+    await page.waitForFunction(() => !!document.fullscreenElement);
+    await page.waitForTimeout(500);
+    assert.equal(await page.evaluate(() => !!document.fullscreenElement), true, 'Fullscreen exited before the persistence check.');
+    await advance(4); await page.evaluate(() => document.exitFullscreen());
+    assert.equal(await page.evaluate(() => !!document.fullscreenElement), false);
+  } finally { await cdp.send('Emulation.setFocusEmulationEnabled', { enabled: false }); }
+  await advance(4);
   await page.setViewportSize({ width: 1152, height: 672 });
-  check('browser fullscreen enters and exits', true);
+  check('browser fullscreen enters and exits', { persistedMilliseconds: 500, focus: 'Standard CDP focus during this check only; native visibility restored afterward.' });
   await page.keyboard.press('Escape'); await advance(4); // Options -> Main, focus OPTIONS.
   await virtualPad(); await padPulse(12); await padPulse(12); // D-pad UP twice -> LOCAL.
   await padPulse(0); await shot('01-local-setup');

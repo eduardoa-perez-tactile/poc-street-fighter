@@ -218,13 +218,16 @@ declare module '@gameengine/ui' {
      *   - `p1Wins`: number, default 0
      *   - `p2Wins`: number, default 0
      *   - `round`: number, default 1
+     *   - `timertext`: text, default "99"
+     *   - `centerlabel`: text, default "TIME"
+     *   - `roundtext`: text, default "ROUND 1"
      * Events: `<id>: pause`
      * Code areas: none
      * Refs: `pause`
-     * Samples (`view render doc:fight-hud --sample …`): `opening`, `closeFight`, `half`, `empty`
+     * Samples (`view render doc:fight-hud --sample …`): `opening`, `closeFight`, `half`, `empty`, `training`
      */
     'fight-hud': {
-      props: { healthone: number; healthtwo: number; timer: number; p1Score: number; p2Score: number; p1Wins: number; p2Wins: number; round: number };
+      props: { healthone: number; healthtwo: number; timer: number; p1Score: number; p2Score: number; p1Wins: number; p2Wins: number; round: number; timertext: string | { loc: string } | LocText; centerlabel: string | { loc: string } | LocText; roundtext: string | { loc: string } | LocText };
       areas: never;
       refs: 'pause';
     };

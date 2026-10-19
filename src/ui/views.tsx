@@ -22,6 +22,7 @@ export const StreetFighterHud = defineView<HudModel>({
   description: 'Two player health, score, round and countdown. Intent: pause.',
   samples: {
     opening,
+    training: { ...opening, training: true },
     closeFight: { ...opening, p1Health: 24, p2Health: 80, p1Score: 1200, p2Score: 800, p1Wins: 1, p2Wins: 2, timer: 12, round: 4 },
     knockout: { ...opening, p2Health: 0, p1Health: 28, timer: 3, p1Score: 3600 },
   },
@@ -32,7 +33,9 @@ export const StreetFighterHud = defineView<HudModel>({
           healthone: () => model().p1Health, healthtwo: () => model().p2Health,
           p1Score: () => model().p1Score, p2Score: () => model().p2Score,
           p1Wins: () => model().p1Wins, p2Wins: () => model().p2Wins,
-          timer: () => model().timer, round: () => model().round,
+          timertext: () => model().training ? '--' : String(model().timer),
+          centerlabel: () => model().training ? 'TRAINING' : 'TIME',
+          roundtext: () => model().training ? '' : `ROUND ${model().round}`,
         }} onIntent={(_, event) => intent(event.path.at(-1)!)} />
       </View>
     </Screen>
