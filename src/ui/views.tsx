@@ -2,6 +2,7 @@ import { defineView, Screen, View, Widget } from '@gameengine/ui';
 import '../ui.gen.ts';
 
 export interface HudModel {
+  training?: boolean;
   p1Health: number;
   p2Health: number;
   p1Score: number;
@@ -35,13 +36,15 @@ export const StreetFighterHud = defineView<HudModel>({
         }} />
       </View>
       <View class="sf-hud-bottom">
-        <Widget doc="fight-footer" onIntent={(_, event) => intent(event.path.at(-1)!)} />
+        <Widget doc="fight-footer" props={{ visible: () => !model().training }} onIntent={(_, event) => intent(event.path.at(-1)!)} />
       </View>
     </Screen>
   ),
 });
 
 export interface MatchPanelModel {
+  soloLabel?: string; localLabel?: string; trainingLabel?: string; difficultyLabel?: string;
+  settingsable?: boolean; canReturn?: boolean;
   title: string;
   subtitle: string;
   hint: string;
@@ -51,10 +54,10 @@ export interface MatchPanelModel {
 }
 
 export const READY_PANEL: MatchPanelModel = {
-  title: 'STREET FIGHTER', subtitle: 'LOCAL VERSUS  /  RYU vs KEN', hint: 'ENTER TO START', ready: true, paused: false, result: false,
+  title: 'STREET FIGHTER', subtitle: 'SOLO  /  RYU vs CPU', hint: 'ENTER TO START', ready: true, paused: false, result: false, settingsable: true, canReturn: false,
 };
 export const PAUSED_PANEL: MatchPanelModel = {
-  title: 'PAUSED', subtitle: 'Take a breath. The round is waiting.', hint: 'ESC TO RESUME', ready: false, paused: true, result: false,
+  title: 'PAUSED', subtitle: 'Take a breath. The round is waiting.', hint: 'ESC TO RESUME', ready: false, paused: true, result: false, settingsable: true, canReturn: true,
 };
 
 export const MatchPanel = defineView<MatchPanelModel>({
@@ -65,14 +68,37 @@ export const MatchPanel = defineView<MatchPanelModel>({
   samples: {
     ready: READY_PANEL,
     paused: PAUSED_PANEL,
-    ryuWins: { ...PAUSED_PANEL, title: 'RYU WINS', subtitle: 'KO  /  RYU 1 — KEN 0', hint: 'ENTER TO PLAY AGAIN', paused: false, result: true },
-    kenWins: { ...PAUSED_PANEL, title: 'KEN WINS', subtitle: 'TIME UP  /  RYU 0 — KEN 1', hint: 'ENTER TO PLAY AGAIN', paused: false, result: true },
-    draw: { ...PAUSED_PANEL, title: 'DRAW', subtitle: 'An even match. Settle it in the next round.', hint: 'ENTER TO PLAY AGAIN', paused: false, result: true },
+    ryuWins: { ...PAUSED_PANEL, title: 'RYU WINS THE MATCH', subtitle: 'FINAL SCORE / RYU 2 - KEN 0', hint: 'ENTER TO REMATCH', paused: false, result: true, settingsable: false },
+    kenWins: { ...PAUSED_PANEL, title: 'KEN WINS THE MATCH', subtitle: 'FINAL SCORE / RYU 1 - KEN 2', hint: 'ENTER TO REMATCH', paused: false, result: true, settingsable: false },
   },
   render: (model, { intent }) => (
     <Widget doc="match-panel" props={{
       title: () => model().title, subtitle: () => model().subtitle, hint: () => model().hint,
       ready: () => model().ready, paused: () => model().paused, result: () => model().result,
+      soloLabel: () => model().soloLabel ?? 'SOLO [SELECTED]', localLabel: () => model().localLabel ?? 'LOCAL VERSUS',
+      trainingLabel: () => model().trainingLabel ?? 'TRAINING', difficultyLabel: () => model().difficultyLabel ?? 'CPU: NORMAL',
+      settingsable: () => model().settingsable ?? false, canReturn: () => model().canReturn ?? false,
     }} onIntent={(_, event) => intent(event.path.at(-1)!)} />
   ),
+});
+
+export interface BannerModel { label: string; detail: string }
+export const FightBanner = defineView<BannerModel>({
+  name: 'FightBanner', blockInput: false,
+  samples: { intro: { label: 'ROUND 1', detail: 'BEST OF THREE' }, fight: { label: 'FIGHT', detail: '' }, knockout: { label: 'RYU WINS', detail: 'KO / NEXT ROUND' } },
+  render: (m) => <Screen safeArea class="sf-banner-screen"><View class="sf-banner"><Widget doc="fight-banner" props={{ label: () => m().label, detail: () => m().detail }} /></View></Screen>,
+});
+
+export interface TrainingModel { stats: string; inputs: string; dummyLabel: string; boxesLabel: string }
+export const TrainingConsole = defineView<TrainingModel>({
+  name: 'TrainingConsole',
+  samples: { idle: { stats: 'DAMAGE 0 / COMBO 0 / BEST 0', inputs: 'INPUT: NEUTRAL', dummyLabel: 'DUMMY: STAND', boxesLabel: 'HITBOXES: OFF' }, combo: { stats: 'DAMAGE 72 / COMBO 3 / BEST 5', inputs: 'INPUT: RIGHT + HP', dummyLabel: 'DUMMY: BLOCK', boxesLabel: 'HITBOXES: ON' } },
+  render: (m, { intent }) => <Screen safeArea class="sf-training-screen"><View class="sf-training"><Widget doc="training-console" props={{ stats: () => m().stats, inputs: () => m().inputs, dummyLabel: () => m().dummyLabel, boxesLabel: () => m().boxesLabel }} onIntent={(_, e) => intent(e.path.at(-1)!)} /></View></Screen>,
+});
+
+export interface AudioSettingsModel { musicLabel: string; sfxLabel: string }
+export const AudioSettings = defineView<AudioSettingsModel>({
+  name: 'AudioSettings', blockInput: true, dims: true,
+  samples: { normal: { musicLabel: 'MUSIC: 60%', sfxLabel: 'EFFECTS: 70%' }, muted: { musicLabel: 'MUSIC: 0%', sfxLabel: 'EFFECTS: 0%' } },
+  render: (m, { intent }) => <Widget doc="audio-settings" props={{ musicLabel: () => m().musicLabel, sfxLabel: () => m().sfxLabel }} onIntent={(_, e) => intent(e.path.at(-1)!)} />,
 });

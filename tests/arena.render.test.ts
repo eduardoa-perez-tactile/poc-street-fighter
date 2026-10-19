@@ -1,13 +1,14 @@
 import { Sprite } from '@gameengine/runtime';
 import { expect, renderTest, worldTest } from '@gameengine/test';
-import { Fighter, MatchIntent, MatchState } from '../src/schema.gen.ts';
-import { FinishFight } from '../src/combat/fight.cheats.ts';
+import { Fighter, MatchIntent, MatchState, TrainingIntent } from '../src/schema.gen.ts';
+import { ArrangeFight, FinishFight } from '../src/combat/fight.cheats.ts';
 
 for (const [name, width, height] of [['classic',1152,672],['wide',1600,900],['ultrawide',2100,900],['compact',1024,768]] as const) {
   renderTest(`arena fits ${name}`, async ({ loaded, input, step, world, render }) => {
     input.view(width,height,1);
     await loaded(); await step(2);
-    input.emit(MatchIntent,{action:0}); await step(40);
+    input.emit(MatchIntent,{action:8}); await step(2);
+    input.emit(MatchIntent,{action:0}); await step(130);
     for (const entity of world.entities(Fighter)) {
       const fighter=world.get(entity,Fighter);
       const [x,y]=input.worldToScreen([fighter.x/100,(216-fighter.y)/100]);
@@ -27,16 +28,37 @@ for (const [name, width, height] of [['classic',1152,672],['wide',1600,900],['ul
 // all panel states and health-fill pipelines without unreplayable direct world mutation.
 worldTest('port pipeline coverage', async ({ loaded, step, input, cheat, world }) => {
   await loaded(); await step(2);
-  input.action('start');await step(3);
-  input.action('p1.right');await step(22);input.action('p1.right',0);await step(1);
-  input.action('p1.lp');await step(20);input.action('p1.lp',0);await step(35);
-  input.action('p1.down');await step(2);input.action('p1.right');await step(2);input.action('p1.down',0);await step(2);input.action('p1.hp');await step(16);
-  input.action('p1.hp',0);input.action('p1.right',0);await step(60);
-  input.action('pause');await step(12);input.action('pause');await step(12);
-  await cheat(FinishFight,{winner:0});await step(50);
+  input.emit(MatchIntent,{action:13}); await step(5);
+  input.emit(MatchIntent,{action:14}); await step(2);
+  input.emit(MatchIntent,{action:8}); await step(2);
+  input.action('start'); await step(95);
+  await cheat(ArrangeFight,{distance:48});
+  input.action('p1.lp'); await step(20); input.action('p1.lp',0); await step(35);
+  input.action('p1.down'); await step(2); input.action('p1.right'); await step(2);
+  input.action('p1.down',0); await step(2); input.action('p1.hp'); await step(16);
+  input.action('p1.hp',0); input.action('p1.right',0); await step(60);
+  input.emit(MatchIntent,{action:2}); await step(12);
+  input.emit(MatchIntent,{action:3}); await step(12);
+  await cheat(FinishFight,{winner:0}); await step(50);
   expect(world.resource(MatchState).phase).toBe(2);
-  input.action('start');await step(10);
-  await cheat(FinishFight,{winner:1});await step(50);
-  input.action('start');await step(10);
-  await cheat(FinishFight,{winner:2});await step(50);
+  await step(200);
+  await cheat(FinishFight,{winner:0}); await step(151);
+  expect(world.resource(MatchState).phase).toBe(5);
+  input.emit(MatchIntent,{action:1}); await step(95);
+  await cheat(FinishFight,{winner:1}); await step(241);
+  await cheat(FinishFight,{winner:1}); await step(151);
+  expect(world.resource(MatchState).matchWinner).toBe(1);
+  input.emit(MatchIntent,{action:1}); await step(95);
+  await cheat(FinishFight,{winner:2}); await step(151);
+  input.emit(MatchIntent,{action:2}); await step(2);
+  input.emit(MatchIntent,{action:6}); await step(2);
+  input.emit(MatchIntent,{action:9}); await step(2);
+  input.emit(MatchIntent,{action:0}); await step(3);
+  input.emit(TrainingIntent,{action:2,value:1}); await step(5);
+  await cheat(ArrangeFight,{distance:48});
+  input.action('p1.down'); input.action('p1.hk'); await step(95);
+  input.action('p1.down',0); input.action('p1.hk',0);
+  input.emit(TrainingIntent,{action:1,value:0}); await step(3);
+  input.emit(TrainingIntent,{action:0,value:1}); await step(3);
+  input.emit(TrainingIntent,{action:2,value:0}); await step(3);
 });

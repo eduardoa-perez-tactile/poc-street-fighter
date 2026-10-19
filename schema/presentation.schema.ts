@@ -8,5 +8,9 @@ export const ArenaFocus = component('ArenaFocus', {}, { sim: true });
 export const StagePart = component('StagePart', { index: u32() }, { sim: false });
 export const FighterShadow = component('FighterShadow', { player: u32() }, { sim: true });
 export const HitSpark = component('HitSpark', {
-  life: u32(), player: u32(), strength: u32(), x: f32(), y: f32(),
+  born: u32(), kind: u32(), life: u32(), player: u32(), strength: u32(), x: f32(), y: f32(),
 }, { sim: true });
+
+export const DebugBox = component('DebugBox', { player: u32(), box: u32() }, { sim: false });
+
+export const CameraImpact = component('CameraImpact', { lastStep: u32() }, { sim: false });

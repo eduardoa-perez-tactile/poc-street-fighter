@@ -1,0 +1,9 @@
+{
+  "$type": "AITuningDef",
+  "easyReaction": 30,
+  "normalReaction": 18,
+  "hardReaction": 10,
+  "easyMistake": 42,
+  "normalMistake": 25,
+  "hardMistake": 12
+}

@@ -6,6 +6,7 @@ import { existsSync, readFileSync, realpathSync, statSync } from 'node:fs';
 import { dirname, extname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'node:http';
+import { extendWebShell } from './extend-web-shell.mjs';
 
 const project = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const action = process.argv[2];
@@ -112,8 +113,11 @@ try {
     // uses the matching source tree for its browser shell/build, retaining SDK cook/native tools.
     env.GAMEENGINE_REPO = action === 'export' ? engineRoot : sdk;
     if (action === 'inspect') console.log(JSON.stringify({ engineRoot, sdk, cli, wasmHost: env.GAMEENGINE_HOST_WEB, rustToolchain: env.RUSTUP_TOOLCHAIN, emsdk: env.GAMEENGINE_EMSDK }, null, 2));
-    else await run(action === 'parity'
-      ? ['test', '--tier', 't0', '--js', 'v8,web', '--jobs', '1']
-      : ['build', 'web', '--config', 'probe', '--out', 'build/web'], env, cli);
+    else {
+      await run(action === 'parity'
+        ? ['test', '--tier', 't0', '--js', 'v8,web', '--jobs', '1']
+        : ['build', 'web', '--config', 'probe', '--out', 'build/web'], env, cli);
+      if (action === 'export' && !process.exitCode) await extendWebShell({ project, engineRoot, sdk });
+    }
   } else throw new Error('Usage: node scripts/web-toolchain.mjs parity|export|inspect|serve');
 } catch (error) { console.error(`Web toolchain: ${error.message}`); process.exitCode = 1; }

@@ -1,14 +1,16 @@
 import { expect, renderTest } from '@gameengine/test';
-import { MatchState } from '../src/schema.gen.ts';
+import { MatchIntent, MatchState } from '../src/schema.gen.ts';
 
 // These presses exercise document hit testing, view intents and the real match controller.
 renderTest('match panels start pause resume and restart through real buttons', async ({ input, step, world, render, ui, loaded }) => {
   input.view(1152, 672, 1);
   await loaded();
   await step(2);
+  input.emit(MatchIntent, { action: 8 });
+  await step(2);
   render.stats({ width: 1152, height: 672 });
   await ui.press('start');
-  await step(2);
+  await step(92);
   expect(world.resource(MatchState).phase).toBe(1);
   render.stats({ width: 1152, height: 672 });
   await ui.press('pause');
@@ -27,7 +29,7 @@ renderTest('match panels start pause resume and restart through real buttons', a
   await step(2);
   render.stats({ width: 1152, height: 672 });
   await ui.press('restart');
-  await step(2);
+  await step(92);
   expect(world.resource(MatchState).phase).toBe(1);
   expect(world.resource(MatchState).p1Health).toBe(144);
   expect(world.resource(MatchState).p2Health).toBe(144);
@@ -50,7 +52,7 @@ for (const [name, width, height, insets] of [
     expect(start.x + start.width).toBeLessThanOrEqual(width - insets[2]);
     expect(start.y + start.height).toBeLessThanOrEqual(height);
     await ui.press('start');
-    await step(2);
+    await step(92);
     render.stats({ width, height });
     const pause = ui.rect('pause')!;
     expect(pause.x).toBeGreaterThanOrEqual(insets[0]);
@@ -63,8 +65,10 @@ for (const [name, width, height, insets] of [
 renderTest('health bars show full half and empty health in mirrored directions', async ({ input, loaded, step, world, render }) => {
   input.view(1152, 672, 1);
   await loaded();
-  input.action('start');
+  input.emit(MatchIntent, { action: 8 });
   await step(2);
+  input.action('start');
+  await step(92);
   const points: [number, number][] = [[60, 52], [450, 52], [700, 52], [1080, 52]];
   for (const health of [144, 72, 0]) {
     world.setResource(MatchState, { p1Health: health, p2Health: health });

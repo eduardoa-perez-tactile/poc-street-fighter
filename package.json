@@ -1,6 +1,6 @@
 {
   "name": "streetfighter",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -14,6 +14,7 @@
     "verify": "node scripts/verify.mjs",
     "verify:web": "node scripts/verify.mjs --web",
     "play:web": "node scripts/web-toolchain.mjs serve",
+    "publish:playtest": "node scripts/publish-playtest.mjs",
     "verify:hermes": "node scripts/verify.mjs --hermes",
     "pr:verify": "node scripts/verify.mjs --publish",
     "pr:merge": "node scripts/merge.mjs"

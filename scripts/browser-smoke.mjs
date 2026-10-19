@@ -67,6 +67,19 @@ async function shot(name, { art = false } = {}) {
   report.screenshots.push({ name, path: relative(root, path), pixels, sha256: digest });
   return digest;
 }
+async function clickCanvas(x, y) {
+  const bounds = await page.locator('canvas').boundingBox();
+  assert.ok(bounds, 'Game canvas is missing.');
+  await page.mouse.click(bounds.x + bounds.width * x, bounds.y + bounds.height * y);
+  await advance(4);
+}
+async function virtualPad(buttons = [], axes = [0, 0]) {
+  await page.evaluate(({ buttons, axes }) => {
+    globalThis.__sfVirtualPads = [{ index: 0, id: 'Automated standard controller', connected: true, mapping: 'standard', axes,
+      buttons: Array.from({ length: 17 }, (_, i) => ({ pressed: buttons.includes(i), touched: buttons.includes(i), value: Number(buttons.includes(i)) })) }];
+  }, { buttons, axes });
+}
+async function padPulse(button, duration = 90) { await virtualPad([button]); await page.waitForTimeout(duration); await virtualPad([]); await advance(4); }
 async function hold(keys, milliseconds = 180) {
   for (const key of keys) await page.keyboard.down(key);
   await page.waitForTimeout(milliseconds);
@@ -75,6 +88,7 @@ async function hold(keys, milliseconds = 180) {
 }
 try {
   assert.ok(existsSync(join(site, 'index.html')), 'Build the real WebGPU probe export with npm run verify:web first.');
+  if (existsSync(join(site, 'playtest-build.json'))) report.build = JSON.parse(readFileSync(join(site, 'playtest-build.json'), 'utf8'));
   await new Promise((done, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', done); });
   // Playwright's normal launch enables focus emulation: even inactive tabs appear
   // visible. Attach without defaults to our OWN isolated Chrome profile instead,
@@ -109,19 +123,46 @@ try {
   await cdp.send('WebAudio.enable');
   cdp.on('WebAudio.contextCreated', ({ context: value }) => report.audio.push({ event: 'created', ...value }));
   cdp.on('WebAudio.contextChanged', ({ context: value }) => report.audio.push({ event: 'changed', ...value }));
+  await page.addInitScript(() => {
+    globalThis.__sfVirtualPads = [];
+    Object.defineProperty(navigator, 'getGamepads', { configurable: true, value: () => globalThis.__sfVirtualPads });
+  });
+  report.controllerFixture = 'W3C standard virtual device through navigator.getGamepads; actual physical hardware remains a human playtest.';
   await page.goto(`http://127.0.0.1:${server.address().port}/`);
   const adapter = await page.evaluate(async () => { const adapter = await navigator.gpu?.requestAdapter(); return adapter ? { vendor: adapter.info.vendor, architecture: adapter.info.architecture, device: adapter.info.device, description: adapter.info.description, fallback: adapter.info.isFallbackAdapter } : null; });
   assert.ok(adapter, 'Chrome could not obtain a WebGPU adapter.');
   assert.equal(adapter.fallback, false, 'Native GPU required; software WebGPU does not establish Metal rendering.');
   report.adapter = adapter;
   await page.locator('#start:enabled').waitFor({ timeout: 120000 });
+  assert.equal(await page.locator('#start').textContent(), 'ENTER THE ARENA');
+  await shot('00-browser-launch');
   await page.locator('#start').click();
   await advance(90);
   await shot('01-ready'); // The title panel intentionally dims most arena pixels.
   check('native WebGPU startup', { adapter, state: await state() });
-  await page.keyboard.press('Enter'); await advance(25);
+  await page.locator('#sf-open-controls').click();
+  await page.locator('#sf-controls[open]').waitFor();
+  await page.waitForTimeout(200); const controlsHeld = await state(); await page.waitForTimeout(150);
+  assert.equal((await state()).step, controlsHeld.step, 'The fight advanced behind the browser controls dialog.');
+  await page.getByRole('button', { name: 'P1 Throw key', exact: true }).click(); await page.keyboard.press('t');
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('sf.browser.controls.v1')));
+  assert.equal(saved.keys[0][10], 'KeyT');
+  await shot('01-browser-controls');
+  await page.locator('#sf-reset-controls').click(); await page.locator('#sf-close-controls').click(); await advance(4);
+  check('persistent remapping and controls-dialog suspension', { throwRemapped: saved.keys[0][10] });
+  await page.locator('#sf-fullscreen').click();
+  await page.waitForFunction(() => !!document.fullscreenElement); await advance(4);
+  await page.evaluate(() => document.exitFullscreen()); await advance(4);
+  await page.setViewportSize({ width: 1152, height: 672 });
+  check('browser fullscreen enters and exits', true);
+  await clickCanvas(0.5, 0.317); // Actual LOCAL title button, not a simulation fixture.
+  await virtualPad(); await padPulse(9); await advance(135);
   await shot('02-fight', { art: true });
-  check('match starts and advances', await state());
+  assert.equal(await page.locator('#sf-pad-status').textContent(), 'Controllers: 1');
+  check('local match starts through standard controller START', await state());
+  await virtualPad([], [0.25, 0]); await advance(8); await virtualPad(); await advance(4);
+  await padPulse(14); await padPulse(0); await padPulse(8);
+  check('controller stick, D-pad, attack and throw input exercised', 'Real browser queue receives canonical SDL button/axis events from the virtual W3C device.');
   await hold(['d']); await hold(['ArrowLeft']);
   await hold(['w'], 70); await hold(['ArrowUp'], 70); await advance(60);
   await hold(['s'], 100); await hold(['ArrowDown'], 100);
@@ -139,7 +180,7 @@ try {
   check('resume restores advancing scene', await state());
   for (const [name, width, height] of [['compact', 800, 600], ['ultrawide', 1680, 720]]) {
     await page.setViewportSize({ width, height });
-    await page.waitForFunction(({ width, height }) => { const c = document.querySelector('canvas'); return c.width === width && c.height === height; }, { width, height });
+    await page.waitForFunction(({ width, height }) => { const c = document.querySelector('canvas'); const rect = c.getBoundingClientRect(); return c.width === Math.round(rect.width) && c.height === Math.round(rect.height) && rect.width === width; }, { width, height });
     await advance(8); await shot(`08-${name}`, { art: true });
     check(`resize ${name}`, { width, height });
   }
@@ -160,6 +201,44 @@ try {
   await page.bringToFront(); await other.close(); await advance(15);
   await shot('10-lifecycle-resumed', { art: true });
   check('tab lifecycle suspend/resume', { hidden, held, resumed: await state() });
+  // Play a complete local first-to-two match through the browser input path.
+  // P2 remains neutral; P1 walks into range and pulses heavy punch after recovery.
+  await virtualPad([], [1, 0]); await page.waitForTimeout(700);
+  for (let attack = 0; attack < 42; attack++) {
+    await virtualPad([4], [1, 0]); await page.waitForTimeout(90);
+    // Keep the physical stick held across automatic round transitions. A reset
+    // must preserve source input, rather than require the player to wiggle it.
+    await virtualPad([], [1, 0]); await page.waitForTimeout(740);
+  }
+  await virtualPad(); await advance(8);
+  await shot('11-first-to-two-result');
+  await padPulse(9); await advance(135);
+  await shot('12-controller-rematch', { art: true });
+  check('first-to-two local match and controller rematch exercised', 'Forty-two recovered heavy punches against neutral P2 with the stick continuously held across round resets, then actual controller START; result/rematch screenshots require visual verification.');
+  await page.setViewportSize({ width: 1152, height: 672 }); await advance(5);
+  await page.keyboard.press('Escape'); await advance(4);
+  await clickCanvas(0.6, 0.700); // MAIN MENU from pause.
+  await shot('11-return-title');
+  await clickCanvas(0.687, 0.317); await page.keyboard.press('Enter'); await advance(12);
+  await shot('12-training', { art: true });
+  await clickCanvas(0.817, 0.957); await shot('12-training-collision-boxes', { art: true });
+  await clickCanvas(0.530, 0.957);
+  await hold(['d'], 350); await hold(['s', 'n'], 100); await advance(55);
+  await shot('13-training-attack', { art: true });
+  await clickCanvas(0.675, 0.957); await clickCanvas(0.817, 0.957);
+  check('training mode selects and runs without round intro', await state());
+  await page.keyboard.press('Escape'); await advance(4); await clickCanvas(0.6, 0.700);
+  await clickCanvas(0.313, 0.317); await page.keyboard.press('Enter'); await advance(350);
+  await shot('14-solo-cpu', { art: true });
+  check('solo mode and autonomous CPU exercised', 'Five seconds of gameplay without P2 controls; see CPU movement/attack screenshot.');
+  await page.keyboard.press('Escape'); await advance(4); await clickCanvas(0.4, 0.700);
+  const audioBefore = await shot('15-audio-settings');
+  await clickCanvas(0.3461, 0.4148); await clickCanvas(0.3461, 0.5160);
+  const audioChanged = await shot('16-audio-adjusted');
+  assert.notEqual(audioChanged, audioBefore, 'Audio settings controls produced no visible change.');
+  await clickCanvas(0.6534, 0.4148); await clickCanvas(0.6534, 0.5160);
+  await clickCanvas(0.4998, 0.6172);
+  check('in-game audio controls adjust and close from pause', 'Music/effects decrement, increment, and DONE traverse native canvas hit targets; screenshots record labels.');
   const audioRunning = report.audio.some(value => value.contextType === 'realtime' && value.contextState === 'running');
   assert.ok(audioRunning, 'No running real-time WebAudio context observed after user startup and match audio.');
   check('browser audio unlocked', 'Chrome WebAudio reported a running realtime context; audible output still requires human playtest.');

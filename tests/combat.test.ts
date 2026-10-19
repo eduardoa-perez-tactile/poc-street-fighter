@@ -1,4 +1,4 @@
-import { worldTest, expect, type TestWorld } from '@gameengine/test';
+import { worldTest, expect, type TestWorld, type TestInput } from '@gameengine/test';
 import { Sprite } from '@gameengine/runtime';
 import { CombatEffect, CombatInput, Fighter, MatchIntent, MatchState, Projectile } from '../src/schema.gen.ts';
 import { FIGHTERS } from '../src/data/fighters.ts';
@@ -13,13 +13,20 @@ function close(world: TestWorld, distance = 48) {
   world.insert(fighter(world, 1).entity, Fighter, { x: 384 + distance / 2 });
 }
 
+async function startLocal(world: TestWorld, input: TestInput, step: (frames: number) => Promise<void>) {
+  world.setResource(MatchState, { mode: 1 });
+  input.emit(MatchIntent, { action: 0 });
+  await step(92);
+  expect(world.resource(MatchState).phase).toBe(1);
+}
+
 worldTest('combat: combat starts ready and a start intent begins a 99 second round', async ({ world, step, input, loaded }) => {
   await loaded();
   await step(2);
   expect(world.entities(Fighter).length).toBe(2);
   expect(world.resource(MatchState).phase).toBe(0);
   expect(world.resource(MatchState).remaining).toBe(5940);
-  input.emit(MatchIntent, { action: 0 }); await step(1);
+  await startLocal(world, input, step);
   expect(world.resource(MatchState).phase).toBe(1);
   const before = world.resource(MatchState).remaining;
   await step(60);
@@ -28,7 +35,7 @@ worldTest('combat: combat starts ready and a start intent begins a 99 second rou
 
 worldTest('combat: independent keyboard seats move and key releases stop movement', async ({ world, step, input, loaded }) => {
   await loaded();
-  await step(2); input.action('start'); await step(2);
+  await step(2); await startLocal(world, input, step);
   input.key(4, true); input.key(51, true); await step(10);
   expect(fighter(world, 0).x).toBeGreaterThan(296);
   expect(fighter(world, 1).x).toBeGreaterThan(472);
@@ -39,7 +46,7 @@ worldTest('combat: independent keyboard seats move and key releases stop movemen
 
 worldTest('combat: crouch transitions release and a directional jump lands at the floor', async ({ world, step, input, loaded }) => {
   await loaded();
-  await step(2); input.action('start'); await step(2);
+  await step(2); await startLocal(world, input, step);
   input.action('p1.down'); await step(8);
   expect(STATE_NAMES[fighter(world, 0).state]).toBe('crouch');
   input.action('p1.down', 0); await step(8);
@@ -52,7 +59,7 @@ worldTest('combat: crouch transitions release and a directional jump lands at th
 
 worldTest('combat: body push and shared arena bounds keep both fighters visible', async ({ world, step, input, loaded }) => {
   await loaded();
-  await step(2); input.action('start'); await step(2);
+  await step(2); await startLocal(world, input, step);
   input.action('p1.right'); input.action('p2.left'); await step(120);
   expect(fighter(world, 1).x - fighter(world, 0).x).toBeGreaterThanOrEqual(31.99);
   input.action('p1.right', 0); input.action('p2.left', 0);
@@ -64,7 +71,7 @@ worldTest('combat: body push and shared arena bounds keep both fighters visible'
 
 worldTest('combat: light punch has startup, strikes once and freezes both fighters for hit stop', async ({ world, step, input, loaded }) => {
   await loaded();
-  await step(2); input.action('start'); await step(2); close(world);
+  await step(2); await startLocal(world, input, step); close(world);
   input.action('p1.lp'); await step(2);
   expect(world.resource(MatchState).p2Health).toBe(144);
   await step(1);
@@ -81,7 +88,7 @@ worldTest('combat: light punch has startup, strikes once and freezes both fighte
 for (const [action, damage] of [['mp', 20], ['hp', 28], ['lk', 12], ['mk', 20], ['hk', 28]] as const) {
   worldTest(`combat: ${action} normal uses its source active frames and strength damage`, async ({ world, step, input, loaded }) => {
   await loaded();
-    await step(2); input.action('start'); await step(2); close(world, 36);
+    await step(2); await startLocal(world, input, step); close(world, 36);
     input.action(`p1.${action}`); await step(90);
     expect(world.resource(MatchState).p2Health).toBe(144 - damage);
   });
@@ -89,7 +96,7 @@ for (const [action, damage] of [['mp', 20], ['hp', 28], ['lk', 12], ['mk', 20], 
 
 worldTest('combat: simultaneous punches trade without player update priority', async ({ world, step, input, loaded }) => {
   await loaded();
-  await step(2); input.action('start'); await step(2); close(world);
+  await step(2); await startLocal(world, input, step); close(world);
   input.action('p1.lp'); input.action('p2.lp'); await step(3);
   expect(world.resource(MatchState).p1Health).toBe(132);
   expect(world.resource(MatchState).p2Health).toBe(132);
@@ -99,7 +106,7 @@ worldTest('combat: simultaneous punches trade without player update priority', a
 
 worldTest('combat: a body contact still hits when the head hurt box misses', async ({ world, step, input, loaded }) => {
   await loaded();
-  await step(2); input.action('start'); await step(2); close(world, 36);
+  await step(2); await startLocal(world, input, step); close(world, 36);
   world.insert(fighter(world, 1).entity, Fighter, { state: 4, y: 190, vy: 0 });
   input.action('p1.lp'); await step(90);
   expect(world.resource(MatchState).p2Health).toBe(132);
@@ -117,7 +124,7 @@ worldTest('combat: mirrored collision boxes and sprites use the same frame selec
 for (const [punch, speed] of [['lp', 150], ['mp', 220], ['hp', 300]] as const) {
   worldTest(`combat: quarter circle ${punch} spawns a projectile at speed ${speed}`, async ({ world, step, input, loaded }) => {
   await loaded();
-    await step(2); input.action('start'); await step(2);
+    await step(2); await startLocal(world, input, step);
     input.action('p1.down'); await step(2);
     input.action('p1.right'); await step(2);
     input.action('p1.down', 0); await step(1);
@@ -133,7 +140,7 @@ for (const [punch, speed] of [['lp', 150], ['mp', 220], ['hp', 300]] as const) {
 
 worldTest('combat: expired quarter circle cannot launch a special', async ({ world, step, input, loaded }) => {
   await loaded();
-  await step(2); input.action('start'); await step(2);
+  await step(2); await startLocal(world, input, step);
   input.action('p1.down'); await step(1); input.action('p1.right'); await step(1);
   input.action('p1.down', 0); await step(30); input.action('p1.lp'); await step(15);
   expect(world.entities(Projectile).length).toBe(0);
@@ -141,7 +148,7 @@ worldTest('combat: expired quarter circle cannot launch a special', async ({ wor
 
 worldTest('combat: opposing projectiles cancel and cannot damage after collision', async ({ world, step, input, loaded }) => {
   await loaded();
-  await step(2); input.action('start'); await step(2);
+  await step(2); await startLocal(world, input, step);
   world.spawn({ Projectile: { player: 0, x: 380, y: 159, facing: 1, strength: 0 } });
   world.spawn({ Projectile: { player: 1, x: 388, y: 159, facing: -1, strength: 2 } });
   await step(1);
@@ -154,7 +161,7 @@ worldTest('combat: opposing projectiles cancel and cannot damage after collision
 
 worldTest('combat: projectile body contacts damage once and then expire', async ({ world, step, input, loaded }) => {
   await loaded();
-  await step(2); input.action('start'); await step(2);
+  await step(2); await startLocal(world, input, step);
   world.spawn({ Projectile: { player: 0, x: 458, y: 160, facing: 1, strength: 0 } });
   await step(1);
   expect(world.resource(MatchState).p2Health).toBe(116);
@@ -165,7 +172,7 @@ worldTest('combat: projectile body contacts damage once and then expire', async 
 
 worldTest('combat: pause freezes countdown and movement then resumes', async ({ world, step, input, loaded }) => {
   await loaded();
-  await step(2); input.action('start'); await step(2);
+  await step(2); await startLocal(world, input, step);
   input.emit(MatchIntent, { action: 2 }); input.action('p1.right'); await step(1);
   const remaining = world.resource(MatchState).remaining, x = fighter(world, 0).x;
   await step(60);
@@ -174,24 +181,26 @@ worldTest('combat: pause freezes countdown and movement then resumes', async ({ 
   expect(fighter(world, 0).x).toBeGreaterThan(x);
 });
 
-worldTest('combat: KO records one result and rematch clears held inputs and projectiles', async ({ world, step, input, loaded }) => {
+worldTest('combat: KO records one result and next round clears buffered attacks and projectiles', async ({ world, step, input, loaded }) => {
   await loaded();
-  await step(2); input.action('start'); await step(2); close(world);
+  await step(2); await startLocal(world, input, step); close(world);
   world.setResource(MatchState, { p2Health: 12 });
   input.action('p1.lp'); await step(3);
   expect(world.resource(MatchState).phase).toBe(2); expect(world.resource(MatchState).winner).toBe(0);
   expect(world.resource(MatchState).p1Wins).toBe(1);
   await step(60); expect(world.resource(MatchState).p1Wins).toBe(1);
-  input.emit(MatchIntent, { action: 1 }); await step(2);
+  await step(185);
   expect(world.resource(MatchState).phase).toBe(1); expect(world.resource(MatchState).round).toBe(2);
   expect(world.resource(MatchState).p2Health).toBe(144); expect(fighter(world, 0).x).toBe(296);
-  expect(world.resource(CombatInput).held[0]).toBe(0);
+  expect(world.resource(CombatInput).held[0]).toBe(16);
+  expect(world.resource(CombatInput).buffered[0]).toBe(0);
+  expect(fighter(world, 0).state).toBe(0);
   expect(world.entities(Projectile).length).toBe(0);
 });
 
 worldTest('combat: simultaneous KO produces a stable draw', async ({ world, step, input, loaded }) => {
   await loaded();
-  await step(2); input.action('start'); await step(2); close(world);
+  await step(2); await startLocal(world, input, step); close(world);
   world.setResource(MatchState, { p1Health: 12, p2Health: 12 });
   input.action('p1.lp'); input.action('p2.lp'); await step(3);
   expect(world.resource(MatchState).winner).toBe(2); expect(world.resource(MatchState).phase).toBe(2);
@@ -199,17 +208,17 @@ worldTest('combat: simultaneous KO produces a stable draw', async ({ world, step
 
 worldTest('combat: timeout compares health and equal health draws', async ({ world, step, input, loaded }) => {
   await loaded();
-  await step(2); input.action('start'); await step(2);
+  await step(2); await startLocal(world, input, step);
   world.setResource(MatchState, { remaining: 1, p1Health: 130, p2Health: 100 }); await step(1);
   expect(world.resource(MatchState).winner).toBe(0);
-  input.emit(MatchIntent, { action: 1 }); await step(2);
+  await step(242);
   world.setResource(MatchState, { remaining: 1 }); await step(1);
   expect(world.resource(MatchState).winner).toBe(2);
 });
 
 worldTest('combat: left facing player recognizes a mirrored quarter circle', async ({ world, step, input, loaded }) => {
   await loaded();
-  await step(2); input.action('start'); await step(2);
+  await step(2); await startLocal(world, input, step);
   input.action('p2.down'); await step(1);
   input.action('p2.left'); await step(1);
   input.action('p2.down', 0); await step(1);
@@ -220,17 +229,17 @@ worldTest('combat: left facing player recognizes a mirrored quarter circle', asy
 
 worldTest('combat: paused restart resets the round without awarding or advancing it', async ({ world, step, input, loaded }) => {
   await loaded();
-  await step(2); input.action('start'); await step(2);
+  await step(2); await startLocal(world, input, step);
   world.setResource(MatchState, { p1Health: 72 });
   input.emit(MatchIntent, { action: 2 }); await step(1);
-  input.emit(MatchIntent, { action: 1 }); await step(2);
+  input.emit(MatchIntent, { action: 5 }); await step(92);
   expect(world.resource(MatchState).phase).toBe(1); expect(world.resource(MatchState).p1Health).toBe(144);
   expect(world.resource(MatchState).round).toBe(1); expect(world.resource(MatchState).p1Wins).toBe(0);
 });
 
 worldTest('combat: projectiles remain frozen through the final fighter hit stop tick', async ({ world, step, input, loaded }) => {
   await loaded();
-  await step(2); input.action('start'); await step(2); close(world);
+  await step(2); await startLocal(world, input, step); close(world);
   const shot = world.spawn({ Projectile: { player: 0, x: 100, y: 100, facing: 1, strength: 0 } });
   input.action('p1.lp'); await step(3);
   expect(world.resource(MatchState).hitStop).toBe(15);
@@ -246,7 +255,7 @@ worldTest('combat: projectiles remain frozen through the final fighter hit stop 
 for (const [target, recoveryAfterFreeze] of [[0, 11], [1, 16]] as const) {
   worldTest(`combat: impact freeze consumes ${target === 0 ? 'Ryu' : 'Ken'} source hurt delay without extra stun`, async ({ world, step, input, loaded }) => {
     await loaded();
-    await step(2); input.action('start'); await step(2); close(world);
+    await step(2); await startLocal(world, input, step); close(world);
     input.action(`p${target === 0 ? 2 : 1}.lp`); await step(3);
     expect(STATE_NAMES[fighter(world, target).state]).toBe('hurt-head-light');
     expect(fighter(world, target).frame).toBe(15);
@@ -261,7 +270,7 @@ for (const [target, recoveryAfterFreeze] of [[0, 11], [1, 16]] as const) {
 
 worldTest('combat: rendered active punch and damage begin on the same simulation tick', async ({ world, step, input, loaded }) => {
   await loaded();
-  await step(2); input.action('start'); await step(2); close(world);
+  await step(2); await startLocal(world, input, step); close(world);
   input.action('p1.lp');
   for (let frame = 0; frame <= 2; frame++) {
     await step(1);
@@ -275,18 +284,19 @@ worldTest('combat: rendered active punch and damage begin on the same simulation
 
 worldTest('combat: Enter and Escape retain independent key edges while held together', async ({ world, step, input, loaded }) => {
   await loaded(); await step(2);
-  input.key(38, true); await step(1); expect(world.resource(MatchState).phase).toBe(1);
-  input.key(39, true); await step(1); expect(world.resource(MatchState).phase).toBe(3);
+  world.setResource(MatchState, { mode: 1 });
+  input.key(38, true); await step(92); expect(world.resource(MatchState).phase).toBe(1);
+  input.key(39, true); await step(2); expect(world.resource(MatchState).phase).toBe(3);
   input.key(39, false); await step(1);
-  input.key(39, true); await step(1); expect(world.resource(MatchState).phase).toBe(1);
+  input.key(39, true); await step(2); expect(world.resource(MatchState).phase).toBe(1);
   // Autorepeat on the still-held Escape key cannot pause the resumed round again.
-  input.key(39, true); await step(1); expect(world.resource(MatchState).phase).toBe(1);
+  input.key(39, true); await step(2); expect(world.resource(MatchState).phase).toBe(1);
   input.key(38, false); await step(1);
-  input.key(39, true); await step(1); expect(world.resource(MatchState).phase).toBe(1);
+  input.key(39, true); await step(2); expect(world.resource(MatchState).phase).toBe(1);
 });
 
 worldTest('combat: jump samples direction at launch and first moves by the source initial velocity', async ({ world, step, input, loaded }) => {
-  await loaded(); await step(2); input.action('start'); await step(2);
+  await loaded(); await step(2); await startLocal(world, input, step);
   input.action('p1.up'); await step(1);
   expect(STATE_NAMES[fighter(world, 0).state]).toBe('jump-start');
   expect(fighter(world, 0).frame).toBe(0);
@@ -302,7 +312,7 @@ worldTest('combat: jump samples direction at launch and first moves by the sourc
 });
 
 worldTest('combat: landing accepts held movement after two source landing frames and emits one landing effect', async ({ world, step, input, loaded }) => {
-  await loaded(); await step(2); input.action('start'); await step(2);
+  await loaded(); await step(2); await startLocal(world, input, step);
   input.action('p1.up'); await step(1); input.action('p1.up', 0);
   let ticks = 0;
   while (STATE_NAMES[fighter(world, 0).state] !== 'jump-land' && ticks++ < 80) await step(1);
@@ -320,7 +330,7 @@ worldTest('combat: landing accepts held movement after two source landing frames
 
 for (const [action, attack] of [['lp', 0], ['lk', 1]] as const) {
   worldTest(`combat: ${action} effects preserve attack type for audio selection`, async ({ world, step, input, loaded }) => {
-    await loaded(); await step(2); input.action('start'); await step(2); close(world, 36);
+    await loaded(); await step(2); await startLocal(world, input, step); close(world, 36);
     input.action(`p1.${action}`); await step(1);
     expect(world.events(CombatEffect).find(e => e.kind === 0)!.attack).toBe(attack);
     let ticks = 0;

@@ -3,6 +3,7 @@ import { ArenaVisualState, Fighter, FighterShadow, HitSpark, MatchState, Project
 import { FIGHTERS } from '../data/fighters.ts';
 import { HIT_FRAMES } from '../data/effects.ts';
 import { frameForFighter } from '../combat/index.ts';
+import { KNOCKDOWN, WAKEUP } from '../combat/moves.ts';
 import { STAGE_PIECES, pieceImage, piecePosition } from './stage-parts.ts';
 
 export const DrawStage = defineSystem({
@@ -26,11 +27,20 @@ export const DrawFighters = defineSystem({
   run(ctx, q) {
     const match = ctx.resource(MatchState), tick = ctx.resource(ArenaVisualState).tick[0]!;
     for (const c of q.chunks()) {
-      const f = c.col(Fighter), s = c.col(Sprite), o = c.col(VisualOffset).position;
+      const f = c.col(Fighter), s = c.col(Sprite), visual = c.col(VisualOffset), o = visual.position;
       for (let i = 0; i < c.length; i++) {
         const frame = frameForFighter(FIGHTERS[f.player[i]!]!, f.state[i]!, f.frame[i]!);
         c.setField(Sprite, i, 'image', frame.sprite); s.flipX[i] = f.facing[i]! < 0 ? 1 : 0;
         o[i * 3] = match.hitStop[0]! > 0 && f.state[i]! >= 19 && f.state[i]! <= 24 ? (tick % 2 ? 0.02 : -0.02) : 0;
+        // Reused hurt/crouch poses rotate about their authored feet pivot; only the
+        // rendered body falls. Gameplay position, hit boxes and knockdown timing stay exact.
+        const authenticFall = frame.sprite.includes('/extra-');
+        const fall = authenticFall ? 0 : f.state[i] === KNOCKDOWN ? Math.min(1, f.frame[i]! / 10) : f.state[i] === WAKEUP ? Math.max(0, 1 - f.frame[i]! / 8) : 0;
+        const angle = f.facing[i]! * Math.PI * 0.5 * fall;
+        o[i * 3 + 1] = 0.3 * fall;
+        visual.rotation[i * 4] = 0; visual.rotation[i * 4 + 1] = 0;
+        visual.rotation[i * 4 + 2] = Math.sin(angle / 2); visual.rotation[i * 4 + 3] = Math.cos(angle / 2);
+
       }
     }
   },
@@ -74,6 +84,8 @@ export const DrawHitSparks = defineSystem({
         if (f.life[i]! > 0) {
           const frames = f.strength[i] === 0 ? HIT_FRAMES.light : f.strength[i] === 1 ? HIT_FRAMES.medium : HIT_FRAMES.heavy;
           c.setField(Sprite, i, 'image', frames[Math.min(3, Math.floor((16 - f.life[i]!) / 4)) + f.player[i]! * 4]!);
+          c.setField(Sprite, i, 'color', f.kind[i] === 6 ? '#62cfffff' : f.kind[i] === 10 ? '#ffffffff' : f.kind[i] === 8 ? '#ffad62ff' : f.kind[i] === 9 ? '#e8b3ffff' : '#ffffffff');
+          c.setField(Sprite, i, 'size', f.kind[i] === 7 || f.kind[i] === 8 ? [1.6, 1.6] : f.kind[i] === 6 ? [1.0, 1.0] : [1.28, 1.28]);
         }
       }
     }

@@ -27,21 +27,25 @@
         "panel_kicker",
         "panel_title",
         "panel_subtitle",
+        "mode_choices",
+        "pause_help",
+        "difficulty",
         "instructions",
         "special_hint",
         "panel_actions",
+        "secondary_actions",
         "panel_hint"
       ],
       "style": {
         "pad": [
-          26,
-          30,
-          26,
-          30
+          18,
+          24,
+          18,
+          24
         ],
         "dir": "column",
         "align": "center",
-        "gap": 13,
+        "gap": 8,
         "w": "84%",
         "bg": "#0c1829f5",
         "radius": 3
@@ -52,7 +56,7 @@
       "name": "Label",
       "text": "THE WORLD WARRIOR",
       "style": {
-        "fontSize": 15,
+        "fontSize": 12,
         "weight": 800,
         "color": "#55d9efff",
         "textAlign": "center"
@@ -64,13 +68,13 @@
       "text": "Label",
       "property": "title",
       "style": {
-        "fontSize": 52,
+        "fontSize": 44,
         "fitMin": 30,
         "weight": 800,
         "color": "#ffce4aff",
         "textAlign": "center",
         "w": "100%",
-        "h": 66
+        "h": 54
       }
     },
     "panel_subtitle": {
@@ -113,7 +117,8 @@
       "children": [
         "one_title",
         "one_move",
-        "one_attack"
+        "one_attack",
+        "one_guard"
       ],
       "style": {
         "pad": 0,
@@ -166,7 +171,8 @@
       "children": [
         "two_title",
         "two_move",
-        "two_attack"
+        "two_attack",
+        "two_guard"
       ],
       "style": {
         "pad": 0,
@@ -273,7 +279,7 @@
       "doc": "fight-button",
       "key": "restart",
       "props": {
-        "label": "RESTART ROUND"
+        "label": "RESTART MATCH"
       },
       "show": "paused",
       "style": {
@@ -285,7 +291,7 @@
       "doc": "fight-button",
       "key": "rematch",
       "props": {
-        "label": "PLAY AGAIN"
+        "label": "REMATCH"
       },
       "show": "result",
       "style": {
@@ -304,6 +310,208 @@
         "textAlign": "center",
         "h": 24,
         "w": "100%"
+      }
+    },
+    "mode_choices": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "solo",
+        "local",
+        "training"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "row",
+        "gap": 10,
+        "justify": "center",
+        "w": "100%"
+      },
+      "show": "ready"
+    },
+    "solo": {
+      "type": "use",
+      "doc": "fight-button",
+      "key": "solo",
+      "props": {
+        "label": {
+          "property": "soloLabel"
+        }
+      },
+      "style": {
+        "w": 205,
+        "h": 42
+      }
+    },
+    "local": {
+      "type": "use",
+      "doc": "fight-button",
+      "key": "local",
+      "props": {
+        "label": {
+          "property": "localLabel"
+        }
+      },
+      "style": {
+        "w": 205,
+        "h": 42
+      }
+    },
+    "training": {
+      "type": "use",
+      "doc": "fight-button",
+      "key": "training",
+      "props": {
+        "label": {
+          "property": "trainingLabel"
+        }
+      },
+      "style": {
+        "w": 205,
+        "h": 42
+      }
+    },
+    "difficulty": {
+      "type": "use",
+      "doc": "fight-button",
+      "key": "difficulty",
+      "props": {
+        "label": {
+          "property": "difficultyLabel"
+        }
+      },
+      "style": {
+        "w": 310,
+        "h": 38
+      },
+      "show": "ready"
+    },
+    "one_guard": {
+      "type": "label",
+      "name": "Label",
+      "text": "BACK: block    R: throw",
+      "style": {
+        "fontSize": 14,
+        "color": "#91d8eaff",
+        "w": "100%",
+        "h": 20
+      }
+    },
+    "two_guard": {
+      "type": "label",
+      "name": "Label",
+      "text": "BACK: block    P: throw",
+      "style": {
+        "fontSize": 14,
+        "color": "#91d8eaff",
+        "w": "100%",
+        "h": 20
+      }
+    },
+    "secondary_actions": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "settings",
+        "title"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "row",
+        "gap": 12,
+        "justify": "center",
+        "w": "100%"
+      }
+    },
+    "settings": {
+      "type": "use",
+      "doc": "fight-button",
+      "key": "settings",
+      "props": {
+        "label": "AUDIO SETTINGS"
+      },
+      "show": "settingsable",
+      "style": {
+        "w": 220,
+        "h": 40
+      }
+    },
+    "title": {
+      "type": "use",
+      "doc": "fight-button",
+      "key": "title",
+      "props": {
+        "label": "MAIN MENU"
+      },
+      "show": "canReturn",
+      "style": {
+        "w": 220,
+        "h": 40
+      }
+    },
+    "pause_help": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "pause_guard",
+        "pause_fireball",
+        "pause_dragon",
+        "pause_hurricane"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "column",
+        "gap": 4,
+        "w": "100%"
+      },
+      "show": "paused"
+    },
+    "pause_guard": {
+      "type": "label",
+      "name": "Label",
+      "text": "BLOCK: Hold back / down-back    THROW: P1 R / P2 P",
+      "style": {
+        "fontSize": 16,
+        "color": "#91d8eaff",
+        "w": "100%",
+        "h": 24,
+        "textAlign": "center"
+      }
+    },
+    "pause_fireball": {
+      "type": "label",
+      "name": "Label",
+      "text": "HADOUKEN: Down > Down-forward > Forward + Punch",
+      "style": {
+        "fontSize": 15,
+        "color": "#d3e0eaff",
+        "w": "100%",
+        "h": 24,
+        "textAlign": "center"
+      }
+    },
+    "pause_dragon": {
+      "type": "label",
+      "name": "Label",
+      "text": "SHORYUKEN: Forward > Down > Down-forward + Punch",
+      "style": {
+        "fontSize": 15,
+        "color": "#d3e0eaff",
+        "w": "100%",
+        "h": 24,
+        "textAlign": "center"
+      }
+    },
+    "pause_hurricane": {
+      "type": "label",
+      "name": "Label",
+      "text": "HURRICANE: Down > Down-back > Back + Kick",
+      "style": {
+        "fontSize": 15,
+        "color": "#d3e0eaff",
+        "w": "100%",
+        "h": 24,
+        "textAlign": "center"
       }
     }
   },
@@ -339,18 +547,47 @@
     "result": {
       "type": "yesno",
       "default": false
+    },
+    "soloLabel": {
+      "type": "text",
+      "default": "SOLO [SELECTED]"
+    },
+    "localLabel": {
+      "type": "text",
+      "default": "LOCAL VERSUS"
+    },
+    "trainingLabel": {
+      "type": "text",
+      "default": "TRAINING"
+    },
+    "difficultyLabel": {
+      "type": "text",
+      "default": "DIFFICULTY: NORMAL"
+    },
+    "settingsable": {
+      "type": "yesno",
+      "default": true
+    },
+    "canReturn": {
+      "type": "yesno",
+      "default": false
     }
   },
   "samples": {
     "ready": {
       "ready": true,
       "paused": false,
-      "result": false
+      "result": false,
+      "settingsable": true,
+      "canReturn": false,
+      "subtitle": "SOLO / RYU vs CPU"
     },
     "paused": {
       "ready": false,
       "paused": true,
       "result": false,
+      "settingsable": true,
+      "canReturn": true,
       "title": "PAUSED",
       "subtitle": "Take a breath. The round is waiting.",
       "hint": "ESC TO RESUME"
@@ -359,25 +596,21 @@
       "ready": false,
       "paused": false,
       "result": true,
-      "title": "RYU WINS",
-      "subtitle": "Another round?",
-      "hint": "ENTER TO PLAY AGAIN"
+      "settingsable": false,
+      "canReturn": true,
+      "title": "RYU WINS THE MATCH",
+      "subtitle": "FINAL SCORE / RYU 2 - KEN 0",
+      "hint": "ENTER TO REMATCH"
     },
     "kenWins": {
       "ready": false,
       "paused": false,
       "result": true,
-      "title": "KEN WINS",
-      "subtitle": "Another round?",
-      "hint": "ENTER TO PLAY AGAIN"
-    },
-    "draw": {
-      "ready": false,
-      "paused": false,
-      "result": true,
-      "title": "DRAW",
-      "subtitle": "An even match. Settle it in the next round.",
-      "hint": "ENTER TO PLAY AGAIN"
+      "settingsable": false,
+      "canReturn": true,
+      "title": "KEN WINS THE MATCH",
+      "subtitle": "FINAL SCORE / RYU 1 - KEN 2",
+      "hint": "ENTER TO REMATCH"
     }
   }
 }

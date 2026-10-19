@@ -28,12 +28,13 @@
       "children": [
         "footer_hint",
         "footer_pause"
-      ]
+      ],
+      "show": "visible"
     },
     "footer_hint": {
       "type": "label",
       "name": "Label",
-      "text": "P1  WASD + FGH / VBN     P2  ARROWS + JKL / UIO",
+      "text": "P1  WASD / FGH VBN / R     P2  ARROWS / JKL UIO / P",
       "style": {
         "fontSize": 15,
         "fitMin": 11,
@@ -53,6 +54,12 @@
         "w": 170,
         "h": 42
       }
+    }
+  },
+  "properties": {
+    "visible": {
+      "type": "yesno",
+      "default": true
     }
   }
 }

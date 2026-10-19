@@ -5,6 +5,14 @@
     "WorldView": { "orthoSize": 1.12, "designAspect": 1.7142857142857142, "fit": "Contain", "center": [3.84, 0.88] }
   },
   "entities": [
-    { "name": "Camera", "id": "camera", "Camera": { "clearColor": "#53678dff" }, "LocalTransform": {} }
+    {
+      "name": "Camera",
+      "id": "camera",
+      "Camera": { "clearColor": "#53678dff" },
+      "CameraImpact": {},
+      "CameraShake": {},
+      "LocalTransform": {},
+      "VisualOffset": {}
+    }
   ]
 }

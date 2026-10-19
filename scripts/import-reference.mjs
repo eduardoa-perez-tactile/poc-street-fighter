@@ -2,7 +2,7 @@
 // Rebuild the cropped port assets from a local checkout of the pinned reference.
 // Usage: node scripts/import-reference.mjs /path/to/street-fighter-2-javascript
 // Requires Python 3 with Pillow. No network access or engine session is used.
-import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync, spawnSync } from 'node:child_process';
@@ -107,10 +107,27 @@ const hudText = read('src/entities/overlays/StatusBar.js');
 const hudFrames = field(hudText, 'frames', ']);');
 for (const [key, rect] of hudFrames) crops.push({ sprite: `ui/${key === 'score-@' ? 'score-at' : key}`, image: 'misc.png', rect });
 
+// Additional authentic poses are manually audited in source-sheet pixel coordinates.
+// Combat metadata owns their timelines/boxes; this manifest owns only art and feet pivots.
+const extraPath = resolve(root, 'scripts/extra-frame-crops.json');
+let extraFrames;
+if (existsSync(extraPath)) {
+  const bytes = readFileSync(extraPath);
+  const manifest = JSON.parse(bytes.toString('utf8'));
+  const metadata = ['ryu', 'ken'].map(fighter => Object.fromEntries(Object.entries(manifest[fighter] ?? {}).map(([key, frame]) => [key, { sprite: `fighters/${fighter}/${key}`, rect: frame.rect, origin: frame.origin }])));
+  writeFileSync(resolve(root, 'src/data/extended-frames.ts'), `// Source-sheet crops inspected in scripts/extra-frame-crops.json; original pixels and feet pivots preserved.\nexport const EXTENDED_FRAMES = ${JSON.stringify(metadata, null, 2)} as const;\n`);
+  let count = 0;
+  for (const fighter of ['ryu', 'ken']) for (const [key, frame] of Object.entries(manifest[fighter] ?? {})) {
+    if (!/^extra-[a-z0-9-]+$/.test(key)) throw new Error(`Invalid extended sprite key ${key}`);
+    crops.push({ sprite: `fighters/${fighter}/${key}`, image: `${fighter}.png`, rect: frame.rect, origin: frame.origin, canvas: [256, 256], pivot: [128, 224] });
+    count++;
+  }
+  extraFrames = { manifest: 'scripts/extra-frame-crops.json', sha256: createHash('sha256').update(bytes).digest('hex'), count };
+}
 const sounds = readdirSync(resolve(source, 'sounds')).filter(p => p.endsWith('.ogg')).sort();
 const python = spawnSync('python3', [resolve(root, 'scripts/import-reference-images.py')], { input: JSON.stringify({ root, source, crops, sounds }), encoding: 'utf8' });
 if (python.status !== 0) throw new Error(python.stderr || 'Image conversion failed');
 const imageInputs = [...new Set(crops.map(c => `images/${c.image}`)), ...sounds.map(s => `sounds/${s}`)];
 const inputs = [...new Set([...trackedInputs, ...imageInputs])].sort().map(path => ({ path, sha256: createHash('sha256').update(readFileSync(resolve(source, path))).digest('hex') }));
-writeFileSync(resolve(root, 'scripts/reference-provenance.json'), JSON.stringify({ repository: 'https://github.com/iuritorres/street-fighter-2-javascript', commit: sha, license: 'No license file present at pinned commit; reuse permissions unresolved. Street Fighter characters/art/audio remain third-party material.', conversion: { fighterCanvas: [256, 256], fighterFeetPivot: [128, 224], effectCanvas: [128, 128], effectPivot: [64, 64], resampling: 'none', stageBackgroundKey: [83, 103, 141], decalsBackgroundKey: [42, 81, 114], shadowBackgroundKey: [27, 2, 218] }, inputs }, null, 2) + '\n');
+writeFileSync(resolve(root, 'scripts/reference-provenance.json'), JSON.stringify({ repository: 'https://github.com/iuritorres/street-fighter-2-javascript', commit: sha, extraFrames, license: 'No license file present at pinned commit; reuse permissions unresolved. Street Fighter characters/art/audio remain third-party material.', conversion: { fighterCanvas: [256, 256], fighterFeetPivot: [128, 224], effectCanvas: [128, 128], effectPivot: [64, 64], resampling: 'none', stageBackgroundKey: [83, 103, 141], decalsBackgroundKey: [42, 81, 114], shadowBackgroundKey: [27, 2, 218] }, inputs }, null, 2) + '\n');
 console.log(`Imported ${fighters.map(f => Object.keys(f.frames).length).join(' + ')} fighter frames, ${Object.keys(stageFrames).length} stage frames, ${sounds.length} sounds; ${crops.length} cropped sprites.`);
