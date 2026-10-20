@@ -197,6 +197,24 @@ try {
   await page.keyboard.down('s'); await page.waitForTimeout(55); await page.keyboard.down('d'); await page.waitForTimeout(55); await page.keyboard.up('s'); await page.waitForTimeout(55); await page.keyboard.down('f'); await page.waitForTimeout(55); await page.keyboard.up('f'); await page.keyboard.up('d'); await advance(15);
   await shot('04-quarter-circle', { art: true });
   check('quarter-circle input sequence exercised', 'down, down-forward, forward + light punch');
+  // Let the previous normal/fireball recover, then make room for real keyboard
+  // special inputs. advance observes the 60 Hz sim clock, avoiding wall-time
+  // assumptions about startup and travel; screenshots still need visual review.
+  await advance(70);
+  await page.keyboard.down('a'); await advance(24); await page.keyboard.up('a'); await advance(3);
+  await page.keyboard.down('d'); await advance(2); await page.keyboard.up('d');
+  await page.keyboard.down('s'); await advance(2);
+  await page.keyboard.down('d'); await page.keyboard.down('h'); await advance(2);
+  await page.keyboard.up('h'); await page.keyboard.up('s'); await page.keyboard.up('d');
+  await advance(18); await shot('04-dragon-airborne', { art: true });
+  check('dragon punch keyboard input exercised with flight capture', 'forward, down, down-forward + heavy punch; captured near the expected apex. Inspect screenshot for airborne sprite/shadow separation; browser probe does not expose fighter positions.');
+  await advance(70);
+  await page.keyboard.down('s'); await advance(2);
+  await page.keyboard.down('a'); await advance(2); await page.keyboard.up('s'); await advance(2);
+  await page.keyboard.down('n'); await advance(2); await page.keyboard.up('n'); await page.keyboard.up('a');
+  await advance(18); await shot('04-hurricane-airborne', { art: true });
+  check('hurricane keyboard input exercised with flight capture', 'down, down-back, back + heavy kick; captured during the expected flight. Inspect screenshot for airborne sprite/shadow separation; browser probe does not expose fighter positions.');
+  await advance(70);
   await page.keyboard.press('Escape'); await advance(5); await page.waitForTimeout(500);
   const paused = await shot('05-paused'); await page.waitForTimeout(250); const still = await shot('06-paused-still');
   assert.equal(still, paused, 'Paused scene or timer continued animating after transitions settled.');

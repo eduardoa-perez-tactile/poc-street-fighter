@@ -213,7 +213,12 @@ worldTest('combat depth: double KO falls both fighters and a timeout loser settl
   expect(world.resource(MatchState).winner).toBe(2);
   for (let player = 0; player < 2; player++) {
     const f = fighter(world, player);
-    expect(f.state).toBe(KNOCKDOWN); expect(frameForFighter(FIGHTERS[player]!, f.state, f.frame).sprite.endsWith('/extra-down')).toBe(true);
+    expect(f.state).toBe(KNOCKDOWN); expect(f.y).toBeLessThan(216); expect(f.frame).toBeLessThan(18);
+  }
+  await step(65);
+  for (let player = 0; player < 2; player++) {
+    const f = fighter(world, player);
+    expect(f.y).toBe(216); expect(frameForFighter(FIGHTERS[player]!, f.state, f.frame).sprite.endsWith('/extra-down')).toBe(true);
   }
   // A separate alive timeout pose never remains suspended in the air.
   world.setResource(MatchState, { phase: 2, phaseTicks: 150, winner: 1, p1Health: 100, p2Health: 120 });
