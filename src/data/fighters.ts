@@ -2528,7 +2528,7 @@ export const FIGHTERS: readonly [FighterDefinition, FighterDefinition] = [
         "sprite": "fighters/ryu/hit-stomach-1",
         "rect": [
           397,
-          2029,
+          2157,
           58,
           85
         ],
@@ -2573,7 +2573,7 @@ export const FIGHTERS: readonly [FighterDefinition, FighterDefinition] = [
         "sprite": "fighters/ryu/hit-stomach-2",
         "rect": [
           470,
-          2032,
+          2160,
           66,
           82
         ],
@@ -2590,7 +2590,7 @@ export const FIGHTERS: readonly [FighterDefinition, FighterDefinition] = [
         "hurt": [
           [
             -17,
-            82,
+            -82,
             28,
             18
           ],
@@ -2618,7 +2618,7 @@ export const FIGHTERS: readonly [FighterDefinition, FighterDefinition] = [
         "sprite": "fighters/ryu/hit-stomach-3",
         "rect": [
           544,
-          2034,
+          2162,
           68,
           84
         ],
@@ -2635,7 +2635,7 @@ export const FIGHTERS: readonly [FighterDefinition, FighterDefinition] = [
         "hurt": [
           [
             -17,
-            82,
+            -82,
             28,
             18
           ],
@@ -6364,7 +6364,7 @@ export const FIGHTERS: readonly [FighterDefinition, FighterDefinition] = [
         "hurt": [
           [
             -17,
-            82,
+            -82,
             28,
             18
           ],
@@ -6409,7 +6409,7 @@ export const FIGHTERS: readonly [FighterDefinition, FighterDefinition] = [
         "hurt": [
           [
             -17,
-            82,
+            -82,
             28,
             18
           ],

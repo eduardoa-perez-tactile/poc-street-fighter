@@ -160,40 +160,40 @@ export const EXTENDED_FRAMES = [
     "extra-dragon-1": {
       "sprite": "fighters/ryu/extra-dragon-1",
       "rect": [
-        11,
-        834,
-        60,
-        72
+        12,
+        1690,
+        62,
+        87
       ],
       "origin": [
-        29,
-        70
+        30,
+        85
       ]
     },
     "extra-dragon-2": {
       "sprite": "fighters/ryu/extra-dragon-2",
       "rect": [
-        83,
-        816,
-        73,
-        91
+        99,
+        1689,
+        68,
+        89
       ],
       "origin": [
-        37,
-        89
+        34,
+        87
       ]
     },
     "extra-dragon-3": {
       "sprite": "fighters/ryu/extra-dragon-3",
       "rect": [
-        167,
-        790,
-        57,
-        117
+        176,
+        1651,
+        59,
+        125
       ],
       "origin": [
-        27,
-        115
+        29,
+        123
       ]
     },
     "extra-hurricane-1": {
@@ -337,6 +337,227 @@ export const EXTENDED_FRAMES = [
       "origin": [
         29,
         59
+      ]
+    },
+    "extra-dragon-4": {
+      "sprite": "fighters/ryu/extra-dragon-4",
+      "rect": [
+        244,
+        1652,
+        53,
+        119
+      ],
+      "origin": [
+        26,
+        117
+      ]
+    },
+    "extra-dragon-5": {
+      "sprite": "fighters/ryu/extra-dragon-5",
+      "rect": [
+        315,
+        1654,
+        49,
+        117
+      ],
+      "origin": [
+        24,
+        115
+      ]
+    },
+    "extra-dragon-6": {
+      "sprite": "fighters/ryu/extra-dragon-6",
+      "rect": [
+        369,
+        1667,
+        59,
+        105
+      ],
+      "origin": [
+        29,
+        103
+      ]
+    },
+    "extra-hurricane-5": {
+      "sprite": "fighters/ryu/extra-hurricane-5",
+      "rect": [
+        168,
+        1531,
+        49,
+        65
+      ],
+      "origin": [
+        24,
+        79
+      ]
+    },
+    "extra-hurricane-6": {
+      "sprite": "fighters/ryu/extra-hurricane-6",
+      "rect": [
+        410,
+        1530,
+        56,
+        95
+      ],
+      "origin": [
+        28,
+        93
+      ]
+    },
+    "extra-hurricane-7": {
+      "sprite": "fighters/ryu/extra-hurricane-7",
+      "rect": [
+        588,
+        1535,
+        58,
+        91
+      ],
+      "origin": [
+        29,
+        89
+      ]
+    },
+    "extra-crouch-punch-4": {
+      "sprite": "fighters/ryu/extra-crouch-punch-4",
+      "rect": [
+        11,
+        834,
+        60,
+        72
+      ],
+      "origin": [
+        29,
+        70
+      ]
+    },
+    "extra-crouch-punch-5": {
+      "sprite": "fighters/ryu/extra-crouch-punch-5",
+      "rect": [
+        83,
+        816,
+        73,
+        91
+      ],
+      "origin": [
+        37,
+        89
+      ]
+    },
+    "extra-crouch-punch-6": {
+      "sprite": "fighters/ryu/extra-crouch-punch-6",
+      "rect": [
+        167,
+        790,
+        57,
+        117
+      ],
+      "origin": [
+        27,
+        115
+      ]
+    },
+    "extra-throw-1": {
+      "sprite": "fighters/ryu/extra-throw-1",
+      "rect": [
+        22,
+        1313,
+        82,
+        90
+      ],
+      "origin": [
+        41,
+        88
+      ]
+    },
+    "extra-throw-2": {
+      "sprite": "fighters/ryu/extra-throw-2",
+      "rect": [
+        111,
+        1311,
+        84,
+        92
+      ],
+      "origin": [
+        42,
+        90
+      ]
+    },
+    "extra-throw-3": {
+      "sprite": "fighters/ryu/extra-throw-3",
+      "rect": [
+        203,
+        1318,
+        65,
+        85
+      ],
+      "origin": [
+        32,
+        83
+      ]
+    },
+    "extra-throw-4": {
+      "sprite": "fighters/ryu/extra-throw-4",
+      "rect": [
+        282,
+        1326,
+        84,
+        76
+      ],
+      "origin": [
+        42,
+        74
+      ]
+    },
+    "extra-throw-5": {
+      "sprite": "fighters/ryu/extra-throw-5",
+      "rect": [
+        375,
+        1341,
+        69,
+        60
+      ],
+      "origin": [
+        34,
+        58
+      ]
+    },
+    "extra-rise-2": {
+      "sprite": "fighters/ryu/extra-rise-2",
+      "rect": [
+        1280,
+        2184,
+        57,
+        70
+      ],
+      "origin": [
+        28,
+        68
+      ]
+    },
+    "extra-rise-3": {
+      "sprite": "fighters/ryu/extra-rise-3",
+      "rect": [
+        1348,
+        2143,
+        47,
+        115
+      ],
+      "origin": [
+        23,
+        113
+      ]
+    },
+    "extra-rise-4": {
+      "sprite": "fighters/ryu/extra-rise-4",
+      "rect": [
+        1422,
+        2184,
+        80,
+        69
+      ],
+      "origin": [
+        40,
+        67
       ]
     }
   },
@@ -500,6 +721,19 @@ export const EXTENDED_FRAMES = [
     "extra-dragon-1": {
       "sprite": "fighters/ken/extra-dragon-1",
       "rect": [
+        11,
+        2970,
+        62,
+        79
+      ],
+      "origin": [
+        30,
+        77
+      ]
+    },
+    "extra-dragon-2": {
+      "sprite": "fighters/ken/extra-dragon-2",
+      "rect": [
         86,
         2961,
         68,
@@ -507,11 +741,11 @@ export const EXTENDED_FRAMES = [
       ],
       "origin": [
         34,
-        86
+        87
       ]
     },
-    "extra-dragon-2": {
-      "sprite": "fighters/ken/extra-dragon-2",
+    "extra-dragon-3": {
+      "sprite": "fighters/ken/extra-dragon-3",
       "rect": [
         155,
         2923,
@@ -520,20 +754,7 @@ export const EXTENDED_FRAMES = [
       ],
       "origin": [
         29,
-        122
-      ]
-    },
-    "extra-dragon-3": {
-      "sprite": "fighters/ken/extra-dragon-3",
-      "rect": [
-        217,
-        2835,
-        53,
-        119
-      ],
-      "origin": [
-        26,
-        116
+        123
       ]
     },
     "extra-hurricane-1": {
@@ -571,7 +792,7 @@ export const EXTENDED_FRAMES = [
         100
       ],
       "origin": [
-        47,
+        29,
         97
       ]
     },
@@ -584,7 +805,7 @@ export const EXTENDED_FRAMES = [
         93
       ],
       "origin": [
-        47,
+        66,
         90
       ]
     },
@@ -617,6 +838,19 @@ export const EXTENDED_FRAMES = [
     "extra-fall-1": {
       "sprite": "fighters/ken/extra-fall-1",
       "rect": [
+        1,
+        3504,
+        82,
+        68
+      ],
+      "origin": [
+        36,
+        66
+      ]
+    },
+    "extra-fall-2": {
+      "sprite": "fighters/ken/extra-fall-2",
+      "rect": [
         84,
         3460,
         102,
@@ -627,8 +861,8 @@ export const EXTENDED_FRAMES = [
         42
       ]
     },
-    "extra-fall-2": {
-      "sprite": "fighters/ken/extra-fall-2",
+    "extra-fall-3": {
+      "sprite": "fighters/ken/extra-fall-3",
       "rect": [
         187,
         3465,
@@ -638,19 +872,6 @@ export const EXTENDED_FRAMES = [
       "origin": [
         39,
         77
-      ]
-    },
-    "extra-fall-3": {
-      "sprite": "fighters/ken/extra-fall-3",
-      "rect": [
-        267,
-        3477,
-        72,
-        64
-      ],
-      "origin": [
-        36,
-        61
       ]
     },
     "extra-down": {
@@ -677,6 +898,266 @@ export const EXTENDED_FRAMES = [
       "origin": [
         27,
         74
+      ]
+    },
+    "extra-dragon-4": {
+      "sprite": "fighters/ken/extra-dragon-4",
+      "rect": [
+        217,
+        2835,
+        53,
+        119
+      ],
+      "origin": [
+        26,
+        117
+      ]
+    },
+    "extra-dragon-5": {
+      "sprite": "fighters/ken/extra-dragon-5",
+      "rect": [
+        286,
+        2842,
+        49,
+        117
+      ],
+      "origin": [
+        24,
+        115
+      ]
+    },
+    "extra-dragon-6": {
+      "sprite": "fighters/ken/extra-dragon-6",
+      "rect": [
+        348,
+        2952,
+        59,
+        98
+      ],
+      "origin": [
+        29,
+        96
+      ]
+    },
+    "extra-hurricane-5": {
+      "sprite": "fighters/ken/extra-hurricane-5",
+      "rect": [
+        137,
+        3061,
+        49,
+        64
+      ],
+      "origin": [
+        24,
+        79
+      ]
+    },
+    "extra-hurricane-6": {
+      "sprite": "fighters/ken/extra-hurricane-6",
+      "rect": [
+        409,
+        3051,
+        56,
+        97
+      ],
+      "origin": [
+        28,
+        94
+      ]
+    },
+    "extra-hurricane-7": {
+      "sprite": "fighters/ken/extra-hurricane-7",
+      "rect": [
+        619,
+        3053,
+        58,
+        93
+      ],
+      "origin": [
+        29,
+        90
+      ]
+    },
+    "extra-crouch-punch-4": {
+      "sprite": "fighters/ken/extra-crouch-punch-4",
+      "rect": [
+        675,
+        1414,
+        60,
+        71
+      ],
+      "origin": [
+        29,
+        68
+      ]
+    },
+    "extra-crouch-punch-5": {
+      "sprite": "fighters/ken/extra-crouch-punch-5",
+      "rect": [
+        746,
+        1396,
+        73,
+        89
+      ],
+      "origin": [
+        37,
+        86
+      ]
+    },
+    "extra-crouch-punch-6": {
+      "sprite": "fighters/ken/extra-crouch-punch-6",
+      "rect": [
+        835,
+        1360,
+        56,
+        125
+      ],
+      "origin": [
+        27,
+        122
+      ]
+    },
+    "extra-throw-1": {
+      "sprite": "fighters/ken/extra-throw-1",
+      "rect": [
+        1,
+        2650,
+        82,
+        90
+      ],
+      "origin": [
+        41,
+        88
+      ]
+    },
+    "extra-throw-2": {
+      "sprite": "fighters/ken/extra-throw-2",
+      "rect": [
+        91,
+        2648,
+        84,
+        92
+      ],
+      "origin": [
+        42,
+        90
+      ]
+    },
+    "extra-throw-3": {
+      "sprite": "fighters/ken/extra-throw-3",
+      "rect": [
+        182,
+        2655,
+        65,
+        85
+      ],
+      "origin": [
+        32,
+        83
+      ]
+    },
+    "extra-throw-4": {
+      "sprite": "fighters/ken/extra-throw-4",
+      "rect": [
+        248,
+        2663,
+        84,
+        76
+      ],
+      "origin": [
+        42,
+        74
+      ]
+    },
+    "extra-throw-5": {
+      "sprite": "fighters/ken/extra-throw-5",
+      "rect": [
+        346,
+        2679,
+        69,
+        60
+      ],
+      "origin": [
+        34,
+        58
+      ]
+    },
+    "extra-rise-2": {
+      "sprite": "fighters/ken/extra-rise-2",
+      "rect": [
+        933,
+        3527,
+        57,
+        71
+      ],
+      "origin": [
+        28,
+        69
+      ]
+    },
+    "extra-rise-3": {
+      "sprite": "fighters/ken/extra-rise-3",
+      "rect": [
+        1020,
+        3484,
+        47,
+        115
+      ],
+      "origin": [
+        23,
+        113
+      ]
+    },
+    "extra-rise-4": {
+      "sprite": "fighters/ken/extra-rise-4",
+      "rect": [
+        1108,
+        3520,
+        80,
+        69
+      ],
+      "origin": [
+        40,
+        67
+      ]
+    },
+    "extra-crouch-punch-7": {
+      "sprite": "fighters/ken/extra-crouch-punch-7",
+      "rect": [
+        194,
+        1425,
+        69,
+        59
+      ],
+      "origin": [
+        30,
+        56
+      ]
+    },
+    "extra-crouch-punch-8": {
+      "sprite": "fighters/ken/extra-crouch-punch-8",
+      "rect": [
+        273,
+        1425,
+        64,
+        59
+      ],
+      "origin": [
+        30,
+        56
+      ]
+    },
+    "extra-crouch-punch-9": {
+      "sprite": "fighters/ken/extra-crouch-punch-9",
+      "rect": [
+        526,
+        1425,
+        66,
+        59
+      ],
+      "origin": [
+        30,
+        56
       ]
     }
   }

@@ -1,0 +1,43 @@
+{
+  "ryu": {
+    "hit-stomach-1": {
+      "rect": [
+        397,
+        2157,
+        58,
+        85
+      ],
+      "reason": "Pinned reference y is 128 pixels above the visible stomach-hit row."
+    },
+    "hit-stomach-2": {
+      "rect": [
+        470,
+        2160,
+        66,
+        82
+      ],
+      "hurtHeadY": -82,
+      "reason": "Pinned reference y is 128 pixels above the stomach-hit row; head hurt box has a missing minus sign."
+    },
+    "hit-stomach-3": {
+      "rect": [
+        544,
+        2162,
+        68,
+        84
+      ],
+      "hurtHeadY": -82,
+      "reason": "Pinned reference y is 128 pixels above the stomach-hit row; head hurt box has a missing minus sign."
+    }
+  },
+  "ken": {
+    "hit-stomach-2": {
+      "hurtHeadY": -82,
+      "reason": "Pinned reference head hurt box has a missing minus sign."
+    },
+    "hit-stomach-3": {
+      "hurtHeadY": -82,
+      "reason": "Pinned reference head hurt box has a missing minus sign."
+    }
+  }
+}
