@@ -75,9 +75,9 @@ function confirm(ctx: SystemContext, menu: MenuStateViews, match: MatchStateView
     else if (cursor === 1) { menu.p2Ready[0] = 1; menu.cursor[0] = 2; }
     else if (cursor === 2 || (match.mode[0] === 0 && cursor === 3)) adjust(menu, match, 1);
     else if (cursor === (match.mode[0] === 0 ? 4 : 3)) {
-      if (!menu.p1Ready[0]) menu.cursor[0] = 0;
-      else if (!menu.p2Ready[0] && match.mode[0] === 1) menu.cursor[0] = 1;
-      else ctx.events.emit(MatchIntent, { action: 0 });
+      // Fight confirms the displayed selections, including seats not individually locked.
+      menu.p1Ready[0] = 1; menu.p2Ready[0] = 1;
+      ctx.events.emit(MatchIntent, { action: 0 });
     }
     else back(ctx, menu, match);
   } else if (screen === 3) {
