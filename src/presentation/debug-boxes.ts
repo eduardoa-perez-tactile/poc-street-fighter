@@ -1,7 +1,6 @@
 import { defineSystem, query, read, Shape, VisualOffset, write } from '@gameengine/runtime';
 import { DebugBox, Fighter, MatchState, TrainingState } from '../schema.gen.ts';
-import { FIGHTERS } from '../data/fighters.ts';
-import { actualBox, frameForFighter } from '../combat/index.ts';
+import { actualBox, fighterFrame } from '../combat/index.ts';
 import { KNOCKDOWN } from '../combat/moves.ts';
 
 /** Exactly the collision geometry used by combat, drawn only when training requests it. */
@@ -19,7 +18,7 @@ export const DrawDebugBoxes = defineSystem({
       for (const fighters of q.fighters.chunks()) for (let j = 0; j < fighters.length; j++) {
         const fighter = fighters.get(Fighter, j);
         if (fighter.player !== debug.player[i]) continue;
-        const frame = frameForFighter(FIGHTERS[fighter.fighterId]!, fighter.state, fighter.frame), index = debug.box[i]!;
+        const frame = fighterFrame(fighter), index = debug.box[i]!;
         if (index > 0 && index < 4 && (fighter.invulnerable > 0 || fighter.state === KNOCKDOWN)) continue;
         const local = index === 0 ? frame.push : index === 4 ? frame.hit : frame.hurt[index - 1];
         if (!local || local[2] <= 0 || local[3] <= 0) continue;

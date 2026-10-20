@@ -79,84 +79,6 @@ export const EXTENDED_FRAMES = [
         56
       ]
     },
-    "extra-air-punch-1": {
-      "sprite": "fighters/ryu/extra-air-punch-1",
-      "rect": [
-        1463,
-        689,
-        67,
-        77
-      ],
-      "origin": [
-        35,
-        87
-      ]
-    },
-    "extra-air-punch-2": {
-      "sprite": "fighters/ryu/extra-air-punch-2",
-      "rect": [
-        1538,
-        688,
-        89,
-        79
-      ],
-      "origin": [
-        32,
-        89
-      ]
-    },
-    "extra-air-punch-3": {
-      "sprite": "fighters/ryu/extra-air-punch-3",
-      "rect": [
-        1637,
-        676,
-        73,
-        89
-      ],
-      "origin": [
-        35,
-        99
-      ]
-    },
-    "extra-air-kick-1": {
-      "sprite": "fighters/ryu/extra-air-kick-1",
-      "rect": [
-        1172,
-        1206,
-        59,
-        76
-      ],
-      "origin": [
-        30,
-        86
-      ]
-    },
-    "extra-air-kick-2": {
-      "sprite": "fighters/ryu/extra-air-kick-2",
-      "rect": [
-        1241,
-        1210,
-        63,
-        72
-      ],
-      "origin": [
-        32,
-        82
-      ]
-    },
-    "extra-air-kick-3": {
-      "sprite": "fighters/ryu/extra-air-kick-3",
-      "rect": [
-        1307,
-        1213,
-        110,
-        62
-      ],
-      "origin": [
-        32,
-        72
-      ]
-    },
     "extra-dragon-1": {
       "sprite": "fighters/ryu/extra-dragon-1",
       "rect": [
@@ -559,6 +481,123 @@ export const EXTENDED_FRAMES = [
         40,
         67
       ]
+    },
+    "extra-air-neutral-punch-ready": {
+      "sprite": "fighters/ryu/extra-air-neutral-punch-ready",
+      "rect": [
+        353,
+        362,
+        52,
+        69
+      ],
+      "origin": [
+        22,
+        91
+      ]
+    },
+    "extra-air-neutral-punch-strike": {
+      "sprite": "fighters/ryu/extra-air-neutral-punch-strike",
+      "rect": [
+        415,
+        365,
+        81,
+        71
+      ],
+      "origin": [
+        26,
+        88
+      ]
+    },
+    "extra-air-diagonal-punch-ready": {
+      "sprite": "fighters/ryu/extra-air-diagonal-punch-ready",
+      "rect": [
+        1463,
+        689,
+        67,
+        77
+      ],
+      "origin": [
+        29,
+        91
+      ]
+    },
+    "extra-air-diagonal-punch-strike": {
+      "sprite": "fighters/ryu/extra-air-diagonal-punch-strike",
+      "rect": [
+        1538,
+        688,
+        89,
+        79
+      ],
+      "origin": [
+        31,
+        92
+      ]
+    },
+    "extra-air-neutral-kick-ready": {
+      "sprite": "fighters/ryu/extra-air-neutral-kick-ready",
+      "rect": [
+        509,
+        920,
+        55,
+        103
+      ],
+      "origin": [
+        27,
+        92
+      ]
+    },
+    "extra-air-neutral-kick-strike": {
+      "sprite": "fighters/ryu/extra-air-neutral-kick-strike",
+      "rect": [
+        572,
+        923,
+        76,
+        92
+      ],
+      "origin": [
+        31,
+        101
+      ]
+    },
+    "extra-air-diagonal-kick-ready": {
+      "sprite": "fighters/ryu/extra-air-diagonal-kick-ready",
+      "rect": [
+        1172,
+        1206,
+        59,
+        76
+      ],
+      "origin": [
+        28,
+        91
+      ]
+    },
+    "extra-air-diagonal-kick-tuck": {
+      "sprite": "fighters/ryu/extra-air-diagonal-kick-tuck",
+      "rect": [
+        1241,
+        1210,
+        63,
+        72
+      ],
+      "origin": [
+        22,
+        89
+      ]
+    },
+    "extra-air-diagonal-kick-strike": {
+      "sprite": "fighters/ryu/extra-air-diagonal-kick-strike",
+      "rect": [
+        1307,
+        1213,
+        110,
+        62
+      ],
+      "origin": [
+        26,
+        86
+      ]
     }
   },
   {
@@ -638,84 +677,6 @@ export const EXTENDED_FRAMES = [
       "origin": [
         48,
         50
-      ]
-    },
-    "extra-air-punch-1": {
-      "sprite": "fighters/ken/extra-air-punch-1",
-      "rect": [
-        1,
-        1485,
-        55,
-        70
-      ],
-      "origin": [
-        27,
-        85
-      ]
-    },
-    "extra-air-punch-2": {
-      "sprite": "fighters/ken/extra-air-punch-2",
-      "rect": [
-        57,
-        1485,
-        76,
-        70
-      ],
-      "origin": [
-        38,
-        85
-      ]
-    },
-    "extra-air-punch-3": {
-      "sprite": "fighters/ken/extra-air-punch-3",
-      "rect": [
-        268,
-        1485,
-        79,
-        60
-      ],
-      "origin": [
-        39,
-        85
-      ]
-    },
-    "extra-air-kick-1": {
-      "sprite": "fighters/ken/extra-air-kick-1",
-      "rect": [
-        195,
-        2434,
-        58,
-        91
-      ],
-      "origin": [
-        29,
-        88
-      ]
-    },
-    "extra-air-kick-2": {
-      "sprite": "fighters/ken/extra-air-kick-2",
-      "rect": [
-        253,
-        2430,
-        57,
-        95
-      ],
-      "origin": [
-        28,
-        92
-      ]
-    },
-    "extra-air-kick-3": {
-      "sprite": "fighters/ken/extra-air-kick-3",
-      "rect": [
-        388,
-        2425,
-        90,
-        100
-      ],
-      "origin": [
-        45,
-        97
       ]
     },
     "extra-dragon-1": {
@@ -1158,6 +1119,123 @@ export const EXTENDED_FRAMES = [
       "origin": [
         30,
         56
+      ]
+    },
+    "extra-air-neutral-punch-ready": {
+      "sprite": "fighters/ken/extra-air-neutral-punch-ready",
+      "rect": [
+        1,
+        1487,
+        52,
+        69
+      ],
+      "origin": [
+        22,
+        91
+      ]
+    },
+    "extra-air-neutral-punch-strike": {
+      "sprite": "fighters/ken/extra-air-neutral-punch-strike",
+      "rect": [
+        54,
+        1487,
+        81,
+        71
+      ],
+      "origin": [
+        26,
+        91
+      ]
+    },
+    "extra-air-diagonal-punch-ready": {
+      "sprite": "fighters/ken/extra-air-diagonal-punch-ready",
+      "rect": [
+        189,
+        1487,
+        69,
+        77
+      ],
+      "origin": [
+        27,
+        91
+      ]
+    },
+    "extra-air-diagonal-punch-strike": {
+      "sprite": "fighters/ken/extra-air-diagonal-punch-strike",
+      "rect": [
+        259,
+        1487,
+        88,
+        58
+      ],
+      "origin": [
+        35,
+        83
+      ]
+    },
+    "extra-air-neutral-kick-ready": {
+      "sprite": "fighters/ken/extra-air-neutral-kick-ready",
+      "rect": [
+        1,
+        2092,
+        50,
+        89
+      ],
+      "origin": [
+        23,
+        92
+      ]
+    },
+    "extra-air-neutral-kick-strike": {
+      "sprite": "fighters/ken/extra-air-neutral-kick-strike",
+      "rect": [
+        52,
+        2092,
+        76,
+        92
+      ],
+      "origin": [
+        31,
+        101
+      ]
+    },
+    "extra-air-diagonal-kick-ready": {
+      "sprite": "fighters/ken/extra-air-diagonal-kick-ready",
+      "rect": [
+        466,
+        2092,
+        61,
+        76
+      ],
+      "origin": [
+        27,
+        92
+      ]
+    },
+    "extra-air-diagonal-kick-tuck": {
+      "sprite": "fighters/ken/extra-air-diagonal-kick-tuck",
+      "rect": [
+        724,
+        2092,
+        63,
+        72
+      ],
+      "origin": [
+        25,
+        90
+      ]
+    },
+    "extra-air-diagonal-kick-strike": {
+      "sprite": "fighters/ken/extra-air-diagonal-kick-strike",
+      "rect": [
+        788,
+        2092,
+        110,
+        58
+      ],
+      "origin": [
+        25,
+        86
       ]
     }
   }
