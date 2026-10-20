@@ -1,0 +1,7 @@
+guid = "925e04b7-2e9d-5816-b046-0643c78e3ecc"
+importer = "texture"
+
+[settings]
+atlas = "ui-combat"
+compression = "none"
+mipmaps = false

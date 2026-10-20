@@ -55,8 +55,8 @@ function change(f: FighterValue, state: number): void {
   if (f.state === state) return;
   f.state = state; f.frame = 0; f.age = 0; f.attackHit = false; f.projectileFired = false;
 }
-function makeFighter(player: number): FighterValue {
-  return { player, x: player === 0 ? 296 : 472, y: 216, vx: 0, vy: 0,
+function makeFighter(player: number, fighterId = player): FighterValue {
+  return { player, fighterId, x: player === 0 ? 296 : 472, y: 216, vx: 0, vy: 0,
     facing: player === 0 ? 1 : -1, state: IDLE, frame: 0, age: 0,
     attackHit: false, strength: 0, projectileFired: false, jumpDirection: 0, stun: 0, invulnerable: 0, airState: JUMP_UP, throwCooldown: 0, comboHits: 0 };
 }
@@ -69,7 +69,7 @@ export function overlaps(a: Box, b: Box): boolean {
 }
 function hitRegion(hit: Box, target: FighterValue): number {
   if (target.invulnerable > 0 || target.state === KNOCKDOWN) return -1;
-  const hurt = frameForFighter(FIGHTERS[target.player]!, target.state, target.frame).hurt;
+  const hurt = frameForFighter(FIGHTERS[target.fighterId]!, target.state, target.frame).hurt;
   // Inspect every hurt box; a missed head does not skip a valid body/feet contact.
   for (let i = 0; i < hurt.length; i++) if (overlaps(hit, actualBox(hurt[i]!, target.x, target.y, target.facing))) return i;
   return -1;
@@ -101,7 +101,7 @@ export const CombatControls = defineSystem({
         }
         if (event.code === 38 || event.code === 39) {
           const bit = event.code === 38 ? 1 : 2;
-          if (event.down && (match.intentKeys[0]! & bit) === 0 && (match.phase[0] === 1 || match.phase[0] === 4) && event.code === 39) intent = 2;
+          if (event.down && (match.intentKeys[0]! & bit) === 0 && (match.phase[0] === 1 || match.phase[0] === 4 || match.phase[0] === 6) && event.code === 39) intent = 2;
           match.intentKeys[0] = setBit(match.intentKeys[0]!, bit, event.down);
         }
       } else if (event.type === 'action') {
@@ -118,7 +118,7 @@ export const CombatControls = defineSystem({
         const map = [4, 7, 5, 8, 10, -1, -1, -1, -1, 6, 9, 2, 3, 0, 1];
         const button = map[event.button] ?? -1;
         if (button >= 0) controls.pad[event.pad] = setBit(controls.pad[event.pad]!, 1 << button, event.down);
-        if (event.button === 6 && event.down && (match.phase[0] === 1 || match.phase[0] === 4)) intent = 2;
+        if (event.button === 6 && event.down && (match.phase[0] === 1 || match.phase[0] === 4 || match.phase[0] === 6)) intent = 2;
       } else if (event.type === 'gamepadAxis' && event.pad < 2 && event.axis < 2) {
         const negative = event.axis === 0 ? LEFT : JUMP, positive = event.axis === 0 ? RIGHT : DUCK;
         controls.axis[event.pad] = setBit(setBit(controls.axis[event.pad]!, negative, event.value < -0.35), positive, event.value > 0.35);
@@ -185,7 +185,7 @@ function applyContact(ctx: SystemContext, match: MatchStateViews, target: Fighte
   score[0] = score[0]! + (hit.thrown ? 300 : SCORE[hit.strength]!);
   change(target, hit.knockdown ? KNOCKDOWN : HURT + (hit.region === 0 ? 0 : 3) + hit.strength);
   target.frame = hit.knockdown ? 0 : 15;
-  target.stun = hit.knockdown ? 57 : duration(FIGHTERS[target.player]!, target.state) - 15;
+  target.stun = hit.knockdown ? 57 : duration(FIGHTERS[target.fighterId]!, target.state) - 15;
   target.strength = hit.strength; target.vx = hit.direction * (hit.thrown ? 220 : [1000 / 6, 200, 800 / 3][hit.strength]!);
   target.y = 216; target.vy = 0; target.throwCooldown = 65;
   match.hitStop[0] = 15;
@@ -203,7 +203,7 @@ export const CombatRound = defineSystem({
     for (const c of q.fighters.chunks()) for (let i = 0; i < c.length; i++) { const f = c.get(Fighter, i); fighters[f.player] = f; }
     if (!fighters[0] || !fighters[1]) return;
     const reset = match.resetStep[0] === ctx.step;
-    if (reset) for (let p = 0; p < 2; p++) fighters[p] = makeFighter(p);
+    if (reset) for (let p = 0; p < 2; p++) fighters[p] = makeFighter(p, p === 0 ? match.p1Fighter[0]! : match.p2Fighter[0]!);
     const persist = () => { for (const c of q.fighters.chunks()) for (let i = 0; i < c.length; i++) c.set(Fighter, i, fighters[c.col(Fighter).player[i]!]!); };
     // A reset places the fighters exactly once; retained physical inputs resume next tick.
     if (reset) { persist(); return; }
@@ -216,10 +216,10 @@ export const CombatRound = defineSystem({
           if (health === 0) {
             // KO owns the fall for the entire result; it never enters the normal wakeup path.
             change(f, KNOCKDOWN);
-            f.frame = Math.min(duration(FIGHTERS[f.player]!, KNOCKDOWN) - 1, f.frame + 1);
+            f.frame = Math.min(duration(FIGHTERS[f.fighterId]!, KNOCKDOWN) - 1, f.frame + 1);
           } else if (match.winner[0] === f.player) {
             change(f, 26);
-            f.frame = Math.min(duration(FIGHTERS[f.player]!, 26), f.frame + 1);
+            f.frame = Math.min(duration(FIGHTERS[f.fighterId]!, 26), f.frame + 1);
           } else {
             // A timeout does not leave the non-winner hanging in a jump or attack pose.
             change(f, IDLE); f.frame = 0;
@@ -234,7 +234,7 @@ export const CombatRound = defineSystem({
       return;
     }
     for (const f of fighters) {
-      const def = FIGHTERS[f.player]!, held = controls.held[f.player]!, opponent = fighters[1 - f.player]!;
+      const def = FIGHTERS[f.fighterId]!, held = controls.held[f.player]!, opponent = fighters[1 - f.player]!;
       if (!reset) {
         f.frame++; f.age++;
         f.invulnerable = Math.max(0, f.invulnerable - 1); f.throwCooldown = Math.max(0, f.throwCooldown - 1); f.stun = Math.max(0, f.stun - 1);
@@ -321,7 +321,7 @@ export const CombatRound = defineSystem({
       }
     }
     const a = fighters[0]!, b = fighters[1]!;
-    const boxA = actualBox(frameForFighter(FIGHTERS[0], a.state, a.frame).push, a.x, a.y, a.facing), boxB = actualBox(frameForFighter(FIGHTERS[1], b.state, b.frame).push, b.x, b.y, b.facing);
+    const boxA = actualBox(frameForFighter(FIGHTERS[a.fighterId]!, a.state, a.frame).push, a.x, a.y, a.facing), boxB = actualBox(frameForFighter(FIGHTERS[b.fighterId]!, b.state, b.frame).push, b.x, b.y, b.facing);
     if (overlaps(boxA, boxB)) {
       const sign = a.x <= b.x ? 1 : -1, overlap = sign === 1 ? boxA[0] + boxA[2] - boxB[0] : boxB[0] + boxB[2] - boxA[0];
       const oldA = a.x, oldB = b.x;
@@ -337,7 +337,7 @@ export const CombatRound = defineSystem({
     for (const f of fighters) {
       const target = fighters[1 - f.player]!, move = moveForState(f.state);
       if (f.attackHit || !(f.state >= FIRST_ATTACK && f.state <= LAST_ATTACK || move)) continue;
-      const hit = actualBox(frameForFighter(FIGHTERS[f.player]!, f.state, f.frame).hit, f.x, f.y, f.facing);
+      const hit = actualBox(frameForFighter(FIGHTERS[f.fighterId]!, f.state, f.frame).hit, f.x, f.y, f.facing);
       const thrown = f.state === THROW;
       const region = thrown ? (f.frame >= 5 && f.frame < 7 && target.y === 216 && target.throwCooldown === 0 && target.invulnerable === 0 && target.state !== KNOCKDOWN && target.state !== WAKEUP && Math.abs(target.x - f.x) <= 42 ? 1 : -1) : hitRegion(hit, target);
       if (region >= 0) {

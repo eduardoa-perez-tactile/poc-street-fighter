@@ -3,9 +3,10 @@ import '../ui.gen.ts';
 
 export interface ArcadeModel {
   cursor: number; mode: number; difficulty: string; music: string; effects: string;
-  browser: boolean; winner: string; score: string; portrait: string;
+  browser: boolean; winner: string; score: string; portrait: string; points: string;
+  p1Fighter: number; p2Fighter: number; stage: string; stagePreview: string; p1Ready: boolean; p2Ready: boolean; versus: boolean;
 }
-export const ARCADE_SAMPLE: ArcadeModel = { cursor: 0, mode: 0, difficulty: 'NORMAL', music: '60%', effects: '70%', browser: false, winner: 'RYU WINS', score: '2 - 0', portrait: 'ui/ryu-portrait' };
+export const ARCADE_SAMPLE: ArcadeModel = { cursor: 0, mode: 0, difficulty: 'NORMAL', music: '60%', effects: '70%', browser: false, winner: 'RYU WINS', score: '2 - 0', portrait: 'ui/arcade/ryu-portrait', points: 'P1 0 / P2 0', p1Fighter: 0, p2Fighter: 1, stage: "KEN'S DOCK / U.S.A.", stagePreview: 'stages/ken/preview', p1Ready: false, p2Ready: false, versus: false };
 
 export const AlphaTitle = defineView<ArcadeModel>({
   name: 'AlphaTitle', blockInput: true,
@@ -19,15 +20,22 @@ export const AlphaMain = defineView<ArcadeModel>({
 });
 export const AlphaSetup = defineView<ArcadeModel>({
   name: 'AlphaSetup', blockInput: true,
-  samples: { solo: { ...ARCADE_SAMPLE, cursor: 1 }, difficulty: ARCADE_SAMPLE, versus: { ...ARCADE_SAMPLE, mode: 1 }, training: { ...ARCADE_SAMPLE, mode: 2 } },
+  samples: { solo: { ...ARCADE_SAMPLE, cursor: 1 }, difficulty: { ...ARCADE_SAMPLE, cursor: 3 }, versus: { ...ARCADE_SAMPLE, mode: 1 }, versusIntro: { ...ARCADE_SAMPLE, mode: 1, versus: true, p1Ready: true, p2Ready: true }, training: { ...ARCADE_SAMPLE, mode: 2 } },
   render: (m, { intent }) => <Widget doc="alpha-setup" class="alpha-flow" props={{
-    heading: () => m().mode === 0 ? 'SOLO BATTLE' : m().mode === 1 ? 'VERSUS BATTLE' : 'TRAINING',
-    detail: () => m().mode === 2 ? "KEN'S STAGE / UNLIMITED PRACTICE" : "KEN'S STAGE / FIRST TO TWO WINS",
-    hint: () => m().mode === 0 ? 'LEFT / RIGHT: ADJUST    ENTER / A: CONFIRM    ESC / B: BACK' : 'ENTER / A: FIGHT    ESC / B: BACK',
-    solo: () => m().mode === 0, difficulty: () => m().difficulty, opponent: () => m().mode === 0 ? 'CPU' : m().mode === 1 ? 'PLAYER 2' : 'DUMMY',
-    f0: () => m().mode === 0 && m().cursor === 0,
-    f1: () => m().cursor === (m().mode === 0 ? 1 : 0),
-    f2: () => m().cursor === (m().mode === 0 ? 2 : 1),
+    heading: () => m().versus ? 'VERSUS' : 'PLAYER SELECT',
+    detail: () => `${m().stage} / ${m().mode === 2 ? 'UNLIMITED PRACTICE' : 'FIRST TO TWO WINS'}`,
+    hint: () => 'LEFT / RIGHT: SWAP RYU / KEN    ENTER / A: LOCK IN    ESC / B: BACK',
+    p1name: () => m().p1Fighter === 0 ? 'RYU' : 'KEN', p2name: () => m().p2Fighter === 0 ? 'RYU' : 'KEN',
+    p1portrait: () => `ui/arcade/${m().p1Fighter === 0 ? 'ryu' : 'ken'}-portrait`,
+    p2portrait: () => `ui/arcade/${m().p2Fighter === 0 ? 'ryu' : 'ken'}-portrait`,
+    p1status: () => m().versus || m().p1Ready ? 'PLAYER 1 / READY' : 'PLAYER 1 / CHOOSE',
+    p2status: () => m().mode !== 1 ? (m().mode === 0 ? 'CPU' : 'DUMMY') : m().versus || m().p2Ready ? 'PLAYER 2 / READY' : 'PLAYER 2 / CHOOSE',
+    stage: () => m().stage, stagePreview: () => m().stagePreview, versus: () => m().versus,
+    solo: () => m().mode === 0, difficulty: () => m().difficulty,
+    f0: () => m().cursor === 0, f1: () => m().cursor === 1, f2: () => m().cursor === 2,
+    f3: () => m().mode === 0 && m().cursor === 3,
+    f4: () => m().cursor === (m().mode === 0 ? 4 : 3),
+    f5: () => m().cursor === (m().mode === 0 ? 5 : 4),
   }} onIntent={(_, e) => intent(e.path.at(-1)!)} />,
 });
 
@@ -54,9 +62,9 @@ export const AlphaOptions = defineView<ArcadeModel>({
 });
 export const AlphaResults = defineView<ArcadeModel>({
   name: 'AlphaResults', blockInput: true,
-  samples: { ryu: ARCADE_SAMPLE, ken: { ...ARCADE_SAMPLE, winner: 'KEN WINS', score: '1 - 2', portrait: 'ui/ken-portrait' } },
+  samples: { ryu: ARCADE_SAMPLE, ken: { ...ARCADE_SAMPLE, winner: 'KEN WINS', score: '1 - 2', portrait: 'ui/arcade/ken-portrait' } },
   render: (m, { intent }) => <Widget doc="alpha-results" class="alpha-flow" props={{
-    winner: () => m().winner, score: () => m().score, portrait: () => m().portrait,
+    winner: () => m().winner, score: () => m().score, points: () => m().points, portrait: () => m().portrait,
     f0: () => m().cursor === 0, f1: () => m().cursor === 1,
   }} onIntent={(_, e) => intent(e.path.at(-1)!)} />,
 });

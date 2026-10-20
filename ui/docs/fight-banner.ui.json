@@ -22,6 +22,7 @@
         "gap": 2
       },
       "children": [
+        "banner_art",
         "banner_label",
         "banner_detail"
       ]
@@ -57,6 +58,18 @@
         "h": 28,
         "textAlign": "center"
       }
+    },
+    "banner_art": {
+      "type": "icon",
+      "name": "Icon",
+      "image": "ui/sprites/star",
+      "style": {
+        "size": 32,
+        "w": 192,
+        "h": 60
+      },
+      "property": "art",
+      "show": "original"
     }
   },
   "properties": {
@@ -67,6 +80,23 @@
     "detail": {
       "type": "text",
       "default": "BEST OF THREE"
+    },
+    "original": {
+      "type": "yesno",
+      "default": false,
+      "poses": {
+        "yes": {
+          "set": {
+            "banner_label": {
+              "hide": true
+            }
+          }
+        }
+      }
+    },
+    "art": {
+      "type": "image",
+      "default": "ui/arcade/hud-fight"
     }
   }
 }

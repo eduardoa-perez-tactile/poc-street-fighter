@@ -16,7 +16,7 @@ function close(world: TestWorld, distance = 48) {
 async function startLocal(world: TestWorld, input: TestInput, step: (frames: number) => Promise<void>) {
   world.setResource(MatchState, { mode: 1 });
   input.emit(MatchIntent, { action: 0 });
-  await step(92);
+  await step(182);
   expect(world.resource(MatchState).phase).toBe(1);
 }
 
@@ -232,7 +232,7 @@ worldTest('combat: paused restart resets the round without awarding or advancing
   await step(2); await startLocal(world, input, step);
   world.setResource(MatchState, { p1Health: 72 });
   input.emit(MatchIntent, { action: 2 }); await step(1);
-  input.emit(MatchIntent, { action: 5 }); await step(92);
+  input.emit(MatchIntent, { action: 5 }); await step(182);
   expect(world.resource(MatchState).phase).toBe(1); expect(world.resource(MatchState).p1Health).toBe(144);
   expect(world.resource(MatchState).round).toBe(1); expect(world.resource(MatchState).p1Wins).toBe(0);
 });

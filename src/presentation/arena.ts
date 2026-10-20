@@ -2,17 +2,19 @@ import { defineSystem, LocalTransform, PlayMusic, PlaySound, query, read, Sprite
 import { ArenaFocus, ArenaVisualState, CombatEffect, Fighter, FighterShadow, HitSpark, DebugBox, MatchState, Projectile, RenderBound } from '../schema.gen.ts';
 import { FIGHTERS } from '../data/fighters.ts';
 import { frameForFighter } from '../combat/index.ts';
-import { STAGE_PIECES, piecePosition } from './stage-parts.ts';
+import { stagePieces, STAGE_SLOT_COUNT, piecePosition } from './stage-parts.ts';
 
 export const SetupArena = defineSystem({
-  name: 'SetupArena', resources: [write(ArenaVisualState)],
+  name: 'SetupArena', resources: [write(ArenaVisualState), read(MatchState)],
   runIf: { resource: ArenaVisualState, field: 'initialized', value: false },
   run(ctx) {
     ctx.commands.spawn({ ArenaFocus: {}, LocalTransform: { position: [3.84, 0.88, 0] } });
-    for (let index = 0; index < STAGE_PIECES.length; index++) {
-      const p = STAGE_PIECES[index]!, [x, y] = piecePosition(p, 448, 0);
-      ctx.commands.spawn({ StagePart: { index }, LocalTransform: { position: [x / 100, (216 - y) / 100, 0] }, VisualOffset: {},
-        Sprite: { image: p.image, size: [p.width / 100, p.height / 100], anchor: [0, 1], sortingLayer: p.layer, order: p.order } });
+    const pieces = stagePieces(ctx.resource(MatchState).stageId[0]!);
+    for (let index = 0; index < STAGE_SLOT_COUNT; index++) {
+      const p = pieces[index], position = p ? piecePosition(p, 448, 0) : [0,0];
+      ctx.commands.spawn({ StagePart: { index, stageId: ctx.resource(MatchState).stageId[0]! }, LocalTransform: { position: [0, 2.16, 0] },
+        VisualOffset: { position: [position[0]! / 100, -position[1]! / 100, 0] },
+        Sprite: { image: p?.image ?? 'stage/stage-background', size: p ? [p.width / 100, p.height / 100] : [0,0], anchor: [0, 1], visible: !!p, sortingLayer: p?.layer ?? 'Background', order: p?.order ?? 0 } });
     }
     for (let player = 0; player < 2; player++) for (let box = 0; box < 5; box++) {
       ctx.commands.spawn({ DebugBox: { player, box }, LocalTransform: {}, VisualOffset: {},
@@ -34,7 +36,7 @@ export const BindCombatSprites = defineSystem({
   runIf: { any: [{ query: query(read(Fighter), without(RenderBound)) }, { query: query(read(Projectile), without(RenderBound)) }] },
   run(ctx, q) {
     for (const c of q.fighters.chunks()) for (let i = 0; i < c.length; i++) {
-      const f = c.get(Fighter, i), frame = frameForFighter(FIGHTERS[f.player]!, f.state, f.frame), entity = c.entity(i);
+      const f = c.get(Fighter, i), frame = frameForFighter(FIGHTERS[f.fighterId]!, f.state, f.frame), entity = c.entity(i);
       ctx.commands.insert(entity, RenderBound, { kind: 0 });
       ctx.commands.insert(entity, LocalTransform, { position: [f.x / 100, (216 - f.y) / 100, 0] });
       ctx.commands.insert(entity, VisualOffset, {});

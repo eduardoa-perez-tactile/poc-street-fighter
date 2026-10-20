@@ -13,23 +13,23 @@
         "w": "100%",
         "h": "100%",
         "pad": [
-          30,
+          12,
           44,
-          30,
+          12,
           44
         ],
-        "bg": "#191267ff",
-        "image": "ui/alpha-backdrop",
-        "fit": "cover",
+        "bg": "#07044cff",
+        "image": "ui/arcade/world-map",
+        "fit": "contain",
         "align": "center",
         "justify": "center",
-        "gap": 12
+        "gap": 6
       },
       "children": [
         "setup_heading",
         "versus",
         "setup_rule",
-        "setup_list",
+        "setup_controls",
         "setup_hint"
       ]
     },
@@ -64,7 +64,7 @@
         "justify": "center",
         "gap": 32,
         "w": 900,
-        "h": 278
+        "h": 156
       }
     },
     "ryu_fighter": {
@@ -73,7 +73,8 @@
       "children": [
         "ryu_portrait",
         "ryu_name",
-        "ryu_role"
+        "ryu_role",
+        "p1_swap"
       ],
       "style": {
         "pad": 0,
@@ -81,7 +82,7 @@
         "align": "center",
         "gap": 6,
         "w": 260,
-        "h": 278
+        "h": 156
       }
     },
     "ryu_portrait": {
@@ -90,24 +91,26 @@
       "image": "ui/ryu-portrait",
       "style": {
         "size": 32,
-        "w": 182,
-        "h": 208
-      }
+        "w": 128,
+        "h": 104
+      },
+      "property": "p1portrait"
     },
     "ryu_name": {
       "type": "label",
       "name": "Label",
       "text": "RYU",
       "style": {
-        "fontSize": 28,
+        "fontSize": 22,
         "color": "#fff3b0ff",
         "shadowX": 2,
         "shadowY": 2,
         "shadowColor": "#100b2fff",
-        "h": 30,
+        "h": 24,
         "textAlign": "center",
         "w": "100%"
-      }
+      },
+      "property": "p1name"
     },
     "ken_fighter": {
       "type": "element",
@@ -115,7 +118,8 @@
       "children": [
         "ken_portrait",
         "ken_name",
-        "ken_role"
+        "ken_role",
+        "p2_swap"
       ],
       "style": {
         "pad": 0,
@@ -123,7 +127,7 @@
         "align": "center",
         "gap": 6,
         "w": 260,
-        "h": 278
+        "h": 156
       }
     },
     "ken_portrait": {
@@ -132,39 +136,26 @@
       "image": "ui/ken-portrait",
       "style": {
         "size": 32,
-        "w": 182,
-        "h": 208
-      }
+        "w": 128,
+        "h": 104
+      },
+      "property": "p2portrait"
     },
     "ken_name": {
       "type": "label",
       "name": "Label",
       "text": "KEN",
       "style": {
-        "fontSize": 28,
+        "fontSize": 22,
         "color": "#fff3b0ff",
         "shadowX": 2,
         "shadowY": 2,
         "shadowColor": "#100b2fff",
-        "h": 30,
+        "h": 24,
         "textAlign": "center",
         "w": "100%"
-      }
-    },
-    "setup_vs": {
-      "type": "label",
-      "name": "Label",
-      "text": "VS",
-      "style": {
-        "fontSize": 68,
-        "color": "#f04b67ff",
-        "shadowX": 2,
-        "shadowY": 2,
-        "shadowColor": "#100b2fff",
-        "w": 130,
-        "h": 110,
-        "textAlign": "center"
-      }
+      },
+      "property": "p2name"
     },
     "setup_rule": {
       "type": "label",
@@ -176,8 +167,10 @@
         "shadowX": 2,
         "shadowY": 2,
         "shadowColor": "#100b2fff",
-        "h": 24,
-        "textAlign": "center"
+        "h": 26,
+        "textAlign": "center",
+        "bg": "#09052df0",
+        "w": 920
       },
       "property": "detail"
     },
@@ -185,6 +178,9 @@
       "type": "element",
       "name": "Element",
       "children": [
+        "p1_character",
+        "p2_character",
+        "stage",
         "difficulty",
         "fight",
         "back"
@@ -193,7 +189,7 @@
         "pad": 0,
         "dir": "column",
         "gap": 2,
-        "w": 540
+        "w": 550
       }
     },
     "difficulty": {
@@ -203,7 +199,7 @@
       "props": {
         "label": "DIFFICULTY",
         "active": {
-          "property": "f0"
+          "property": "f3"
         },
         "value": {
           "property": "difficulty"
@@ -222,7 +218,7 @@
       "props": {
         "label": "FIGHT",
         "active": {
-          "property": "f1"
+          "property": "f4"
         }
       },
       "style": {
@@ -236,7 +232,7 @@
       "props": {
         "label": "BACK",
         "active": {
-          "property": "f2"
+          "property": "f5"
         }
       },
       "style": {
@@ -269,8 +265,10 @@
         "shadowY": 2,
         "shadowColor": "#100b2fff",
         "h": 20,
-        "textAlign": "center"
-      }
+        "textAlign": "center",
+        "bg": "#09052df0"
+      },
+      "property": "p1status"
     },
     "ken_role": {
       "type": "label",
@@ -283,9 +281,139 @@
         "shadowY": 2,
         "shadowColor": "#100b2fff",
         "h": 20,
-        "textAlign": "center"
+        "textAlign": "center",
+        "bg": "#09052df0"
       },
-      "property": "opponent"
+      "property": "p2status"
+    },
+    "p1_character": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "p1-character",
+      "props": {
+        "label": "PLAYER 1",
+        "value": {
+          "property": "p1name"
+        },
+        "valued": true,
+        "active": {
+          "property": "f0"
+        }
+      },
+      "style": {
+        "w": "100%"
+      }
+    },
+    "p2_character": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "p2-character",
+      "props": {
+        "label": "OPPONENT",
+        "value": {
+          "property": "p2name"
+        },
+        "valued": true,
+        "active": {
+          "property": "f1"
+        }
+      },
+      "style": {
+        "w": "100%"
+      }
+    },
+    "stage": {
+      "type": "use",
+      "doc": "alpha-row",
+      "key": "stage",
+      "props": {
+        "label": "STAGE",
+        "value": {
+          "property": "stage"
+        },
+        "valued": true,
+        "active": {
+          "property": "f2"
+        }
+      },
+      "style": {
+        "w": "100%"
+      }
+    },
+    "setup_vs": {
+      "type": "icon",
+      "name": "Icon",
+      "image": "ui/arcade/versus-emblem",
+      "style": {
+        "size": 32,
+        "w": 119,
+        "h": 65
+      }
+    },
+    "p1_swap": {
+      "type": "use",
+      "doc": "alpha-arrow",
+      "key": "swap-p1",
+      "props": {
+        "label": "<>"
+      },
+      "style": {
+        "position": "anchored",
+        "anchor": [
+          1,
+          0.5
+        ],
+        "offset": [
+          0,
+          0
+        ]
+      }
+    },
+    "p2_swap": {
+      "type": "use",
+      "doc": "alpha-arrow",
+      "key": "swap-p2",
+      "props": {
+        "label": "<>"
+      },
+      "style": {
+        "position": "anchored",
+        "anchor": [
+          1,
+          0.5
+        ],
+        "offset": [
+          0,
+          0
+        ]
+      }
+    },
+    "setup_controls": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "setup_list",
+        "stage_preview"
+      ],
+      "style": {
+        "pad": 10,
+        "dir": "row",
+        "gap": 22,
+        "w": 920,
+        "align": "center",
+        "bg": "#09052df0"
+      }
+    },
+    "stage_preview": {
+      "type": "icon",
+      "name": "Icon",
+      "image": "ui/sprites/star",
+      "style": {
+        "size": 32,
+        "w": 320,
+        "h": 180
+      },
+      "property": "stagePreview"
     }
   },
   "view": {
@@ -319,10 +447,6 @@
       "type": "yesno",
       "default": true
     },
-    "opponent": {
-      "type": "text",
-      "default": "CPU"
-    },
     "detail": {
       "type": "text",
       "default": "KEN'S STAGE / FIRST TO TWO WINS"
@@ -330,6 +454,92 @@
     "hint": {
       "type": "text",
       "default": "LEFT / RIGHT: ADJUST    ENTER / A: CONFIRM    ESC / B: BACK"
+    },
+    "p1name": {
+      "type": "text",
+      "default": ""
+    },
+    "p2name": {
+      "type": "text",
+      "default": ""
+    },
+    "p1status": {
+      "type": "text",
+      "default": ""
+    },
+    "p2status": {
+      "type": "text",
+      "default": ""
+    },
+    "stage": {
+      "type": "text",
+      "default": ""
+    },
+    "p1portrait": {
+      "type": "image",
+      "default": "ui/ryu-portrait"
+    },
+    "p2portrait": {
+      "type": "image",
+      "default": "ui/ken-portrait"
+    },
+    "f3": {
+      "type": "yesno",
+      "default": false
+    },
+    "f4": {
+      "type": "yesno",
+      "default": false
+    },
+    "f5": {
+      "type": "yesno",
+      "default": false
+    },
+    "versus": {
+      "type": "yesno",
+      "default": false,
+      "poses": {
+        "yes": {
+          "set": {
+            "setup_list": {
+              "hide": true
+            },
+            "setup_hint": {
+              "hide": true
+            },
+            "versus": {
+              "h": 300
+            },
+            "ryu_fighter": {
+              "h": 280
+            },
+            "ken_fighter": {
+              "h": 280
+            },
+            "ryu_portrait": {
+              "w": 256,
+              "h": 224
+            },
+            "ken_portrait": {
+              "w": 256,
+              "h": 224
+            },
+            "p1_swap": {
+              "hide": true
+            },
+            "p2_swap": {
+              "hide": true
+            },
+            "setup_controls": {
+              "hide": true
+            }
+          }
+        }
+      }
+    },
+    "stagePreview": {
+      "type": "image",
+      "default": "stages/ken/preview"
     }
   }
 }

@@ -95,12 +95,15 @@ Track asset provenance when importing; no license file was present in the inspec
 
 ## Working state
 
-The UI redesign follows the Street Fighter Alpha 2 reference supplied by the user:
-`https://www.gameuidatabase.com/gameData.php?id=1806`. Use its arcade hierarchy and visual
-language for title, mode selection, fixed Ryu/Ken setup, pause, move help, options and results.
-Keep the battle HUD compact. Expose existing features only; no roster grid, stage selector,
-super meter or extra modes. Keyboard, controller and pointer must reach the same menu actions.
-Browser remapping/fullscreen belong in Options, without a permanent utility toolbar.
+The UI now follows the original Street Fighter II: Champion Edition artwork and arcade screen
+sequence, replacing the earlier Alpha 2-inspired generated artwork. Keep Solo, Local Versus,
+Training, pause/help and Options. Character selection supports Ryu and Ken; stage selection
+supports Ken, Guile, Chun-Li, E. Honda and Blanka locations using inspected original sheets.
+Use dedicated original portraits, logo, HUD and versus artwork. Keep seat controls independent
+of fighter identity and preserve deterministic native/web rules. New fighters remain out of scope.
+Keyboard, controller and pointer must reach the same menu actions; browser remapping/fullscreen
+remain in Options. Deliver original-art title/selection/versus/results and additional stages in
+playable verified increments. A full arcade ladder, attract loop and continue flow are later options.
 
 Version 0.3 retains the complete follow-up roadmap: local versus, solo CPU (three difficulties),
 and training; guards, crouch/air normals, sweeps, wakeup, throws/tech, three specials, buffered
@@ -129,7 +132,7 @@ process memory was 154 MB including the desktop engine. These are not phone GPU/
 
 `npm run publish:playtest` requires clean exact-commit native/web/browser evidence and deploys
 only the cooked browser artifact through GitHub Pages. Run it after merge and fresh verification
-on main. Mobile, online play, extra fighters and stages remain outside this desktop/web release.
+on main. Mobile, online play and extra fighters remain outside this desktop/web release.
 Keep working notes concise; the user authorized notes needed for autonomous development. Other
 engine instructions remain in AGENTS.md.
 

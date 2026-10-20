@@ -26,3 +26,13 @@ for (const [device, width, height] of [['compact', 1024, 768], ['ultrawide', 168
     });
   }
 }
+
+for (const [name, width, height] of [['compact', 1024, 768], ['ultrawide', 1680, 720]] as const) {
+  renderTest(`arcade versus introduction fits ${name}`, async (c) => {
+    c.input.view(width, height, 1); await c.loaded(); await c.step(2);
+    c.world.setResource(MatchState, { phase: 6, phaseTicks: 90, p1Fighter: 1, p2Fighter: 0, stageId: 1 });
+    await c.step(2); c.render.stats({ width, height });
+    expect(c.ui.interactables().filter(button => button.id === 'fight' || button.id === 'swap-p1').length).toBe(0);
+    c.render.expectScreenshot(`arcade-versus-${name}`, { width, height });
+  });
+}

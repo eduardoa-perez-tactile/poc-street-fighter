@@ -1,0 +1,9 @@
+guid = "5f535ba7-0815-5975-93e9-3b59afdd4fb3"
+importer = "texture"
+
+[settings]
+atlas = "arcade-stages"
+compression = "none"
+mipmaps = false
+trim = false
+art_check = false

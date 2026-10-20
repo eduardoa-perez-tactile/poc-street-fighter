@@ -1,6 +1,7 @@
 import { gameengine, loading, SetBusVolume } from '@gameengine/runtime';
 import { createEffect, createMemo, defineUI, emit, untrack, useResource, views, type ViewHandle } from '@gameengine/ui';
 import { MatchIntent, MatchState, MenuIntent, MenuState, TrainingIntent, TrainingState } from '../schema.gen.ts';
+import { stageById } from '../data/stages.ts';
 import { browserOptionsAvailable, openBrowserControls, toggleBrowserFullscreen } from '../platform/browser-options.ts';
 import { FightBanner, StreetFighterHud, TrainingConsole, type BannerModel, type HudModel, type TrainingModel } from './views.tsx';
 import { AlphaTitle, AlphaMain, AlphaSetup, AlphaPause, AlphaMoves, AlphaOptions, AlphaResults, type ArcadeModel } from './alpha.views.tsx';
@@ -9,6 +10,7 @@ export { AlphaMain as MatchPanel } from './alpha.views.tsx';
 export { FightBanner, StreetFighterHud, TrainingConsole } from './views.tsx';
 const SCREENS = [AlphaTitle, AlphaMain, AlphaSetup, AlphaPause, AlphaMoves, AlphaOptions, AlphaResults] as const;
 const DIFFICULTIES = ['EASY', 'NORMAL', 'HARD'] as const;
+const fighterName = (id: number) => id === 0 ? 'RYU' : 'KEN';
 const DUMMIES = ['STAND', 'BLOCK', 'LOW BLOCK', 'JUMP', 'CPU'] as const;
 const INPUT_NAMES = ['LEFT', 'RIGHT', 'UP', 'DOWN', 'LP', 'MP', 'HP', 'LK', 'MK', 'HK', 'THROW'] as const;
 const savedVolume = (key: string, fallback: number) => {
@@ -62,11 +64,12 @@ export const MatchUI = defineUI({
       if (name === 'music-down' || name === 'music-up') { sendMenu(8, Math.max(0, Math.min(100, (state?.music ?? 60) + (name === 'music-up' ? 10 : -10)))); return; }
       if (name === 'effects-down' || name === 'effects-up') { sendMenu(9, Math.max(0, Math.min(100, (state?.sfx ?? 70) + (name === 'effects-up' ? 10 : -10)))); return; }
       const screen = state?.screen ?? 0;
+      if (name === 'swap-p1' || name === 'swap-p2') { sendMenu(11, name === 'swap-p2' ? 1 : 0); return; }
       if (name === 'press-start') { sendMenu(0); return; }
       if (name === 'back') { sendMenu(1); return; }
       let index = -1;
       if (screen === 1) index = ['solo', 'local', 'training', 'options'].indexOf(name);
-      else if (screen === 2) index = name === 'difficulty' ? 0 : name === 'fight' ? (game?.mode === 0 ? 1 : 0) : -1;
+      else if (screen === 2) index = name === 'p1-character' ? 0 : name === 'p2-character' ? 1 : name === 'stage' ? 2 : name === 'difficulty' ? 3 : name === 'fight' ? (game?.mode === 0 ? 4 : 3) : -1;
       else if (screen === 3) index = ['resume', 'moves', 'options', 'restart', 'main-menu'].indexOf(name);
       else if (screen === 4 && name === 'back') index = 0;
       else if (screen === 5) index = ['music', 'effects', 'browser-controls', 'fullscreen'].indexOf(name);
@@ -76,7 +79,7 @@ export const MatchUI = defineUI({
     const seconds = createMemo(() => Math.max(0, Math.ceil((match()?.remaining ?? 5940) / 60)));
     const snapshot = (): HudModel => {
       const s = match();
-      return { training: s?.mode === 2, p1Health: s?.p1Health ?? 144, p2Health: s?.p2Health ?? 144, p1Score: s?.p1Score ?? 0, p2Score: s?.p2Score ?? 0, p1Wins: s?.p1Wins ?? 0, p2Wins: s?.p2Wins ?? 0, timer: seconds(), round: s?.round ?? 1 };
+      return { p1Name: fighterName(s?.p1Fighter ?? 0), p2Name: fighterName(s?.p2Fighter ?? 1), training: s?.mode === 2, p1Health: s?.p1Health ?? 144, p2Health: s?.p2Health ?? 144, p1Score: s?.p1Score ?? 0, p2Score: s?.p2Score ?? 0, p1Wins: s?.p1Wins ?? 0, p2Wins: s?.p2Wins ?? 0, timer: seconds(), round: s?.round ?? 1 };
     };
     const hud = views.push(StreetFighterHud, untrack(snapshot), { onIntent });
     createEffect(() => hud.update(snapshot()));
@@ -84,13 +87,16 @@ export const MatchUI = defineUI({
     let shownScreen = -1;
     createEffect(() => {
       const s = match(), m = menu(), phase = s?.phase ?? 0;
-      if (!m || (phase !== 0 && phase !== 3 && phase !== 5)) { flow?.close({ immediate: true }); flow = undefined; shownScreen = -1; return; }
-      const screen = Math.min(6, m.screen), winner = s?.matchWinner ?? 0;
+      if (!m || (phase !== 0 && phase !== 3 && phase !== 5 && phase !== 6)) { flow?.close({ immediate: true }); flow = undefined; shownScreen = -1; return; }
+      const screen = phase === 6 ? 2 : Math.min(6, m.screen), winner = s?.matchWinner ?? 0;
+      const winnerFighter = winner === 1 ? s?.p2Fighter ?? 1 : s?.p1Fighter ?? 0;
       const model: ArcadeModel = {
         cursor: m.cursor, mode: s?.mode ?? 0, difficulty: DIFFICULTIES[s?.difficulty ?? 1]!,
         music: `${m.music}%`, effects: `${m.sfx}%`, browser: m.browserAvailable,
-        winner: winner === 0 ? 'RYU WINS' : 'KEN WINS', score: `${s?.p1Wins ?? 0} - ${s?.p2Wins ?? 0}`,
-        portrait: winner === 1 ? 'ui/ken-portrait' : 'ui/ryu-portrait',
+        winner: `${fighterName(winnerFighter)} WINS`, score: `ROUNDS ${s?.p1Wins ?? 0} - ${s?.p2Wins ?? 0}`, points: `P1 ${s?.p1Score ?? 0} / P2 ${s?.p2Score ?? 0}`,
+        portrait: `ui/arcade/${winnerFighter === 0 ? 'ryu' : 'ken'}-portrait`,
+        p1Fighter: s?.p1Fighter ?? 0, p2Fighter: s?.p2Fighter ?? 1, stage: `${stageById(s?.stageId ?? 0).name} / ${stageById(s?.stageId ?? 0).location}`, stagePreview: stageById(s?.stageId ?? 0).preview,
+        p1Ready: m.p1Ready, p2Ready: m.p2Ready, versus: phase === 6,
       };
       if (flow && shownScreen === screen) flow.update(model);
       else { flow?.close({ immediate: true }); shownScreen = screen; flow = views.push(SCREENS[screen]!, model, { onIntent }); }
@@ -100,7 +106,7 @@ export const MatchUI = defineUI({
     createEffect(() => {
       const s = match(), phase = s?.phase ?? 0;
       if (!s || (phase !== 4 && phase !== 2 && !fight())) { banner?.close({ immediate: true }); banner = undefined; return; }
-      const model = phase === 4 ? { label: `ROUND ${s.round}`, detail: 'FIRST TO TWO WINS' } : phase === 2 ? { label: s.winner === 2 ? 'DRAW' : s.winner === 0 ? 'RYU WINS' : 'KEN WINS', detail: `${s.remaining === 0 ? 'TIME UP' : 'KO'} / ${s.p1Wins} - ${s.p2Wins}` } : { label: 'FIGHT', detail: '' };
+      const model = phase === 4 ? { label: `ROUND ${s.round}`, detail: 'FIRST TO TWO WINS' } : phase === 2 ? { label: s.winner === 2 ? 'DRAW' : `${fighterName(s.winner === 0 ? s.p1Fighter : s.p2Fighter)} WINS`, detail: `${s.remaining === 0 ? 'TIME UP' : 'KO'} / ${s.p1Wins} - ${s.p2Wins}` } : { label: 'FIGHT', detail: '' };
       if (banner) banner.update(model); else banner = views.push(FightBanner, model);
     });
     let consoleView: ViewHandle<TrainingModel> | undefined;

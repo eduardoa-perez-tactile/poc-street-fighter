@@ -36,7 +36,8 @@
       "children": [
         "p1_row",
         "p1_frame",
-        "p1_wins"
+        "p1_wins",
+        "p1_tokens"
       ],
       "style": {
         "pad": 0,
@@ -71,7 +72,8 @@
         "shadowX": 2,
         "shadowY": 2,
         "shadowColor": "#100b2fff"
-      }
+      },
+      "property": "p1name"
     },
     "p1_score": {
       "type": "label",
@@ -93,9 +95,9 @@
         "p1_empty"
       ],
       "style": {
-        "pad": 2,
-        "bg": "#100b2fff",
-        "h": 17
+        "pad": 0,
+        "h": 17,
+        "image": "ui/arcade/hud-health-bar-empty"
       }
     },
     "p1_empty": {
@@ -106,7 +108,6 @@
       ],
       "style": {
         "pad": 0,
-        "bg": "#b7334eff",
         "h": "100%"
       }
     },
@@ -122,7 +123,7 @@
         "fillAmount": 1,
         "fillOrigin": "start",
         "fit": "fill",
-        "bg": "#ffd34dff"
+        "image": "ui/arcade/hud-health-bar-full"
       }
     },
     "p1_wins": {
@@ -136,7 +137,8 @@
         "h": 16,
         "shadowX": 1,
         "shadowY": 1,
-        "shadowColor": "#100b2fff"
+        "shadowColor": "#100b2fff",
+        "hide": true
       }
     },
     "p2": {
@@ -145,7 +147,8 @@
       "children": [
         "p2_row",
         "p2_frame",
-        "p2_wins"
+        "p2_wins",
+        "p2_tokens"
       ],
       "style": {
         "pad": 0,
@@ -180,7 +183,8 @@
         "shadowX": 2,
         "shadowY": 2,
         "shadowColor": "#100b2fff"
-      }
+      },
+      "property": "p2name"
     },
     "p2_score": {
       "type": "label",
@@ -202,9 +206,10 @@
         "p2_empty"
       ],
       "style": {
-        "pad": 2,
-        "bg": "#100b2fff",
-        "h": 17
+        "pad": 0,
+        "h": 17,
+        "image": "ui/arcade/hud-health-bar-empty",
+        "flip": "x"
       }
     },
     "p2_empty": {
@@ -215,7 +220,6 @@
       ],
       "style": {
         "pad": 0,
-        "bg": "#b7334eff",
         "h": "100%"
       }
     },
@@ -231,7 +235,8 @@
         "fillAmount": 1,
         "fillOrigin": "end",
         "fit": "fill",
-        "bg": "#ffd34dff"
+        "image": "ui/arcade/hud-health-bar-full",
+        "flip": "x"
       }
     },
     "p2_wins": {
@@ -245,13 +250,15 @@
         "h": 16,
         "shadowX": 1,
         "shadowY": 1,
-        "shadowColor": "#100b2fff"
+        "shadowColor": "#100b2fff",
+        "hide": true
       }
     },
     "clock": {
       "type": "element",
       "name": "Element",
       "children": [
+        "hud_ko",
         "clock_label",
         "clock_value",
         "clock_round"
@@ -325,6 +332,88 @@
           -2
         ]
       }
+    },
+    "hud_ko": {
+      "type": "icon",
+      "name": "Icon",
+      "image": "ui/arcade/hud-ko",
+      "style": {
+        "size": 32,
+        "w": 48,
+        "h": 24
+      }
+    },
+    "p1_tokens": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "p1_win0",
+        "p1_win1"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "row",
+        "gap": 4,
+        "h": 20
+      }
+    },
+    "p1_win0": {
+      "type": "icon",
+      "name": "Icon",
+      "image": "ui/arcade/hud-round-win",
+      "style": {
+        "size": 32,
+        "w": 20,
+        "h": 20
+      },
+      "show": "p1one"
+    },
+    "p1_win1": {
+      "type": "icon",
+      "name": "Icon",
+      "image": "ui/arcade/hud-round-win",
+      "style": {
+        "size": 32,
+        "w": 20,
+        "h": 20
+      },
+      "show": "p1two"
+    },
+    "p2_tokens": {
+      "type": "element",
+      "name": "Element",
+      "children": [
+        "p2_win0",
+        "p2_win1"
+      ],
+      "style": {
+        "pad": 0,
+        "dir": "row",
+        "gap": 4,
+        "h": 20
+      }
+    },
+    "p2_win0": {
+      "type": "icon",
+      "name": "Icon",
+      "image": "ui/arcade/hud-round-win",
+      "style": {
+        "size": 32,
+        "w": 20,
+        "h": 20
+      },
+      "show": "p2one"
+    },
+    "p2_win1": {
+      "type": "icon",
+      "name": "Icon",
+      "image": "ui/arcade/hud-round-win",
+      "style": {
+        "size": 32,
+        "w": 20,
+        "h": 20
+      },
+      "show": "p2two"
     }
   },
   "properties": {
@@ -421,6 +510,30 @@
     "roundtext": {
       "type": "text",
       "default": "ROUND 1"
+    },
+    "p1name": {
+      "type": "text",
+      "default": "RYU"
+    },
+    "p2name": {
+      "type": "text",
+      "default": "KEN"
+    },
+    "p1one": {
+      "type": "yesno",
+      "default": false
+    },
+    "p1two": {
+      "type": "yesno",
+      "default": false
+    },
+    "p2one": {
+      "type": "yesno",
+      "default": false
+    },
+    "p2two": {
+      "type": "yesno",
+      "default": false
     }
   },
   "transition": {

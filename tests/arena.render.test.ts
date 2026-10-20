@@ -8,7 +8,7 @@ for (const [name, width, height] of [['classic',1152,672],['wide',1600,900],['ul
     input.view(width,height,1);
     await loaded(); await step(2);
     input.emit(MatchIntent,{action:8}); await step(2);
-    input.emit(MatchIntent,{action:0}); await step(130);
+    input.emit(MatchIntent,{action:0}); await step(220);
     for (const entity of world.entities(Fighter)) {
       const fighter=world.get(entity,Fighter);
       const [x,y]=input.worldToScreen([fighter.x/100,(216-fighter.y)/100]);
@@ -40,7 +40,7 @@ worldTest('port pipeline coverage', async ({ loaded, step, input, cheat, world }
   await menu(4);
   await menu(1);
   input.emit(MatchIntent,{action:8}); await step(2);
-  input.action('start'); await step(95);
+  input.action('start'); await step(185);
   await cheat(ArrangeFight,{distance:48});
   input.action('p1.lp'); await step(20); input.action('p1.lp',0); await step(35);
   input.action('p1.down'); await step(2); input.action('p1.right'); await step(2);
@@ -55,11 +55,11 @@ worldTest('port pipeline coverage', async ({ loaded, step, input, cheat, world }
   await step(200);
   await cheat(FinishFight,{winner:0}); await step(151);
   expect(world.resource(MatchState).phase).toBe(5);
-  input.emit(MatchIntent,{action:1}); await step(95);
+  input.emit(MatchIntent,{action:1}); await step(185);
   await cheat(FinishFight,{winner:1}); await step(241);
   await cheat(FinishFight,{winner:1}); await step(151);
   expect(world.resource(MatchState).matchWinner).toBe(1);
-  input.emit(MatchIntent,{action:1}); await step(95);
+  input.emit(MatchIntent,{action:1}); await step(185);
   await cheat(FinishFight,{winner:2}); await step(151);
   input.emit(MatchIntent,{action:2}); await step(2);
   input.emit(MatchIntent,{action:6}); await step(2);
@@ -72,4 +72,23 @@ worldTest('port pipeline coverage', async ({ loaded, step, input, cheat, world }
   input.emit(TrainingIntent,{action:1,value:0}); await step(3);
   input.emit(TrainingIntent,{action:0,value:1}); await step(3);
   input.emit(TrainingIntent,{action:2,value:0}); await step(3);
+});
+
+// Recorded inputs visit every stage, including a fresh versus transition for each match.
+worldTest('arcade stage pipeline coverage', async ({ loaded, step, input, world }) => {
+  await loaded(); await step(2);
+  input.emit(MatchIntent, { action: 8 }); await step(2);
+  for (let stageId = 0; stageId < 5; stageId++) {
+    const send = async (action: number, value = 0) => {
+      const menu = world.resource(MenuState);
+      input.emit(MenuIntent, { action, value, screen: menu.screen, id: menu.lastIntent + 1 });
+      await step(3);
+    };
+    await send(7, 2);
+    if (stageId > 0) await send(6, 2);
+    input.emit(MatchIntent, { action: 0 }); await step(190);
+    expect(world.resource(MatchState).stageId).toBe(stageId);
+    input.emit(MatchIntent, { action: 2 }); await step(3);
+    input.emit(MatchIntent, { action: 6 }); await step(3);
+  }
 });

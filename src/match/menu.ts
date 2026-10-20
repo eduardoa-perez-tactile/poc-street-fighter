@@ -1,4 +1,5 @@
 /** Deterministic frontend focus and navigation; views only render these models and raise intents. */
+import { STAGES } from '../data/stages.ts';
 import { defineSystem, write, type SystemContext } from '@gameengine/runtime';
 import { MatchIntent, MatchState, MenuIntent, MenuState, type MatchStateViews, type MenuStateViews } from '../schema.gen.ts';
 
@@ -22,7 +23,7 @@ function held(menu: MenuStateViews): number {
   return value | (k >>> 10 & 63);
 }
 export function menuItemCount(screen: number, mode: number, browser: boolean): number {
-  return screen === 1 ? 4 : screen === 2 ? mode === 0 ? 3 : 2 : screen === 3 ? 5 : screen === 5 ? browser ? 5 : 3 : screen === 6 ? 2 : 1;
+  return screen === 1 ? 4 : screen === 2 ? mode === 0 ? 6 : 5 : screen === 3 ? 5 : screen === 5 ? browser ? 5 : 3 : screen === 6 ? 2 : 1;
 }
 export function showMenu(menu: MenuStateViews, screen: number, cursor = 0): void {
   menu.screen[0] = screen; menu.cursor[0] = cursor; menu.repeat[0] = 0;
@@ -49,7 +50,15 @@ function back(ctx: SystemContext, menu: MenuStateViews, match: MatchStateViews):
   else if (screen === 6) { ctx.events.emit(MatchIntent, { action: 6 }); showMenu(menu, 1); }
 }
 function adjust(menu: MenuStateViews, match: MatchStateViews, direction: number): void {
-  if (menu.screen[0] === 2 && match.mode[0] === 0 && menu.cursor[0] === 0) match.difficulty[0] = (match.difficulty[0]! + direction + 3) % 3;
+  if (menu.screen[0] === 2) {
+    const row = menu.cursor[0]!;
+    if (row === 0 || row === 1) {
+      match.p1Fighter[0] = 1 - match.p1Fighter[0]!; match.p2Fighter[0] = 1 - match.p1Fighter[0]!;
+      menu.p1Ready[0] = 0; menu.p2Ready[0] = match.mode[0] === 1 ? 0 : 1;
+    }
+    else if (row === 2) match.stageId[0] = (match.stageId[0]! + direction + STAGES.length) % STAGES.length;
+    else if (row === 3 && match.mode[0] === 0) match.difficulty[0] = (match.difficulty[0]! + direction + 3) % 3;
+  }
   if (menu.screen[0] === 5) {
     const target = menu.cursor[0] === 0 ? menu.music : menu.cursor[0] === 1 ? menu.sfx : undefined;
     if (target) target[0] = Math.max(0, Math.min(100, target[0]! + direction * 10));
@@ -60,10 +69,16 @@ function confirm(ctx: SystemContext, menu: MenuStateViews, match: MatchStateView
   if (screen === 0) showMenu(menu, 1);
   else if (screen === 1) {
     if (cursor === 3) openOptions(menu, match);
-    else { match.mode[0] = cursor; showMenu(menu, 2, cursor === 0 ? 1 : 0); }
+    else { match.mode[0] = cursor; menu.p1Ready[0] = 0; menu.p2Ready[0] = cursor === 1 ? 0 : 1; showMenu(menu, 2); }
   } else if (screen === 2) {
-    if (match.mode[0] === 0 && cursor === 0) adjust(menu, match, 1);
-    else if (cursor === (match.mode[0] === 0 ? 1 : 0)) ctx.events.emit(MatchIntent, { action: 0 });
+    if (cursor === 0) { menu.p1Ready[0] = 1; menu.cursor[0] = match.mode[0] === 1 ? 1 : 2; }
+    else if (cursor === 1) { menu.p2Ready[0] = 1; menu.cursor[0] = 2; }
+    else if (cursor === 2 || (match.mode[0] === 0 && cursor === 3)) adjust(menu, match, 1);
+    else if (cursor === (match.mode[0] === 0 ? 4 : 3)) {
+      if (!menu.p1Ready[0]) menu.cursor[0] = 0;
+      else if (!menu.p2Ready[0] && match.mode[0] === 1) menu.cursor[0] = 1;
+      else ctx.events.emit(MatchIntent, { action: 0 });
+    }
     else back(ctx, menu, match);
   } else if (screen === 3) {
     if (cursor === 0) ctx.events.emit(MatchIntent, { action: 3 });
@@ -79,7 +94,7 @@ function confirm(ctx: SystemContext, menu: MenuStateViews, match: MatchStateView
     } else back(ctx, menu, match);
   } else if (screen === 6) {
     if (cursor === 0) ctx.events.emit(MatchIntent, { action: 1 });
-    else { ctx.events.emit(MatchIntent, { action: 6 }); showMenu(menu, 1); }
+    else ctx.events.emit(MatchIntent, { action: 15 });
   }
 }
 function apply(ctx: SystemContext, menu: MenuStateViews, match: MatchStateViews, action: number, value = 0): void {
@@ -93,13 +108,14 @@ function apply(ctx: SystemContext, menu: MenuStateViews, match: MatchStateViews,
   if (action === 7) {
     if (available(value, match.phase[0]!)) {
       if (value === 5) openOptions(menu, match);
-      else { match.settingsOpen[0] = 0; showMenu(menu, value, value === 2 && match.mode[0] === 0 ? 1 : 0); }
+      else { match.settingsOpen[0] = 0; showMenu(menu, value); }
     }
     return;
   }
   if (!available(menu.screen[0]!, match.phase[0]!)) return;
   const count = menuItemCount(menu.screen[0]!, match.mode[0]!, menu.browserAvailable[0] !== 0);
-  if (action === 0) confirm(ctx, menu, match);
+  if (action === 11 && menu.screen[0] === 2) { menu.cursor[0] = value === 1 ? 1 : 0; adjust(menu, match, 1); }
+  else if (action === 0) confirm(ctx, menu, match);
   else if (action === 1) back(ctx, menu, match);
   else if (action === 2 || action === 3) menu.cursor[0] = (menu.cursor[0]! + (action === 2 ? -1 : 1) + count) % count;
   else if (action === 4 || action === 5) adjust(menu, match, action === 4 ? -1 : 1);

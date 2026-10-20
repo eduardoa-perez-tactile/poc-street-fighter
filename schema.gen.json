@@ -213,6 +213,12 @@
           "lanes": 1
         },
         {
+          "name": "fighterId",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
           "name": "x",
           "kind": "f32",
           "scalar": "f32",
@@ -338,6 +344,25 @@
       "kind": "resource",
       "sim": true,
       "fields": [
+        {
+          "name": "stageId",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "p1Fighter",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "p2Fighter",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1,
+          "default": 1
+        },
         {
           "name": "settingsOpen",
           "kind": "bool",
@@ -512,6 +537,24 @@
       "kind": "resource",
       "sim": true,
       "fields": [
+        {
+          "name": "selectionSeat",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "p1Ready",
+          "kind": "bool",
+          "scalar": "u8",
+          "lanes": 1
+        },
+        {
+          "name": "p2Ready",
+          "kind": "bool",
+          "scalar": "u8",
+          "lanes": 1
+        },
         {
           "name": "screen",
           "kind": "u32",
@@ -927,6 +970,13 @@
           "kind": "u32",
           "scalar": "u32",
           "lanes": 1
+        },
+        {
+          "name": "stageId",
+          "kind": "i32",
+          "scalar": "i32",
+          "lanes": 1,
+          "default": -1
         }
       ],
       "package": "StreetFighter"

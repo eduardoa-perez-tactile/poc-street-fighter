@@ -18,9 +18,8 @@
           30,
           44
         ],
-        "bg": "#191267ff",
-        "image": "ui/alpha-backdrop",
-        "fit": "cover",
+        "bg": "#09052dff",
+        "fit": "contain",
         "align": "center",
         "justify": "center",
         "gap": 12
@@ -74,14 +73,15 @@
       ],
       "style": {
         "pad": [
-          8,
-          0,
-          8,
-          0
+          16,
+          12,
+          16,
+          12
         ],
         "dir": "column",
-        "gap": 6,
-        "w": 640
+        "gap": 10,
+        "w": 640,
+        "bg": "#131058ff"
       }
     },
     "back": {

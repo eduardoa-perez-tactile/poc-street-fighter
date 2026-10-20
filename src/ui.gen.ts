@@ -100,12 +100,13 @@ declare module '@gameengine/ui' {
      *   - `winner`: text, default "RYU WINS"
      *   - `score`: text, default "2 - 0"
      *   - `portrait`: image, default "ui/ryu-portrait"
+     *   - `points`: text, default "SCORE 0"
      * Events: `rematch`, `main-menu`
      * Code areas: none
      * Refs: `rematch`, `main-menu`
      */
     'alpha-results': {
-      props: { f0: boolean; f1: boolean; winner: string | { loc: string } | LocText; score: string | { loc: string } | LocText; portrait: string };
+      props: { f0: boolean; f1: boolean; winner: string | { loc: string } | LocText; score: string | { loc: string } | LocText; portrait: string; points: string | { loc: string } | LocText };
       areas: never;
       refs: 'rematch' | 'main-menu';
     };
@@ -136,17 +137,28 @@ declare module '@gameengine/ui' {
      *   - `heading`: text, default "SOLO BATTLE"
      *   - `difficulty`: text, default "NORMAL"
      *   - `solo`: yesno, default true
-     *   - `opponent`: text, default "CPU"
      *   - `detail`: text, default "KEN'S STAGE / FIRST TO TWO WINS"
      *   - `hint`: text, default "LEFT / RIGHT: ADJUST    ENTER / A: CONFIRM    ESC / B: BACK"
-     * Events: `difficulty`, `fight`, `back`
+     *   - `p1name`: text, default ""
+     *   - `p2name`: text, default ""
+     *   - `p1status`: text, default ""
+     *   - `p2status`: text, default ""
+     *   - `stage`: text, default ""
+     *   - `p1portrait`: image, default "ui/ryu-portrait"
+     *   - `p2portrait`: image, default "ui/ken-portrait"
+     *   - `f3`: yesno, default false
+     *   - `f4`: yesno, default false
+     *   - `f5`: yesno, default false
+     *   - `versus`: yesno, default false
+     *   - `stagePreview`: image, default "stages/ken/preview"
+     * Events: `swap-p1`, `swap-p2`, `p1-character`, `p2-character`, `stage`, `difficulty`, `fight`, `back`
      * Code areas: none
-     * Refs: `difficulty`, `fight`, `back`
+     * Refs: `swap-p1`, `swap-p2`, `p1-character`, `p2-character`, `stage`, `difficulty`, `fight`, `back`
      */
     'alpha-setup': {
-      props: { f0: boolean; f1: boolean; f2: boolean; heading: string | { loc: string } | LocText; difficulty: string | { loc: string } | LocText; solo: boolean; opponent: string | { loc: string } | LocText; detail: string | { loc: string } | LocText; hint: string | { loc: string } | LocText };
+      props: { f0: boolean; f1: boolean; f2: boolean; heading: string | { loc: string } | LocText; difficulty: string | { loc: string } | LocText; solo: boolean; detail: string | { loc: string } | LocText; hint: string | { loc: string } | LocText; p1name: string | { loc: string } | LocText; p2name: string | { loc: string } | LocText; p1status: string | { loc: string } | LocText; p2status: string | { loc: string } | LocText; stage: string | { loc: string } | LocText; p1portrait: string; p2portrait: string; f3: boolean; f4: boolean; f5: boolean; versus: boolean; stagePreview: string };
       areas: never;
-      refs: 'difficulty' | 'fight' | 'back';
+      refs: 'swap-p1' | 'swap-p2' | 'p1-character' | 'p2-character' | 'stage' | 'difficulty' | 'fight' | 'back';
     };
     /**
      * Alpha small: a widget, button (ui/docs/alpha-small.ui.json)
@@ -197,12 +209,14 @@ declare module '@gameengine/ui' {
      * Properties:
      *   - `label`: text, default "ROUND 1"
      *   - `detail`: text, default "BEST OF THREE"
+     *   - `original`: yesno, default false
+     *   - `art`: image, default "ui/arcade/hud-fight"
      * Events: none
      * Code areas: none
      * Refs: none
      */
     'fight-banner': {
-      props: { label: string | { loc: string } | LocText; detail: string | { loc: string } | LocText };
+      props: { label: string | { loc: string } | LocText; detail: string | { loc: string } | LocText; original: boolean; art: string };
       areas: never;
       refs: never;
     };
@@ -221,13 +235,19 @@ declare module '@gameengine/ui' {
      *   - `timertext`: text, default "99"
      *   - `centerlabel`: text, default "TIME"
      *   - `roundtext`: text, default "ROUND 1"
+     *   - `p1name`: text, default "RYU"
+     *   - `p2name`: text, default "KEN"
+     *   - `p1one`: yesno, default false
+     *   - `p1two`: yesno, default false
+     *   - `p2one`: yesno, default false
+     *   - `p2two`: yesno, default false
      * Events: `<id>: pause`
      * Code areas: none
      * Refs: `pause`
      * Samples (`view render doc:fight-hud --sample …`): `opening`, `closeFight`, `half`, `empty`, `training`
      */
     'fight-hud': {
-      props: { healthone: number; healthtwo: number; timer: number; p1Score: number; p2Score: number; p1Wins: number; p2Wins: number; round: number; timertext: string | { loc: string } | LocText; centerlabel: string | { loc: string } | LocText; roundtext: string | { loc: string } | LocText };
+      props: { healthone: number; healthtwo: number; timer: number; p1Score: number; p2Score: number; p1Wins: number; p2Wins: number; round: number; timertext: string | { loc: string } | LocText; centerlabel: string | { loc: string } | LocText; roundtext: string | { loc: string } | LocText; p1name: string | { loc: string } | LocText; p2name: string | { loc: string } | LocText; p1one: boolean; p1two: boolean; p2one: boolean; p2two: boolean };
       areas: never;
       refs: 'pause';
     };

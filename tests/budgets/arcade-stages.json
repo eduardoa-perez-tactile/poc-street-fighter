@@ -1,0 +1,8 @@
+{
+  "replay": "tests/replays/arcade_stage_pipeline_coverage.greplay",
+  "structural": {
+    "drawCallsMax": 30,
+    "pipelinesCreatedDuringPlay": 0,
+    "gcPausesOver4msMax": 0
+  }
+}

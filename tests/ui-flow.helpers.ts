@@ -5,7 +5,7 @@ export async function press(c: UIFlowContext, id: string, width = 1152, height =
   c.render.stats({ width, height }); await c.ui.press(id); await c.step(2);
 }
 export async function beginLocal(c: UIFlowContext, width = 1152, height = 672) {
-  await press(c, 'press-start', width, height); await press(c, 'local', width, height); await press(c, 'fight', width, height); await c.step(92);
+  await press(c, 'press-start', width, height); await press(c, 'local', width, height); await press(c, 'p1-character', width, height); await press(c, 'p2-character', width, height); await press(c, 'fight', width, height); await c.step(182);
 }
 export async function menuCommand(c: UIFlowContext, action: number, value = 0) {
   const menu = c.world.resource(MenuState);

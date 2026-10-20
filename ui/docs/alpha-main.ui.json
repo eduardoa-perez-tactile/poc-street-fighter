@@ -18,9 +18,8 @@
           24,
           60
         ],
-        "bg": "#191267ff",
-        "image": "ui/alpha-backdrop",
-        "fit": "cover",
+        "bg": "#09052dff",
+        "fit": "contain",
         "align": "center",
         "justify": "center",
         "gap": 10
@@ -37,7 +36,7 @@
       "children": [],
       "style": {
         "pad": 8,
-        "image": "ui/street-fighter-wordmark",
+        "image": "ui/arcade/logo-ce",
         "w": 640,
         "h": 190,
         "fit": "contain"
@@ -149,11 +148,11 @@
     "main_portrait": {
       "type": "icon",
       "name": "Icon",
-      "image": "ui/ryu-portrait",
+      "image": "ui/arcade/ryu-portrait",
       "style": {
         "size": 32,
-        "w": 270,
-        "h": 310
+        "w": 288,
+        "h": 252
       }
     }
   },
