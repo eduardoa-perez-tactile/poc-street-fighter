@@ -1,7 +1,7 @@
 import { array, bool, component, event, f32, i32, resource, u32 } from '@gameengine/schema';
 
 export const Fighter = component('Fighter', {
-  player: u32(), x: f32(), y: f32({ default: 216 }), vx: f32(), vy: f32(),
+  player: u32(), fighterId: u32(), x: f32(), y: f32({ default: 216 }), vx: f32(), vy: f32(),
   facing: i32({ default: 1 }), state: u32(), frame: u32(), age: u32(),
   comboHits: u32(), stun: u32(), invulnerable: u32(), airState: u32(), throwCooldown: u32(),
   attackHit: bool(), strength: u32(), projectileFired: bool(), jumpDirection: i32(),
@@ -10,6 +10,7 @@ export const Projectile = component('Projectile', {
   player: u32(), x: f32(), y: f32(), facing: i32(), strength: u32(), state: u32(), frame: u32(),
 }, { sim: true });
 export const MatchState = resource('MatchState', {
+  stageId: u32(), p1Fighter: u32(), p2Fighter: u32({ default: 1 }),
   settingsOpen: bool(), mode: u32(), difficulty: u32({ default: 1 }), phaseTicks: u32(), resumePhase: u32({ default: 1 }), matchWinner: i32({ default: -1 }),
   phase: u32(), remaining: u32({ default: 5940 }), winner: i32({ default: -1 }),
   round: u32({ default: 1 }), p1Health: u32({ default: 144 }), p2Health: u32({ default: 144 }),
@@ -41,6 +42,7 @@ export const TrainingIntent = event('TrainingIntent', { action: u32(), value: u3
 
 // Recorded frontend input keeps keyboard, controller and pointer navigation equivalent.
 export const MenuState = resource('MenuState', {
+  selectionSeat: u32(), p1Ready: bool(), p2Ready: bool(),
   screen: u32(), cursor: u32(), returnScreen: u32(), returnCursor: u32(), lastIntent: u32(), lastPhase: u32({ default: 99 }),
   music: u32({ default: 60 }), sfx: u32({ default: 70 }),
   browserAvailable: bool(), browserRequest: u32(), browserAction: u32(),

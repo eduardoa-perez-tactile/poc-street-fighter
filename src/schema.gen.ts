@@ -220,6 +220,12 @@ export const schemaIr = {
           "lanes": 1
         },
         {
+          "name": "fighterId",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
           "name": "x",
           "kind": "f32",
           "scalar": "f32",
@@ -345,6 +351,25 @@ export const schemaIr = {
       "kind": "resource",
       "sim": true,
       "fields": [
+        {
+          "name": "stageId",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "p1Fighter",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "p2Fighter",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1,
+          "default": 1
+        },
         {
           "name": "settingsOpen",
           "kind": "bool",
@@ -519,6 +544,24 @@ export const schemaIr = {
       "kind": "resource",
       "sim": true,
       "fields": [
+        {
+          "name": "selectionSeat",
+          "kind": "u32",
+          "scalar": "u32",
+          "lanes": 1
+        },
+        {
+          "name": "p1Ready",
+          "kind": "bool",
+          "scalar": "u8",
+          "lanes": 1
+        },
+        {
+          "name": "p2Ready",
+          "kind": "bool",
+          "scalar": "u8",
+          "lanes": 1
+        },
         {
           "name": "screen",
           "kind": "u32",
@@ -934,6 +977,13 @@ export const schemaIr = {
           "kind": "u32",
           "scalar": "u32",
           "lanes": 1
+        },
+        {
+          "name": "stageId",
+          "kind": "i32",
+          "scalar": "i32",
+          "lanes": 1,
+          "default": -1
         }
       ],
       "package": "StreetFighter"
@@ -1066,6 +1116,7 @@ export const CombatInput = typeToken<CombatInputViews, CombatInputValue>('Combat
 
 export interface FighterViews {
   player: Uint32Array;
+  fighterId: Uint32Array;
   x: Float32Array;
   y: Float32Array;
   vx: Float32Array;
@@ -1086,6 +1137,7 @@ export interface FighterViews {
 }
 export interface FighterValue {
   player: number;
+  fighterId: number;
   x: number;
   y: number;
   vx: number;
@@ -1105,7 +1157,7 @@ export interface FighterValue {
   jumpDirection: number;
 }
 /** Fighter (component, sim) */
-export const Fighter = typeToken<FighterViews, FighterValue>('Fighter', 'component', { sig: 'player:u32:1,x:f32:1,y:f32:1,vx:f32:1,vy:f32:1,facing:i32:1,state:u32:1,frame:u32:1,age:u32:1,comboHits:u32:1,stun:u32:1,invulnerable:u32:1,airState:u32:1,throwCooldown:u32:1,attackHit:bool:1,strength:u32:1,projectileFired:bool:1,jumpDirection:i32:1', read: (v: FighterViews, i: number, o: Record<string, unknown>) => { o.player = v.player[i]; o.x = v.x[i]; o.y = v.y[i]; o.vx = v.vx[i]; o.vy = v.vy[i]; o.facing = v.facing[i]; o.state = v.state[i]; o.frame = v.frame[i]; o.age = v.age[i]; o.comboHits = v.comboHits[i]; o.stun = v.stun[i]; o.invulnerable = v.invulnerable[i]; o.airState = v.airState[i]; o.throwCooldown = v.throwCooldown[i]; o.attackHit = v.attackHit[i] !== 0; o.strength = v.strength[i]; o.projectileFired = v.projectileFired[i] !== 0; o.jumpDirection = v.jumpDirection[i]; return o; } });
+export const Fighter = typeToken<FighterViews, FighterValue>('Fighter', 'component', { sig: 'player:u32:1,fighterId:u32:1,x:f32:1,y:f32:1,vx:f32:1,vy:f32:1,facing:i32:1,state:u32:1,frame:u32:1,age:u32:1,comboHits:u32:1,stun:u32:1,invulnerable:u32:1,airState:u32:1,throwCooldown:u32:1,attackHit:bool:1,strength:u32:1,projectileFired:bool:1,jumpDirection:i32:1', read: (v: FighterViews, i: number, o: Record<string, unknown>) => { o.player = v.player[i]; o.fighterId = v.fighterId[i]; o.x = v.x[i]; o.y = v.y[i]; o.vx = v.vx[i]; o.vy = v.vy[i]; o.facing = v.facing[i]; o.state = v.state[i]; o.frame = v.frame[i]; o.age = v.age[i]; o.comboHits = v.comboHits[i]; o.stun = v.stun[i]; o.invulnerable = v.invulnerable[i]; o.airState = v.airState[i]; o.throwCooldown = v.throwCooldown[i]; o.attackHit = v.attackHit[i] !== 0; o.strength = v.strength[i]; o.projectileFired = v.projectileFired[i] !== 0; o.jumpDirection = v.jumpDirection[i]; return o; } });
 
 export interface MatchIntentViews {
   action: Uint32Array;
@@ -1117,6 +1169,9 @@ export interface MatchIntentValue {
 export const MatchIntent = typeToken<MatchIntentViews, MatchIntentValue>('MatchIntent', 'event', { sig: 'action:u32:1', read: (v: MatchIntentViews, i: number, o: Record<string, unknown>) => { o.action = v.action[i]; return o; } });
 
 export interface MatchStateViews {
+  stageId: Uint32Array;
+  p1Fighter: Uint32Array;
+  p2Fighter: Uint32Array;
   settingsOpen: Uint8Array;
   mode: Uint32Array;
   difficulty: Uint32Array;
@@ -1140,6 +1195,9 @@ export interface MatchStateViews {
   freezeStep: Uint32Array;
 }
 export interface MatchStateValue {
+  stageId: number;
+  p1Fighter: number;
+  p2Fighter: number;
   settingsOpen: boolean;
   mode: number;
   difficulty: number;
@@ -1163,7 +1221,7 @@ export interface MatchStateValue {
   freezeStep: number;
 }
 /** MatchState (resource, sim) */
-export const MatchState = typeToken<MatchStateViews, MatchStateValue>('MatchState', 'resource', { sig: 'settingsOpen:bool:1,mode:u32:1,difficulty:u32:1,phaseTicks:u32:1,resumePhase:u32:1,matchWinner:i32:1,phase:u32:1,remaining:u32:1,winner:i32:1,round:u32:1,p1Health:u32:1,p2Health:u32:1,p1Score:u32:1,p2Score:u32:1,p1Wins:u32:1,p2Wins:u32:1,hitStop:u32:1,initialized:bool:1,intentKeys:u32:1,resetStep:u32:1,freezeStep:u32:1', read: (v: MatchStateViews, i: number, o: Record<string, unknown>) => { o.settingsOpen = v.settingsOpen[i] !== 0; o.mode = v.mode[i]; o.difficulty = v.difficulty[i]; o.phaseTicks = v.phaseTicks[i]; o.resumePhase = v.resumePhase[i]; o.matchWinner = v.matchWinner[i]; o.phase = v.phase[i]; o.remaining = v.remaining[i]; o.winner = v.winner[i]; o.round = v.round[i]; o.p1Health = v.p1Health[i]; o.p2Health = v.p2Health[i]; o.p1Score = v.p1Score[i]; o.p2Score = v.p2Score[i]; o.p1Wins = v.p1Wins[i]; o.p2Wins = v.p2Wins[i]; o.hitStop = v.hitStop[i]; o.initialized = v.initialized[i] !== 0; o.intentKeys = v.intentKeys[i]; o.resetStep = v.resetStep[i]; o.freezeStep = v.freezeStep[i]; return o; } });
+export const MatchState = typeToken<MatchStateViews, MatchStateValue>('MatchState', 'resource', { sig: 'stageId:u32:1,p1Fighter:u32:1,p2Fighter:u32:1,settingsOpen:bool:1,mode:u32:1,difficulty:u32:1,phaseTicks:u32:1,resumePhase:u32:1,matchWinner:i32:1,phase:u32:1,remaining:u32:1,winner:i32:1,round:u32:1,p1Health:u32:1,p2Health:u32:1,p1Score:u32:1,p2Score:u32:1,p1Wins:u32:1,p2Wins:u32:1,hitStop:u32:1,initialized:bool:1,intentKeys:u32:1,resetStep:u32:1,freezeStep:u32:1', read: (v: MatchStateViews, i: number, o: Record<string, unknown>) => { o.stageId = v.stageId[i]; o.p1Fighter = v.p1Fighter[i]; o.p2Fighter = v.p2Fighter[i]; o.settingsOpen = v.settingsOpen[i] !== 0; o.mode = v.mode[i]; o.difficulty = v.difficulty[i]; o.phaseTicks = v.phaseTicks[i]; o.resumePhase = v.resumePhase[i]; o.matchWinner = v.matchWinner[i]; o.phase = v.phase[i]; o.remaining = v.remaining[i]; o.winner = v.winner[i]; o.round = v.round[i]; o.p1Health = v.p1Health[i]; o.p2Health = v.p2Health[i]; o.p1Score = v.p1Score[i]; o.p2Score = v.p2Score[i]; o.p1Wins = v.p1Wins[i]; o.p2Wins = v.p2Wins[i]; o.hitStop = v.hitStop[i]; o.initialized = v.initialized[i] !== 0; o.intentKeys = v.intentKeys[i]; o.resetStep = v.resetStep[i]; o.freezeStep = v.freezeStep[i]; return o; } });
 
 export interface MenuIntentViews {
   action: Uint32Array;
@@ -1181,6 +1239,9 @@ export interface MenuIntentValue {
 export const MenuIntent = typeToken<MenuIntentViews, MenuIntentValue>('MenuIntent', 'event', { sig: 'action:u32:1,value:u32:1,id:u32:1,screen:u32:1', read: (v: MenuIntentViews, i: number, o: Record<string, unknown>) => { o.action = v.action[i]; o.value = v.value[i]; o.id = v.id[i]; o.screen = v.screen[i]; return o; } });
 
 export interface MenuStateViews {
+  selectionSeat: Uint32Array;
+  p1Ready: Uint8Array;
+  p2Ready: Uint8Array;
   screen: Uint32Array;
   cursor: Uint32Array;
   returnScreen: Uint32Array;
@@ -1199,6 +1260,9 @@ export interface MenuStateViews {
   repeat: Uint32Array;
 }
 export interface MenuStateValue {
+  selectionSeat: number;
+  p1Ready: boolean;
+  p2Ready: boolean;
   screen: number;
   cursor: number;
   returnScreen: number;
@@ -1217,7 +1281,7 @@ export interface MenuStateValue {
   repeat: number;
 }
 /** MenuState (resource, sim) */
-export const MenuState = typeToken<MenuStateViews, MenuStateValue>('MenuState', 'resource', { sig: 'screen:u32:1,cursor:u32:1,returnScreen:u32:1,returnCursor:u32:1,lastIntent:u32:1,lastPhase:u32:1,music:u32:1,sfx:u32:1,browserAvailable:bool:1,browserRequest:u32:1,browserAction:u32:1,keyboard:u32:1,pad:u32:1,axis:u32:1,previous:u32:1,repeat:u32:1', read: (v: MenuStateViews, i: number, o: Record<string, unknown>) => { o.screen = v.screen[i]; o.cursor = v.cursor[i]; o.returnScreen = v.returnScreen[i]; o.returnCursor = v.returnCursor[i]; o.lastIntent = v.lastIntent[i]; o.lastPhase = v.lastPhase[i]; o.music = v.music[i]; o.sfx = v.sfx[i]; o.browserAvailable = v.browserAvailable[i] !== 0; o.browserRequest = v.browserRequest[i]; o.browserAction = v.browserAction[i]; o.keyboard = v.keyboard[i]; o.pad = v.pad[i]; o.axis = v.axis[i]; o.previous = v.previous[i]; o.repeat = v.repeat[i]; return o; } });
+export const MenuState = typeToken<MenuStateViews, MenuStateValue>('MenuState', 'resource', { sig: 'selectionSeat:u32:1,p1Ready:bool:1,p2Ready:bool:1,screen:u32:1,cursor:u32:1,returnScreen:u32:1,returnCursor:u32:1,lastIntent:u32:1,lastPhase:u32:1,music:u32:1,sfx:u32:1,browserAvailable:bool:1,browserRequest:u32:1,browserAction:u32:1,keyboard:u32:1,pad:u32:1,axis:u32:1,previous:u32:1,repeat:u32:1', read: (v: MenuStateViews, i: number, o: Record<string, unknown>) => { o.selectionSeat = v.selectionSeat[i]; o.p1Ready = v.p1Ready[i] !== 0; o.p2Ready = v.p2Ready[i] !== 0; o.screen = v.screen[i]; o.cursor = v.cursor[i]; o.returnScreen = v.returnScreen[i]; o.returnCursor = v.returnCursor[i]; o.lastIntent = v.lastIntent[i]; o.lastPhase = v.lastPhase[i]; o.music = v.music[i]; o.sfx = v.sfx[i]; o.browserAvailable = v.browserAvailable[i] !== 0; o.browserRequest = v.browserRequest[i]; o.browserAction = v.browserAction[i]; o.keyboard = v.keyboard[i]; o.pad = v.pad[i]; o.axis = v.axis[i]; o.previous = v.previous[i]; o.repeat = v.repeat[i]; return o; } });
 
 export interface ProjectileViews {
   player: Uint32Array;
@@ -1363,12 +1427,14 @@ export const RenderBound = typeToken<RenderBoundViews, RenderBoundValue>('Render
 
 export interface StagePartViews {
   index: Uint32Array;
+  stageId: Int32Array;
 }
 export interface StagePartValue {
   index: number;
+  stageId: number;
 }
 /** StagePart (component, presentation-only) */
-export const StagePart = typeToken<StagePartViews, StagePartValue>('StagePart', 'component', { sig: 'index:u32:1', read: (v: StagePartViews, i: number, o: Record<string, unknown>) => { o.index = v.index[i]; return o; } });
+export const StagePart = typeToken<StagePartViews, StagePartValue>('StagePart', 'component', { sig: 'index:u32:1,stageId:i32:1', read: (v: StagePartViews, i: number, o: Record<string, unknown>) => { o.index = v.index[i]; o.stageId = v.stageId[i]; return o; } });
 
 export type AITuningDefData = {
   /** Fixed steps between easy CPU observations */

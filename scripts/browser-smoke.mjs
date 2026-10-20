@@ -178,7 +178,12 @@ try {
   await page.keyboard.press('Escape'); await advance(4); // Options -> Main, focus OPTIONS.
   await virtualPad(); await padPulse(12); await padPulse(12); // D-pad UP twice -> LOCAL.
   await padPulse(0); await shot('01-local-setup');
-  await padPulse(9); await advance(135);
+  await padPulse(0); // Confirm P1, then P2 independently.
+  await padPulse(0);
+  await padPulse(15); // W3C D-pad RIGHT selects Guile's stage.
+  await padPulse(13); // Stage row -> Fight.
+  await padPulse(9); await advance(8); await shot('01-versus');
+  await advance(200);
   await shot('02-fight', { art: true });
   assert.equal(await page.evaluate(() => globalThis.__sfBrowserOptions.controllers), 1);
   check('local match starts through standard controller START', await state());
@@ -243,6 +248,8 @@ try {
   await page.keyboard.press('Enter'); await advance(5); await shot('11-return-main');
   for (let i = 0; i < 2; i++) { await page.keyboard.press('ArrowDown'); await advance(2); }
   await page.keyboard.press('Enter'); await advance(4); await shot('12-training-setup');
+  await page.keyboard.press('Enter'); await advance(4); // Confirm the training fighter.
+  await page.keyboard.press('ArrowDown'); await advance(2); // Stage -> Fight.
   await page.keyboard.press('Enter'); await advance(12);
   await shot('12-training', { art: true });
   await clickCanvas(0.908, 0.951); await shot('12-training-collision-boxes', { art: true });
@@ -264,8 +271,11 @@ try {
   await page.keyboard.press('ArrowDown'); await advance(2); await page.keyboard.press('ArrowDown'); await advance(2);
   await page.keyboard.press('Enter'); await advance(5); // Main menu, cursor SOLO.
   await page.keyboard.press('Enter'); await advance(4); await shot('14-solo-setup');
-  await page.keyboard.press('ArrowUp'); await advance(2); await page.keyboard.press('ArrowRight'); await advance(2); await page.keyboard.press('ArrowDown'); await advance(2);
-  await page.keyboard.press('Enter'); await advance(350); await shot('14-solo-cpu', { art: true });
+  await page.keyboard.press('Enter'); await advance(2); // Lock P1; CPU is already ready.
+  await page.keyboard.press('ArrowDown'); await advance(2); // Stage -> Difficulty.
+  await page.keyboard.press('ArrowRight'); await advance(2);
+  await page.keyboard.press('ArrowDown'); await advance(2); // Difficulty -> Fight.
+  await page.keyboard.press('Enter'); await advance(440); await shot('14-solo-cpu', { art: true });
   check('solo difficulty setup and autonomous CPU exercised', 'Difficulty cycle then five seconds without P2 controls; CPU damage recorded in screenshot.');
   check('pause, move list and options navigation', 'Actual keyboard routes through pause/moves/options/back/main; audio levels changed and restored.');
   const audioRunning = report.audio.some(value => value.contextType === 'realtime' && value.contextState === 'running');

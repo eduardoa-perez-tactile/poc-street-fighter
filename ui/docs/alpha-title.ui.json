@@ -18,16 +18,14 @@
           30,
           44
         ],
-        "bg": "#191267ff",
-        "image": "ui/alpha-backdrop",
-        "fit": "cover",
+        "bg": "#09052dff",
+        "fit": "contain",
         "align": "center",
         "justify": "center",
-        "gap": 12
+        "gap": 32
       },
       "children": [
         "wordmark",
-        "title_tag",
         "press_start",
         "title_hint"
       ]
@@ -38,24 +36,10 @@
       "children": [],
       "style": {
         "pad": 8,
-        "image": "ui/street-fighter-wordmark",
-        "w": 920,
-        "h": 350,
+        "image": "ui/arcade/logo-ce",
+        "w": 660,
+        "h": 290,
         "fit": "contain"
-      }
-    },
-    "title_tag": {
-      "type": "label",
-      "name": "Label",
-      "text": "THE WORLD WARRIOR",
-      "style": {
-        "fontSize": 19,
-        "color": "#fff3b0ff",
-        "shadowX": 2,
-        "shadowY": 2,
-        "shadowColor": "#100b2fff",
-        "h": 28,
-        "textAlign": "center"
       }
     },
     "press_start": {

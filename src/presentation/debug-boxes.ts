@@ -19,7 +19,7 @@ export const DrawDebugBoxes = defineSystem({
       for (const fighters of q.fighters.chunks()) for (let j = 0; j < fighters.length; j++) {
         const fighter = fighters.get(Fighter, j);
         if (fighter.player !== debug.player[i]) continue;
-        const frame = frameForFighter(FIGHTERS[fighter.player]!, fighter.state, fighter.frame), index = debug.box[i]!;
+        const frame = frameForFighter(FIGHTERS[fighter.fighterId]!, fighter.state, fighter.frame), index = debug.box[i]!;
         if (index > 0 && index < 4 && (fighter.invulnerable > 0 || fighter.state === KNOCKDOWN)) continue;
         const local = index === 0 ? frame.push : index === 4 ? frame.hit : frame.hurt[index - 1];
         if (!local || local[2] <= 0 || local[3] <= 0) continue;

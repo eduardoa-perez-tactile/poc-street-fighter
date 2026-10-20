@@ -9,7 +9,7 @@ function fighter(world: TestWorld, player: number) {
   return { entity, ...world.get(entity, Fighter) };
 }
 async function setup(world: TestWorld, input: TestInput, step: (frames: number) => Promise<void>, distance = 36) {
-  await step(2); world.setResource(MatchState, { mode: 1 }); input.emit(MatchIntent, { action: 0 }); await step(92);
+  await step(2); world.setResource(MatchState, { mode: 1 }); input.emit(MatchIntent, { action: 0 }); await step(182);
   for (let p = 0; p < 2; p++) world.insert(fighter(world, p).entity, Fighter, { x: 384 + (p === 0 ? -1 : 1) * distance / 2 });
 }
 worldTest('combat depth: holding back blocks a standing strike with blockstun and pushback', async ({ world, input, step, loaded }) => {
@@ -186,7 +186,7 @@ worldTest('combat depth: one active Hadouken per player prevents projectile stac
 worldTest('combat depth: KO fall reaches prone and stays dead throughout the final match result', async ({ world, input, step, loaded, cheat }) => {
   await loaded(); await step(2);
   input.emit(MatchIntent, { action: 8 }); await step(1);
-  input.emit(MatchIntent, { action: 0 }); await step(92);
+  input.emit(MatchIntent, { action: 0 }); await step(182);
   // FinishFight is a recorded input; both the first-round fall and final result replay.
   for (let round = 0; round < 2; round++) {
     await cheat(FinishFight, { winner: 1 }); await step(20);

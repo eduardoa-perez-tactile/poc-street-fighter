@@ -3,6 +3,7 @@ import '../ui.gen.ts';
 
 export interface HudModel {
   training?: boolean;
+  p1Name?: string; p2Name?: string;
   p1Health: number;
   p2Health: number;
   p1Score: number;
@@ -30,9 +31,11 @@ export const StreetFighterHud = defineView<HudModel>({
     <Screen safeArea class="sf-hud">
       <View class="sf-hud-top">
         <Widget doc="fight-hud" props={{
+          p1name: () => model().p1Name ?? 'RYU', p2name: () => model().p2Name ?? 'KEN',
           healthone: () => model().p1Health, healthtwo: () => model().p2Health,
           p1Score: () => model().p1Score, p2Score: () => model().p2Score,
           p1Wins: () => model().p1Wins, p2Wins: () => model().p2Wins,
+          p1one: () => model().p1Wins >= 1, p1two: () => model().p1Wins >= 2, p2one: () => model().p2Wins >= 1, p2two: () => model().p2Wins >= 2,
           timertext: () => model().training ? '--' : String(model().timer),
           centerlabel: () => model().training ? 'TRAINING' : 'TIME',
           roundtext: () => model().training ? '' : `ROUND ${model().round}`,
@@ -46,7 +49,7 @@ export interface BannerModel { label: string; detail: string }
 export const FightBanner = defineView<BannerModel>({
   name: 'FightBanner', blockInput: false,
   samples: { intro: { label: 'ROUND 1', detail: 'BEST OF THREE' }, fight: { label: 'FIGHT', detail: '' }, knockout: { label: 'RYU WINS', detail: 'KO / NEXT ROUND' } },
-  render: (m) => <Screen safeArea class="sf-banner-screen"><View class="sf-banner"><Widget doc="fight-banner" props={{ label: () => m().label, detail: () => m().detail }} /></View></Screen>,
+  render: (m) => <Screen safeArea class="sf-banner-screen"><View class="sf-banner"><Widget doc="fight-banner" props={{ label: () => m().label, detail: () => m().detail, original: () => m().label === 'FIGHT', art: 'ui/arcade/hud-fight' }} /></View></Screen>,
 });
 
 export interface TrainingModel { stats: string; inputs: string; dummyLabel: string; boxesLabel: string }

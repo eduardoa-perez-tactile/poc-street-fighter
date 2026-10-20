@@ -7,7 +7,7 @@ function fighter(world: TestWorld, player: number) {
 
 worldTest('modes: solo opponent approaches and attacks without player two input', async ({ world, step, input, loaded }) => {
   await loaded(); input.emit(MatchIntent, { action: 7 }); await step(2);
-  input.action('start'); await step(100);
+  input.action('start'); await step(190);
   expect(world.resource(MatchState).phase).toBe(1);
   let cpuMoved = false;
   for (let i = 0; i < 18; i++) { await step(60); if (Math.abs(fighter(world, 1).x - 472) > 20) cpuMoved = true; }
@@ -25,7 +25,7 @@ worldTest('modes: local versus leaves player two under human control', async ({ 
 });
 
 worldTest('modes: CPU motion plans and fight timer stay frozen while paused', async ({ world, step, input, loaded }) => {
-  await loaded(); input.action('start'); await step(150);
+  await loaded(); input.action('start'); await step(240);
   input.action('pause'); await step(2);
   const before = world.resource(MatchState).remaining;
   const aiBefore = world.resource(AIState).held[1];
@@ -37,24 +37,24 @@ worldTest('modes: CPU motion plans and fight timer stay frozen while paused', as
 });
 
 worldTest('modes: difficulty selects different CPU reaction intervals', async ({ world, step, input, loaded }) => {
-  await loaded(); input.emit(MatchIntent, { action: 10 }); await step(2); input.action('start'); await step(94);
+  await loaded(); input.emit(MatchIntent, { action: 10 }); await step(2); input.action('start'); await step(184);
   const easy = world.resource(AIState).think[1]!;
   expect(easy).toBeGreaterThanOrEqual(20);
   input.emit(MatchIntent, { action: 2 }); await step(2);
   input.emit(MatchIntent, { action: 6 }); await step(2);
-  input.emit(MatchIntent, { action: 12 }); await step(2); input.action('start', 0); input.action('start'); await step(94);
+  input.emit(MatchIntent, { action: 12 }); await step(2); input.action('start', 0); input.action('start'); await step(184);
   expect(world.resource(AIState).think[1]!).toBeLessThan(20);
 });
 
 worldTest('training: clock is unlimited and dummy ignores player two keyboard', async ({ world, step, input, loaded }) => {
-  await loaded(); input.emit(MatchIntent, { action: 9 }); await step(2); input.action('start'); await step(100);
+  await loaded(); input.emit(MatchIntent, { action: 9 }); await step(2); input.action('start'); await step(190);
   input.action('p2.left'); await step(360);
   expect(fighter(world, 1).x).toBe(472);
   expect(world.resource(MatchState).remaining).toBe(5940);
 });
 
 worldTest('training: attacks report damage, restore dummy health, and reset positions through intent', async ({ world, step, input, loaded }) => {
-  await loaded(); input.emit(MatchIntent, { action: 9 }); await step(2); input.action('start'); await step(100);
+  await loaded(); input.emit(MatchIntent, { action: 9 }); await step(2); input.action('start'); await step(190);
   input.action('p1.right'); await step(40); input.action('p1.right', 0); await step(2);
   input.action('p1.lp'); await step(100);
   expect(world.resource(TrainingState).lastDamage).toBeGreaterThan(0);
@@ -71,7 +71,7 @@ worldTest('training: attacks report damage, restore dummy health, and reset posi
 });
 
 worldTest('training: dummy high guard blocks a projectile and box display is a recorded setting', async ({ world, step, input, loaded }) => {
-  await loaded(); input.emit(MatchIntent, { action: 9 }); await step(2); input.action('start'); await step(100);
+  await loaded(); input.emit(MatchIntent, { action: 9 }); await step(2); input.action('start'); await step(190);
   input.emit(TrainingIntent, { action: 0, value: 1 }); input.emit(TrainingIntent, { action: 2, value: 1 }); await step(3);
   input.action('p1.down'); await step(3); input.action('p1.right'); await step(3);
   input.action('p1.down', 0); await step(3); input.action('p1.lp'); await step(2);

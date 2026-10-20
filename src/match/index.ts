@@ -4,8 +4,9 @@ import { CombatInput, MatchIntent, MatchState, MenuState } from '../schema.gen.t
 import { closeOptions, openOptions, showMenu } from './menu.ts';
 export { MenuNavigation, MENU_ACTION, MENU_SCREEN } from './menu.ts';
 
-export const MATCH_PHASE = Object.freeze({ title: 0, playing: 1, roundResult: 2, paused: 3, intro: 4, matchResult: 5 });
+export const MATCH_PHASE = Object.freeze({ title: 0, playing: 1, roundResult: 2, paused: 3, intro: 4, matchResult: 5, versus: 6 });
 export const INTRO_STEPS = 90;
+export const VERSUS_STEPS = 90;
 export const RESULT_STEPS = 150;
 
 export const MatchCommands = defineSystem({
@@ -22,16 +23,20 @@ export const MatchCommands = defineSystem({
       if (phase === 0 && action >= 7 && action <= 9) m.mode[0] = action - 7;
       else if (phase === 0 && action >= 10 && action <= 12) m.difficulty[0] = action - 10;
       else if ((action === 0 && phase === 0) || (action === 1 && phase === 5) || (action === 5 && phase === 3)) restart = true;
-      else if (action === 2 && (phase === 1 || phase === 4)) { m.resumePhase[0] = phase; m.phase[0] = 3; }
+      else if (action === 2 && (phase === 1 || phase === 4 || phase === 6)) { m.resumePhase[0] = phase; m.phase[0] = 3; }
       else if (action === 3 && phase === 3) m.phase[0] = m.resumePhase[0]!;
+      else if (action === 15 && phase === 5) {
+        m.phase[0] = 0; m.phaseTicks[0] = 0; m.hitStop[0] = 0;
+        const menu = ctx.resource(MenuState); menu.p1Ready[0] = 0; menu.p2Ready[0] = m.mode[0] === 1 ? 0 : 1; showMenu(menu, 2);
+      }
       else if (action === 6 && (phase === 3 || phase === 5)) {
         m.phase[0] = 0; m.phaseTicks[0] = 0; m.hitStop[0] = 0; showMenu(ctx.resource(MenuState), 1);
       }
     }
     if (!restart) return;
     m.settingsOpen[0] = 0;
-    m.phase[0] = m.mode[0] === 2 ? 1 : 4;
-    m.phaseTicks[0] = m.mode[0] === 2 ? 0 : INTRO_STEPS;
+    m.phase[0] = m.mode[0] === 2 ? 1 : 6;
+    m.phaseTicks[0] = m.mode[0] === 2 ? 0 : VERSUS_STEPS;
     m.resumePhase[0] = 1; m.round[0] = 1; m.remaining[0] = 5940;
     m.p1Health[0] = 144; m.p2Health[0] = 144; m.p1Score[0] = 0; m.p2Score[0] = 0;
     m.p1Wins[0] = 0; m.p2Wins[0] = 0; m.winner[0] = -1; m.matchWinner[0] = -1;
@@ -46,6 +51,7 @@ export const MatchLifecycle = defineSystem({
   name: 'MatchLifecycle', after: ['CombatProjectiles'],
   resources: [write(MatchState), write(CombatInput)],
   runIf: { any: [
+    { resource: MatchState, field: 'phase', value: 6 },
     { resource: MatchState, field: 'phase', value: 4 },
     { resource: MatchState, field: 'phase', value: 2 },
     { resource: MatchState, field: 'phase', value: 1 },
@@ -55,6 +61,7 @@ export const MatchLifecycle = defineSystem({
     if (m.phase[0] === 1) { if (m.phaseTicks[0]! > 0) m.phaseTicks[0] = m.phaseTicks[0]! - 1; return; }
     if (m.resetStep[0] === ctx.step) return;
     if (m.phaseTicks[0]! > 0) { m.phaseTicks[0] = m.phaseTicks[0]! - 1; if (m.phaseTicks[0]! > 0) return; }
+    if (m.phase[0] === 6) { m.phase[0] = 4; m.phaseTicks[0] = INTRO_STEPS; return; }
     if (m.phase[0] === 4) { m.phase[0] = 1; m.phaseTicks[0] = 30; return; }
     if (m.p1Wins[0]! >= 2 || m.p2Wins[0]! >= 2) {
       m.matchWinner[0] = m.p1Wins[0]! >= 2 ? 0 : 1; m.phase[0] = 5; return;

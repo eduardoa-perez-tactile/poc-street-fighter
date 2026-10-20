@@ -14,7 +14,9 @@
         "h": "100%",
         "pad": 24,
         "align": "center",
-        "justify": "center"
+        "justify": "center",
+        "bg": "#09052dff",
+        "fit": "contain"
       },
       "children": [
         "pause_frame"
@@ -42,7 +44,7 @@
         "dir": "column",
         "gap": 4,
         "w": 460,
-        "bg": "#191267f5",
+        "bg": "#131058ff",
         "radius": 0
       }
     },

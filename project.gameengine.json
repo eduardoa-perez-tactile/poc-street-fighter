@@ -62,7 +62,10 @@
       "include": [
         "**"
       ],
-      "delivery": "in-app"
+      "delivery": "in-app",
+      "exclude": [
+        "assets/source/**"
+      ]
     }
   ],
   "targets": [
@@ -96,7 +99,8 @@
           "assets/stage/**",
           "assets/effects/**",
           "assets/ui/**",
-          "assets/fonts/**"
+          "assets/fonts/**",
+          "assets/stages/**"
         ]
       }
     }
@@ -108,6 +112,11 @@
         "textures": "64MB",
         "audio": "12MB"
       }
+    }
+  },
+  "check": {
+    "smoke": {
+      "frames": 1800
     }
   }
 }

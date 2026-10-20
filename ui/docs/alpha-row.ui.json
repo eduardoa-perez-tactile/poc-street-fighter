@@ -21,7 +21,7 @@
         "bg": "#00000000",
         "radius": 0,
         "gap": 12,
-        "h": 48
+        "h": 40
       },
       "children": [
         "row_arrow",
@@ -63,7 +63,7 @@
       "name": "Label",
       "text": "",
       "style": {
-        "fontSize": 25,
+        "fontSize": 22,
         "color": "#fff3b0ff",
         "shadowX": 2,
         "shadowY": 2,
@@ -80,12 +80,12 @@
       "name": "Label",
       "text": "",
       "style": {
-        "fontSize": 22,
+        "fontSize": 18,
         "color": "#fff3b0ff",
         "shadowX": 2,
         "shadowY": 2,
         "shadowColor": "#100b2fff",
-        "w": 140,
+        "w": 210,
         "h": "100%",
         "fitMin": 14,
         "textAlign": "right"

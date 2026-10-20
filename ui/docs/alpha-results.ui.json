@@ -18,9 +18,8 @@
           30,
           44
         ],
-        "bg": "#191267ff",
-        "image": "ui/alpha-backdrop",
-        "fit": "cover",
+        "bg": "#09052dff",
+        "fit": "contain",
         "align": "center",
         "justify": "center",
         "gap": 12
@@ -69,8 +68,8 @@
       "image": "ui/sprites/star",
       "style": {
         "size": 32,
-        "w": 280,
-        "h": 320
+        "w": 288,
+        "h": 252
       },
       "property": "portrait"
     },
@@ -79,7 +78,8 @@
       "name": "Element",
       "children": [
         "winner_headline",
-        "winner_score"
+        "winner_score",
+        "winner_points"
       ],
       "style": {
         "pad": 0,
@@ -112,13 +112,13 @@
       "name": "Label",
       "text": "",
       "style": {
-        "fontSize": 58,
+        "fontSize": 36,
         "color": "#fff3b0ff",
         "shadowX": 2,
         "shadowY": 2,
         "shadowColor": "#100b2fff",
         "w": "100%",
-        "h": 90,
+        "h": 54,
         "textAlign": "center"
       },
       "property": "score"
@@ -156,7 +156,7 @@
       "doc": "alpha-row",
       "key": "main-menu",
       "props": {
-        "label": "MAIN MENU",
+        "label": "CHANGE SELECTION",
         "active": {
           "property": "f1"
         }
@@ -177,6 +177,17 @@
         "shadowColor": "#100b2fff",
         "h": 24,
         "textAlign": "center"
+      }
+    },
+    "winner_points": {
+      "type": "label",
+      "name": "Label",
+      "text": "Label",
+      "property": "points",
+      "style": {
+        "fontSize": 22,
+        "h": 32,
+        "color": "#fff3b0ff"
       }
     }
   },
@@ -206,6 +217,10 @@
     "portrait": {
       "type": "image",
       "default": "ui/ryu-portrait"
+    },
+    "points": {
+      "type": "text",
+      "default": "SCORE 0"
     }
   }
 }

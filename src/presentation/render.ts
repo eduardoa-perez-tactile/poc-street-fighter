@@ -4,19 +4,29 @@ import { FIGHTERS } from '../data/fighters.ts';
 import { HIT_FRAMES } from '../data/effects.ts';
 import { frameForFighter } from '../combat/index.ts';
 import { KNOCKDOWN, WAKEUP } from '../combat/moves.ts';
-import { STAGE_PIECES, pieceImage, piecePosition } from './stage-parts.ts';
+import { stagePieces, pieceImage, piecePosition } from './stage-parts.ts';
 
 export const DrawStage = defineSystem({
-  name: 'DrawStage', stage: 'LateUpdate', query: query(read(StagePart), write(Sprite), write(VisualOffset)),
-  resources: [read(ArenaVisualState), read(WorldView)], skipUnchanged: true,
+  name: 'DrawStage', stage: 'LateUpdate', query: query(write(StagePart), write(Sprite), write(VisualOffset)),
+  resources: [read(ArenaVisualState), read(WorldView), read(MatchState)], skipUnchanged: true,
   run(ctx, q) {
     const tick = ctx.resource(ArenaVisualState).tick[0]!, camera = ctx.get(WorldView).center[0]! * 100 + 64;
+    const stageId = ctx.resource(MatchState).stageId[0]!, pieces = stagePieces(stageId);
     for (const c of q.chunks()) {
-      const index = c.col(StagePart).index, offset = c.col(VisualOffset).position, image = c.col(Sprite).image;
+      const parts = c.col(StagePart), index = parts.index, offset = c.col(VisualOffset).position, sprites = c.col(Sprite);
       for (let i = 0; i < c.length; i++) {
-        const piece = STAGE_PIECES[index[i]!]!, base = piecePosition(piece, 448, 0), now = piecePosition(piece, camera, tick);
-        offset[i * 3] = (now[0] - base[0]) / 100; offset[i * 3 + 1] = (base[1] - now[1]) / 100;
-        if (piece.animation || piece.grey) c.setField(Sprite, i, 'image', pieceImage(piece, tick));
+        const piece = pieces[index[i]!];
+        sprites.visible[i] = piece ? 1 : 0;
+        if (!piece) continue;
+        const now = piecePosition(piece, camera, tick), image = pieceImage(piece, tick);
+        offset[i * 3] = now[0] / 100; offset[i * 3 + 1] = -now[1] / 100;
+        if (parts.stageId[i] !== stageId) {
+          c.setField(Sprite, i, 'image', image);
+          c.setField(Sprite, i, 'size', [piece.width / 100, piece.height / 100]);
+          c.setField(Sprite, i, 'sortingLayer', piece.layer);
+          c.setField(Sprite, i, 'order', piece.order);
+          parts.stageId[i] = stageId;
+        } else if (piece.animation || piece.grey || piece.frames) c.setField(Sprite, i, 'image', image);
       }
     }
   },
@@ -29,7 +39,7 @@ export const DrawFighters = defineSystem({
     for (const c of q.chunks()) {
       const f = c.col(Fighter), s = c.col(Sprite), visual = c.col(VisualOffset), o = visual.position;
       for (let i = 0; i < c.length; i++) {
-        const frame = frameForFighter(FIGHTERS[f.player[i]!]!, f.state[i]!, f.frame[i]!);
+        const frame = frameForFighter(FIGHTERS[f.fighterId[i]!]!, f.state[i]!, f.frame[i]!);
         c.setField(Sprite, i, 'image', frame.sprite); s.flipX[i] = f.facing[i]! < 0 ? 1 : 0;
         o[i * 3] = match.hitStop[0]! > 0 && f.state[i]! >= 19 && f.state[i]! <= 24 ? (tick % 2 ? 0.02 : -0.02) : 0;
         // Reused hurt/crouch poses rotate about their authored feet pivot; only the

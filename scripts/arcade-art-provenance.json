@@ -1,0 +1,1102 @@
+{
+  "description": "Audited original Capcom SFII artwork; exact pixels, no redrawing or AI generation. Sources acquired through normal browser downloadMedia on 2026-10-20.",
+  "rights": "Original game artwork belongs to Capcom. Spriters Resource hosts community rips; no redistribution license is asserted. Preserve source and contributor attribution.",
+  "edition": "Champion Edition menu logo, select and versus art. HUD sheet is SFII collection art and is not labeled CE-specific.",
+  "rawSourceDirectory": "assets/source/arcade-ui",
+  "sourceExclusion": "Exclude assets/source/** from runtime bundles and asset groups.",
+  "limitations": [
+    "The Title sheet (180851) is the World Warrior opening city/intro artwork, not a Champion Edition title backdrop; audited and retained only as source, not cropped into runtime UI.",
+    "Defeated portraits are the first injured variant on the CE portrait sheet; a normal portrait can serve winner/results artwork.",
+    "world-map contains original blue map background and no baked roster; two-fighter selector must be built separately.",
+    "Bitmap font and HUD glyph crops are sprites, not a TTF; accessible/dynamic text may retain the existing readable font.",
+    "Source sheets contain multiple variants and contributor edits; runtime crops use the normal CE Ryu/Ken portraits and original CE emblem/logo only."
+  ],
+  "sources": [
+    {
+      "id": 222169,
+      "file": "222169.png",
+      "title": "Character Select (Champion Edition)",
+      "contributor": "MartinMayonnaise",
+      "pageUrl": "https://www.spriters-resource.com/arcade/streetfighter2/asset/222169/",
+      "mediaUrl": "https://www.spriters-resource.com/media/assets/219/222169.png?updated=1755490440",
+      "sha256": "a90024321e56261db5bcb829878d9f8938320539eb49c328477cb48905e739e0"
+    },
+    {
+      "id": 117898,
+      "file": "117898.png",
+      "title": "Portraits (Champion Edition)",
+      "contributor": "Deleted User; sheet credit xxxJohnnieWalker2005",
+      "pageUrl": "https://www.spriters-resource.com/arcade/streetfighter2/asset/117898/",
+      "mediaUrl": "https://www.spriters-resource.com/media/assets/115/117898.png?updated=1755478763",
+      "sha256": "c9f0a978169bc1013ae04f3b2bad923db611a0cc8e01078be932401427843b3d"
+    },
+    {
+      "id": 246263,
+      "file": "246263.png",
+      "title": "Versus Screen (Champion Edition)",
+      "contributor": "kellym; sheet credit 16-Bit Globe",
+      "pageUrl": "https://www.spriters-resource.com/arcade/streetfighter2/asset/246263/",
+      "mediaUrl": "https://www.spriters-resource.com/media/assets/243/246263.png?updated=1755492954",
+      "sha256": "d5eb89e37d29dc8277b6e6895af6f461d231ac9041c5d9bf7cee55411d252a6f"
+    },
+    {
+      "id": 127352,
+      "file": "127352.png",
+      "title": "Logos",
+      "contributor": "The Shirt Ninja",
+      "pageUrl": "https://www.spriters-resource.com/arcade/streetfighter2/asset/127352/",
+      "mediaUrl": "https://www.spriters-resource.com/media/assets/124/127352.png?updated=1755479800",
+      "sha256": "13e40b1cc9d8cec3e311643b7443ce75469a5d79bc51ad803bc48749c6f5f2dc"
+    },
+    {
+      "id": 180851,
+      "file": "180851.png",
+      "title": "Title",
+      "contributor": "shezor",
+      "pageUrl": "https://www.spriters-resource.com/arcade/streetfighter2/asset/180851/",
+      "mediaUrl": "https://www.spriters-resource.com/media/assets/178/180851.png?updated=1755486926",
+      "sha256": "86a1ad9219c42eecdecdc9fcb6cadc9e0e74336bb9645e9e1f9985f56d464098"
+    },
+    {
+      "id": 175665,
+      "file": "175665.png",
+      "title": "Game Text, Fonts, & Health Bars",
+      "contributor": "shezor",
+      "pageUrl": "https://www.spriters-resource.com/arcade/streetfighter2/asset/175665/",
+      "mediaUrl": "https://www.spriters-resource.com/media/assets/172/175665.png?updated=1755486484",
+      "sha256": "1d2c8381841b38dcb2b14319abc73a5febbbd759283076f513bcfda721eb9f9b"
+    }
+  ],
+  "crops": [
+    {
+      "file": "assets/ui/arcade/logo-ce.png",
+      "source": 127352,
+      "rect": [
+        390,
+        16,
+        338,
+        137
+      ],
+      "key": [
+        0,
+        248,
+        0
+      ],
+      "sha256": "73ae8799c0167ace4b7d0e40423c3416d43093dac83bb6d04f064c9c555478b1"
+    },
+    {
+      "file": "assets/ui/arcade/ryu-portrait.png",
+      "source": 117898,
+      "rect": [
+        131,
+        0,
+        128,
+        112
+      ],
+      "key": [
+        0,
+        0,
+        168
+      ],
+      "sha256": "dd49513c2abc7cfdc8fc6773270863401b310db1261e01887390118111b95f02"
+    },
+    {
+      "file": "assets/ui/arcade/ryu-defeated.png",
+      "source": 117898,
+      "rect": [
+        260,
+        0,
+        128,
+        112
+      ],
+      "key": [
+        0,
+        0,
+        168
+      ],
+      "sha256": "e05a7edd95c75a7798541fa3ef5ea9adb7201daf9d26a199416331dc43f1c2d5"
+    },
+    {
+      "file": "assets/ui/arcade/ken-portrait.png",
+      "source": 117898,
+      "rect": [
+        131,
+        114,
+        128,
+        112
+      ],
+      "key": [
+        0,
+        0,
+        168
+      ],
+      "sha256": "bf8694a6e220747e999c706addaeddc1a89654165afa72971abb095402488179"
+    },
+    {
+      "file": "assets/ui/arcade/ken-defeated.png",
+      "source": 117898,
+      "rect": [
+        260,
+        114,
+        128,
+        112
+      ],
+      "key": [
+        0,
+        0,
+        168
+      ],
+      "sha256": "35a66a5ce74911d63b5ca65dc2809ec9290fad19698fb0ceb2515a1ea594f360"
+    },
+    {
+      "file": "assets/ui/arcade/ryu-select.png",
+      "source": 222169,
+      "rect": [
+        15,
+        153,
+        96,
+        96
+      ],
+      "key": [
+        162,
+        255,
+        215
+      ],
+      "sha256": "50254c355abbd69f361c80193c212fc8dd35f6088e5cdcf3bcea058b87f98396"
+    },
+    {
+      "file": "assets/ui/arcade/ken-select.png",
+      "source": 222169,
+      "rect": [
+        15,
+        279,
+        96,
+        96
+      ],
+      "key": [
+        162,
+        255,
+        215
+      ],
+      "sha256": "6cdbfa0da9ba5bcc8e24213991762bafa7ea762b57ab2b29362f33ef70958988"
+    },
+    {
+      "file": "assets/ui/arcade/world-map.png",
+      "source": 222169,
+      "rect": [
+        30,
+        555,
+        384,
+        144
+      ],
+      "opaqueBackground": true,
+      "sha256": "abbed4ed270576d541a23e0ede405591597f2d13ad72907a8f76a5a6a4e22548"
+    },
+    {
+      "file": "assets/ui/arcade/versus-emblem.png",
+      "source": 246263,
+      "rect": [
+        132,
+        145,
+        119,
+        65
+      ],
+      "sha256": "0f72d0a84e4f528fe9f08dc5627c8ad2cf9a241366e00efe083085ced4ebd717",
+      "keys": [
+        [
+          0,
+          0,
+          168
+        ],
+        [
+          99,
+          116,
+          125
+        ],
+        [
+          125,
+          146,
+          158
+        ]
+      ]
+    },
+    {
+      "file": "assets/ui/arcade/player-select.png",
+      "source": 222169,
+      "rect": [
+        158,
+        4,
+        128,
+        16
+      ],
+      "key": [
+        162,
+        255,
+        215
+      ],
+      "sha256": "12f87944d6403b1aa3b0c065c3761a8709b26d64cc035ad67e39ad1bac41a13f"
+    },
+    {
+      "file": "assets/ui/arcade/ryu-name.png",
+      "source": 246263,
+      "rect": [
+        420,
+        36,
+        54,
+        16
+      ],
+      "key": [
+        99,
+        116,
+        125
+      ],
+      "sha256": "55827bb417ff25ec48b6716b2adbca043779e5cac8cfa65fc61063401d09e478",
+      "audit": "Bottom source-sheet separator row excluded; all original glyph and shadow rows retained."
+    },
+    {
+      "file": "assets/ui/arcade/ken-name.png",
+      "source": 246263,
+      "rect": [
+        420,
+        70,
+        54,
+        16
+      ],
+      "key": [
+        99,
+        116,
+        125
+      ],
+      "sha256": "5b064a28e457cdf2acbb3360e379f608a26865f2391850c3942e9331d2913799",
+      "audit": "Bottom source-sheet separator row excluded; all original glyph and shadow rows retained."
+    },
+    {
+      "file": "assets/ui/arcade/hud-health-empty.png",
+      "source": 175665,
+      "rect": [
+        16,
+        4,
+        322,
+        11
+      ],
+      "combat": true,
+      "sha256": "4a5509ff1aa89d418f0eca05b03b7781895aee31320e9525ce2efda495946bcc"
+    },
+    {
+      "file": "assets/ui/arcade/hud-health-full.png",
+      "source": 175665,
+      "rect": [
+        16,
+        18,
+        322,
+        11
+      ],
+      "combat": true,
+      "sha256": "7c66d76e5efc97b5578371f418412d8032c44cae4328dbc2924b5e1b84adb202"
+    },
+    {
+      "file": "assets/ui/arcade/hud-ko.png",
+      "source": 175665,
+      "rect": [
+        161,
+        16,
+        32,
+        16
+      ],
+      "combat": true,
+      "sha256": "98da21f03099ac5fbcc3996f0cb206edea22352f4f513ad57efdd0fd4867bc5d"
+    },
+    {
+      "file": "assets/ui/arcade/hud-fight.png",
+      "source": 175665,
+      "rect": [
+        16,
+        168,
+        64,
+        20
+      ],
+      "combat": true,
+      "sha256": "349528fbb14695eaa925c0b73456b44851fb76d668687738575cc3ba6acf3cbc"
+    },
+    {
+      "file": "assets/ui/arcade/hud-round.png",
+      "source": 175665,
+      "rect": [
+        272,
+        168,
+        64,
+        20
+      ],
+      "combat": true,
+      "sha256": "1539eb057a33d729f1c572985056b66eee453560ba75d293d77a788200200911"
+    },
+    {
+      "file": "assets/ui/arcade/hud-game-over.png",
+      "source": 175665,
+      "rect": [
+        368,
+        72,
+        112,
+        16
+      ],
+      "combat": true,
+      "sha256": "fbf4413e736fe2e0706afba0b758b4449936def0fc7146442b5853e64fe3715d"
+    },
+    {
+      "file": "assets/ui/arcade/hud-time-over.png",
+      "source": 175665,
+      "rect": [
+        352,
+        112,
+        64,
+        32
+      ],
+      "combat": true,
+      "sha256": "b9b62c4d39aa98e52acafc4016e22031ac0daa20c3396ea356a07481ca7b8b4e"
+    },
+    {
+      "file": "assets/ui/arcade/hud-draw-game.png",
+      "source": 175665,
+      "rect": [
+        424,
+        112,
+        64,
+        32
+      ],
+      "combat": true,
+      "sha256": "8df4fe3fa304d122196454e82885fa1a0d35597f8efe7dd098ec479618b9a546"
+    },
+    {
+      "file": "assets/ui/arcade/hud-ryu-name.png",
+      "source": 175665,
+      "rect": [
+        16,
+        56,
+        32,
+        9
+      ],
+      "combat": true,
+      "sha256": "16ad56279b92b9275326d7780ca542049a47c35637e00717ec33626ee7492e11"
+    },
+    {
+      "file": "assets/ui/arcade/hud-ken-name.png",
+      "source": 175665,
+      "rect": [
+        128,
+        56,
+        32,
+        9
+      ],
+      "combat": true,
+      "sha256": "bf830c067e728d620573f837b66f369443d3c833994235c52e6d688d638f97a4"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-0.png",
+      "source": 175665,
+      "rect": [
+        88,
+        168,
+        16,
+        20
+      ],
+      "combat": true,
+      "sha256": "4cb9b2df9ac237832d69a4edfd0a32a6173b8203e48099d028708b0269cda39a"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-urgent-0.png",
+      "source": 175665,
+      "rect": [
+        16,
+        192,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "9358150940d522a6b8df5befb811968e1cac5e2528d3b2d730cbc7605d929921"
+    },
+    {
+      "file": "assets/ui/arcade/score-digit-0.png",
+      "source": 175665,
+      "rect": [
+        16,
+        32,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "e3ce668a35e2c1b6ffa89783c29d75b4d545cdb70fb84265f3bc9b31ed8637de"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-1.png",
+      "source": 175665,
+      "rect": [
+        104,
+        168,
+        16,
+        20
+      ],
+      "combat": true,
+      "sha256": "2884935a774cd56788fd9f1eaff801cde272fac0cde414b30d2a9300fe1d6550"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-urgent-1.png",
+      "source": 175665,
+      "rect": [
+        32,
+        192,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "1c392f7e6c962afac15bd772aae7fc78eb32e31e1f98f0172a29eb0d909dca7b"
+    },
+    {
+      "file": "assets/ui/arcade/score-digit-1.png",
+      "source": 175665,
+      "rect": [
+        32,
+        32,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "5f7217282489518912aeb1be1f3008aec3c86e165d727853cec9b01f51663857"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-2.png",
+      "source": 175665,
+      "rect": [
+        120,
+        168,
+        16,
+        20
+      ],
+      "combat": true,
+      "sha256": "88ec27bbb66f6a8dac14ddebbca80dceac6db92b1f6ba6448f27478f1ec07a83"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-urgent-2.png",
+      "source": 175665,
+      "rect": [
+        48,
+        192,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "e6ee9ce13971f30b646a434bece19af5c6213c45d057bd90e79a13e5b00f98c5"
+    },
+    {
+      "file": "assets/ui/arcade/score-digit-2.png",
+      "source": 175665,
+      "rect": [
+        48,
+        32,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "3e9b55431739323dd85627ff32a2d26e177a0686a9b7657c8c0fcb0cdb8bc601"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-3.png",
+      "source": 175665,
+      "rect": [
+        136,
+        168,
+        16,
+        20
+      ],
+      "combat": true,
+      "sha256": "4ea2f853cf5786806f7b03863af12c955a1a59dff8db9fab4567f0106bf67684"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-urgent-3.png",
+      "source": 175665,
+      "rect": [
+        64,
+        192,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "40c83df159ecba9f1d11dd10b4d165cdf38c1c4c50ff997f67ddf77937d3fa23"
+    },
+    {
+      "file": "assets/ui/arcade/score-digit-3.png",
+      "source": 175665,
+      "rect": [
+        64,
+        32,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "3b771092fbf96a12da7b91981e8f25288cd38cfdc92bfee2e901dae70362d28f"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-4.png",
+      "source": 175665,
+      "rect": [
+        152,
+        168,
+        16,
+        20
+      ],
+      "combat": true,
+      "sha256": "c362f339e70a9c1b73bd7d05c8f424ed929c409a417685862f5a8b613749be0e"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-urgent-4.png",
+      "source": 175665,
+      "rect": [
+        80,
+        192,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "05caf9878b4e6860cc6e10d30913c774f5a40e233273f592ca80164052d6dea1"
+    },
+    {
+      "file": "assets/ui/arcade/score-digit-4.png",
+      "source": 175665,
+      "rect": [
+        80,
+        32,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "ba20b68837af31cc3078320c09cc12ac605fa157233c2000db49859df625e981"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-5.png",
+      "source": 175665,
+      "rect": [
+        168,
+        168,
+        16,
+        20
+      ],
+      "combat": true,
+      "sha256": "a0d769a9b8b73a5f090da72dc642ea984a489804b702222842f5937c39c9073e"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-urgent-5.png",
+      "source": 175665,
+      "rect": [
+        96,
+        192,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "900b1f4da80827da32845503b7133dffd1b0894c88ff230b00e040a544c5ec3d"
+    },
+    {
+      "file": "assets/ui/arcade/score-digit-5.png",
+      "source": 175665,
+      "rect": [
+        96,
+        32,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "1f6a1bc2ebf0430a50bd4c6381896842f321d25a0e7876fd78ddb88628650ec5"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-6.png",
+      "source": 175665,
+      "rect": [
+        184,
+        168,
+        16,
+        20
+      ],
+      "combat": true,
+      "sha256": "79cc26154f32ec14c325cdc77c85774ecbcf0428be21e8c4d5fd5598378325b0"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-urgent-6.png",
+      "source": 175665,
+      "rect": [
+        112,
+        192,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "0dde9b71332a800233c7c958b6e79a24381d7d41e56dcc4f448c39fd8ff9c86b"
+    },
+    {
+      "file": "assets/ui/arcade/score-digit-6.png",
+      "source": 175665,
+      "rect": [
+        112,
+        32,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "98821ec1db040b94cc4d713eba4be8f091a6529cb1cf5948617a056eb884dac2"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-7.png",
+      "source": 175665,
+      "rect": [
+        200,
+        168,
+        16,
+        20
+      ],
+      "combat": true,
+      "sha256": "85d54c16153309f8aa20ee30776c87fa4e5d69914be4598aeba31a4b6d3c97f6"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-urgent-7.png",
+      "source": 175665,
+      "rect": [
+        128,
+        192,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "3396426752561cdce0c22cc9cb2cc054dc0a77108aa2fe854b06c5abf32682ed"
+    },
+    {
+      "file": "assets/ui/arcade/score-digit-7.png",
+      "source": 175665,
+      "rect": [
+        128,
+        32,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "5d71d2eda26f554f33c9fe16365b06f8749026f1daac3dc2000490b458b34acb"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-8.png",
+      "source": 175665,
+      "rect": [
+        216,
+        168,
+        16,
+        20
+      ],
+      "combat": true,
+      "sha256": "edc44025af719d56c11acf9141587d69c314fc69ad1116220f3167996f0f4110"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-urgent-8.png",
+      "source": 175665,
+      "rect": [
+        144,
+        192,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "fa2aa65992e8f6828f4bf5c2b5e585f05e7c419208ff76236b3de726f8a1b4c7"
+    },
+    {
+      "file": "assets/ui/arcade/score-digit-8.png",
+      "source": 175665,
+      "rect": [
+        144,
+        32,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "525c71e543a9e2cdb72d35032a9b0adf5e7aebcfbe9c22d484c988407ab81ac6"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-9.png",
+      "source": 175665,
+      "rect": [
+        232,
+        168,
+        16,
+        20
+      ],
+      "combat": true,
+      "sha256": "49c77e2cb33e7e97aceef5469cec38dfd50e18fbb19b7c33a1f82798b006075d"
+    },
+    {
+      "file": "assets/ui/arcade/hud-digit-urgent-9.png",
+      "source": 175665,
+      "rect": [
+        160,
+        192,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "35e9b2a38845b4ee3e1b0811bfe075855de077450623ae8e197f3505f1c6f058"
+    },
+    {
+      "file": "assets/ui/arcade/score-digit-9.png",
+      "source": 175665,
+      "rect": [
+        160,
+        32,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "a798f33b389ca04f81d4bb285fc49d5240a7e1ee7692fbfecc0ab85d7e648671"
+    },
+    {
+      "file": "assets/ui/arcade/font-a.png",
+      "source": 175665,
+      "rect": [
+        28,
+        112,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "b22963e7bbaeab7914ced42b490bdf67b15e91a78897a3205a7bc64cc8b8af37"
+    },
+    {
+      "file": "assets/ui/arcade/font-b.png",
+      "source": 175665,
+      "rect": [
+        40,
+        112,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "2ef0749ad3825dad36d1310d1a8cb822846508a00c20b4aa3caf7233ca221245"
+    },
+    {
+      "file": "assets/ui/arcade/font-c.png",
+      "source": 175665,
+      "rect": [
+        52,
+        112,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "65d87195d33e0c4f3defdcab100f0e7038bf50359a4e7eb7e84a213f701ea343"
+    },
+    {
+      "file": "assets/ui/arcade/font-d.png",
+      "source": 175665,
+      "rect": [
+        64,
+        112,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "849c5294c2994ff1aba083517cde5a121a7ed1f27ed184ebcc32ebf914feeb06"
+    },
+    {
+      "file": "assets/ui/arcade/font-e.png",
+      "source": 175665,
+      "rect": [
+        76,
+        112,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "62af98c6f89cc4a7b7cfd54732b6711cb576b57b05949eaaa7a9c35c77eeaed6"
+    },
+    {
+      "file": "assets/ui/arcade/font-f.png",
+      "source": 175665,
+      "rect": [
+        88,
+        112,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "cb23abd86aa1edfa9d7fe2170c528f3d68c7537217d7e72613c3c77ee0f3302c"
+    },
+    {
+      "file": "assets/ui/arcade/font-g.png",
+      "source": 175665,
+      "rect": [
+        100,
+        112,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "3f843f41275a732c7719dc82358370f194d6677f3a22379b33e16a733d968fb0"
+    },
+    {
+      "file": "assets/ui/arcade/font-h.png",
+      "source": 175665,
+      "rect": [
+        112,
+        112,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "410e94551f6f6ea501cb411fcdd24c648594dfbc47d5e8051053f9384affe4fe"
+    },
+    {
+      "file": "assets/ui/arcade/font-i.png",
+      "source": 175665,
+      "rect": [
+        124,
+        112,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "3fedb119e15efc34983638059e7f169cb7b0750564fe35357b7ca0ad5c39ca1d"
+    },
+    {
+      "file": "assets/ui/arcade/font-j.png",
+      "source": 175665,
+      "rect": [
+        136,
+        112,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "ea484658a78170b171e59445ce79fc334b36da19c2a0120131d19ec10f9b658c"
+    },
+    {
+      "file": "assets/ui/arcade/font-k.png",
+      "source": 175665,
+      "rect": [
+        148,
+        112,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "83707393e21d1099f11b133c04a8a41f08236e1aebf0f359a208f334dfc44870"
+    },
+    {
+      "file": "assets/ui/arcade/font-l.png",
+      "source": 175665,
+      "rect": [
+        160,
+        112,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "2c6dc3620daadc77224c387a22ea5458e52fd8b2f87b348778d2cc7a750ecf44"
+    },
+    {
+      "file": "assets/ui/arcade/font-m.png",
+      "source": 175665,
+      "rect": [
+        172,
+        112,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "5b4838675b31700aef37589cc0a30996b840ec879fbae6e7fadec251c3fe50a9"
+    },
+    {
+      "file": "assets/ui/arcade/font-n.png",
+      "source": 175665,
+      "rect": [
+        184,
+        112,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "346722c47d721d11148dcae317d6889d8be5d3aab95d469b5b4d58206ec959cf"
+    },
+    {
+      "file": "assets/ui/arcade/font-o.png",
+      "source": 175665,
+      "rect": [
+        196,
+        112,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "28b23d33786395586943c6c026d65556bb357603818e992a11f65ac8a8e05186"
+    },
+    {
+      "file": "assets/ui/arcade/font-p.png",
+      "source": 175665,
+      "rect": [
+        16,
+        124,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "09369e2ec8bc86324bd3207af2d6ba8ac2aff44a7cc6a975df0c5c79d6c43d43"
+    },
+    {
+      "file": "assets/ui/arcade/font-q.png",
+      "source": 175665,
+      "rect": [
+        28,
+        124,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "a97ac5e017416ae497b580d88e4e3d833882969ea980a954ccd240bd10fa2bbe"
+    },
+    {
+      "file": "assets/ui/arcade/font-r.png",
+      "source": 175665,
+      "rect": [
+        40,
+        124,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "78375fed9495527022947d785e15fd0b4597469b0ab2d05ddca55dae7d5bdaa3"
+    },
+    {
+      "file": "assets/ui/arcade/font-s.png",
+      "source": 175665,
+      "rect": [
+        52,
+        124,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "a7a2d32828516aca287cd5193df827ae4db99f045d14e3b676518ed49c4a4d07"
+    },
+    {
+      "file": "assets/ui/arcade/font-t.png",
+      "source": 175665,
+      "rect": [
+        64,
+        124,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "32aed58c1431e8a997f6cfc40d37c071628731d132692240ded296816cd244ff"
+    },
+    {
+      "file": "assets/ui/arcade/font-u.png",
+      "source": 175665,
+      "rect": [
+        76,
+        124,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "90bb1396942eccb59810943fab996a444010d7333bbb9e90ba0ca9f4fa59a39e"
+    },
+    {
+      "file": "assets/ui/arcade/font-v.png",
+      "source": 175665,
+      "rect": [
+        88,
+        124,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "8b4e7e27cdb18ce5e7be7bf7f24f0c10b00dcfa49b1e103424aa9ccc87e450f2"
+    },
+    {
+      "file": "assets/ui/arcade/font-w.png",
+      "source": 175665,
+      "rect": [
+        100,
+        124,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "126a383a75af9fe43a2c0e06c19f889424587c5b1723b2addbf9f7bad2b6065b"
+    },
+    {
+      "file": "assets/ui/arcade/font-x.png",
+      "source": 175665,
+      "rect": [
+        112,
+        124,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "ea69148da0d45eb00c0564ede6f880b05f89c922fede7fb3a68fe8ecc39c6fa3"
+    },
+    {
+      "file": "assets/ui/arcade/font-y.png",
+      "source": 175665,
+      "rect": [
+        124,
+        124,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "aa61980a59ccfe003f8c0c68f3b74e05456169debd028db984113169cf6076c2"
+    },
+    {
+      "file": "assets/ui/arcade/font-z.png",
+      "source": 175665,
+      "rect": [
+        136,
+        124,
+        12,
+        12
+      ],
+      "combat": true,
+      "sha256": "d2225d518e7bba202c4085226485f1f36a72e2d3a0081295c602d16b639be88e"
+    },
+    {
+      "file": "assets/ui/arcade/hud-health-bar-empty.png",
+      "source": 175665,
+      "rect": [
+        16,
+        4,
+        145,
+        11
+      ],
+      "combat": true,
+      "sha256": "11a9976c277fe8b1f11091a765c1d95bd72e43c332df8793a08776253f18b97a"
+    },
+    {
+      "file": "assets/ui/arcade/hud-health-bar-full.png",
+      "source": 175665,
+      "rect": [
+        16,
+        18,
+        145,
+        11
+      ],
+      "combat": true,
+      "sha256": "ed29c287a7162c778d51f26af55c4006ce861f594873fbf8d4a1f7f077ae0534"
+    },
+    {
+      "file": "assets/ui/arcade/hud-round-win.png",
+      "source": 175665,
+      "rect": [
+        344,
+        16,
+        16,
+        16
+      ],
+      "combat": true,
+      "sha256": "d8ff2ddf8be9e813453a6a8159b95df5d7641406f68b60004f63fac2b06d35c7"
+    }
+  ]
+}

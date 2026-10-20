@@ -1,0 +1,1746 @@
+{
+  "version": 1,
+  "owner": "Capcom",
+  "usage": "Original arcade artwork; source pages provide attribution, not a redistribution license.",
+  "coordinateSystem": "Top-left source pixels; runtime stage coordinates preserve common 216px fighter baseline.",
+  "stages": [
+    {
+      "assetId": 272822,
+      "key": "guile",
+      "title": "Guile's Stage (SFII)",
+      "sourcePage": "https://www.spriters-resource.com/arcade/streetfighter2/asset/272822/",
+      "contributor": "shezzor",
+      "sha256": "0d38aa3ee99769fb8e169a04d0ae31cee231ec2d77ba9e104322ca7d4538dc79",
+      "size": [
+        1040,
+        624
+      ],
+      "keyColor": [
+        48,
+        48,
+        88
+      ],
+      "clearColor": [
+        16,
+        136,
+        200,
+        255
+      ],
+      "layers": [
+        {
+          "name": "sky",
+          "crop": [
+            8,
+            256,
+            768,
+            224
+          ],
+          "position": [
+            0,
+            -48
+          ],
+          "key": false
+        },
+        {
+          "name": "plane",
+          "crop": [
+            8,
+            72,
+            1024,
+            128
+          ],
+          "position": [
+            -128,
+            48
+          ],
+          "key": true
+        },
+        {
+          "name": "floor",
+          "canvas": [
+            1024,
+            64
+          ],
+          "position": [
+            -128,
+            176
+          ],
+          "parts": [
+            {
+              "crop": [
+                8,
+                200,
+                1024,
+                48
+              ],
+              "at": [
+                0,
+                0
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                8,
+                244,
+                1024,
+                4
+              ],
+              "at": [
+                0,
+                48
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                8,
+                244,
+                1024,
+                4
+              ],
+              "at": [
+                0,
+                52
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                8,
+                244,
+                1024,
+                4
+              ],
+              "at": [
+                0,
+                56
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                8,
+                244,
+                1024,
+                4
+              ],
+              "at": [
+                0,
+                60
+              ],
+              "key": false
+            }
+          ]
+        },
+        {
+          "name": "spectators",
+          "canvas": [
+            1024,
+            128
+          ],
+          "position": [
+            -128,
+            80
+          ],
+          "parts": [
+            {
+              "crop": [
+                8,
+                488,
+                208,
+                120
+              ],
+              "at": [
+                0,
+                0
+              ],
+              "key": true
+            },
+            {
+              "crop": [
+                224,
+                488,
+                48,
+                72
+              ],
+              "at": [
+                248,
+                8
+              ],
+              "key": true
+            },
+            {
+              "crop": [
+                280,
+                488,
+                48,
+                72
+              ],
+              "at": [
+                320,
+                8
+              ],
+              "key": true
+            },
+            {
+              "crop": [
+                224,
+                568,
+                48,
+                40
+              ],
+              "at": [
+                248,
+                80
+              ],
+              "key": true
+            },
+            {
+              "crop": [
+                280,
+                568,
+                48,
+                40
+              ],
+              "at": [
+                320,
+                80
+              ],
+              "key": true
+            },
+            {
+              "crop": [
+                392,
+                536,
+                88,
+                80
+              ],
+              "at": [
+                680,
+                48
+              ],
+              "key": true
+            },
+            {
+              "crop": [
+                488,
+                536,
+                88,
+                80
+              ],
+              "at": [
+                784,
+                48
+              ],
+              "key": true
+            }
+          ]
+        },
+        {
+          "name": "crate",
+          "crop": [
+            784,
+            256,
+            96,
+            80
+          ],
+          "position": [
+            672,
+            128
+          ],
+          "key": true
+        }
+      ],
+      "audit": "SFII-labelled sheet. Sky, aircraft, runway, fence, intact crate and first spectator poses extracted separately. Plane auxiliary overlays and damaged crate variants omitted. Spectators currently static; no claim of complete stage animation. Runway has an original two-pixel darker vertical center seam at source x519\u2013520, retained without alteration. Only plain final concrete rows are tiled below the source floor; the logo is not repeated."
+    },
+    {
+      "assetId": 275150,
+      "key": "chun-li",
+      "title": "Chun-Li's Stage",
+      "sourcePage": "https://www.spriters-resource.com/arcade/streetfighter2/asset/275150/",
+      "contributor": "shezzor",
+      "sha256": "a154c910ea52203ab871ea04b3f1706e0d1af1ff2cf112dc085245cdeed543fd",
+      "size": [
+        1056,
+        1008
+      ],
+      "keyColor": [
+        110,
+        130,
+        110
+      ],
+      "clearColor": [
+        119,
+        136,
+        255,
+        255
+      ],
+      "layers": [
+        {
+          "name": "sky",
+          "position": [
+            0,
+            -48
+          ],
+          "canvas": [
+            768,
+            240
+          ],
+          "parts": [
+            {
+              "crop": [
+                8,
+                312,
+                320,
+                224
+              ],
+              "at": [
+                0,
+                0
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                8,
+                312,
+                320,
+                224
+              ],
+              "at": [
+                320,
+                0
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                8,
+                312,
+                128,
+                224
+              ],
+              "at": [
+                640,
+                0
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                8,
+                312,
+                768,
+                224
+              ],
+              "at": [
+                0,
+                0
+              ],
+              "key": false,
+              "borderKeyColors": [
+                [
+                  204,
+                  204,
+                  187
+                ]
+              ]
+            },
+            {
+              "crop": [
+                8,
+                520,
+                96,
+                16
+              ],
+              "at": [
+                0,
+                224
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                8,
+                520,
+                96,
+                16
+              ],
+              "at": [
+                96,
+                224
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                8,
+                520,
+                96,
+                16
+              ],
+              "at": [
+                192,
+                224
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                8,
+                520,
+                96,
+                16
+              ],
+              "at": [
+                288,
+                224
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                8,
+                520,
+                96,
+                16
+              ],
+              "at": [
+                384,
+                224
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                8,
+                520,
+                96,
+                16
+              ],
+              "at": [
+                480,
+                224
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                8,
+                520,
+                96,
+                16
+              ],
+              "at": [
+                576,
+                224
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                8,
+                520,
+                96,
+                16
+              ],
+              "at": [
+                672,
+                224
+              ],
+              "key": false
+            }
+          ]
+        },
+        {
+          "name": "street",
+          "crop": [
+            176,
+            8,
+            704,
+            208
+          ],
+          "position": [
+            32,
+            -16
+          ],
+          "key": true
+        },
+        {
+          "name": "floor",
+          "crop": [
+            8,
+            224,
+            1040,
+            80
+          ],
+          "position": [
+            -136,
+            192
+          ],
+          "key": false
+        }
+      ],
+      "audit": "Native source sky, foreground shopfronts with embedded initial spectator poses, and cobbled floor. Bicycles, alternate spectator/barber frames and sky alternates omitted in this increment. Sheet title does not specify SFII edition. Border-connected gray sheet-layout background in the distant skyline is keyed and filled using repeated original sky pixels. Original lower sky pixels extend 16px behind foreground edges so corner framing never exposes clear color before the cobbled floor. The pale lavender lower sky (RGB 204,221,255) is genuine original full-sky artwork and remains visible between foreground buildings; it is not a missing asset or sheet key. Internal gray building facade pixels are preserved."
+    },
+    {
+      "assetId": 27199,
+      "key": "honda",
+      "title": "E. Honda's Stage",
+      "sourcePage": "https://www.spriters-resource.com/arcade/streetfighter2/asset/27199/",
+      "contributor": "Maxim",
+      "sha256": "897aa86dd0f536b036ca7b189e0b1746d6cbeef8fbc298fa8ab0dd0b2696868a",
+      "size": [
+        888,
+        472
+      ],
+      "keyColor": [
+        83,
+        103,
+        141
+      ],
+      "clearColor": [
+        34,
+        34,
+        51,
+        255
+      ],
+      "layers": [
+        {
+          "name": "ceiling",
+          "crop": [
+            88,
+            8,
+            768,
+            48
+          ],
+          "position": [
+            0,
+            -16
+          ],
+          "key": true
+        },
+        {
+          "name": "wall",
+          "canvas": [
+            864,
+            200
+          ],
+          "position": [
+            -48,
+            16
+          ],
+          "parts": [
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                0,
+                0
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                80,
+                0
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                160,
+                0
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                240,
+                0
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                320,
+                0
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                400,
+                0
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                480,
+                0
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                560,
+                0
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                640,
+                0
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                720,
+                0
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                64,
+                32
+              ],
+              "at": [
+                800,
+                0
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                0,
+                32
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                80,
+                32
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                160,
+                32
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                240,
+                32
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                320,
+                32
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                400,
+                32
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                480,
+                32
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                560,
+                32
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                640,
+                32
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                720,
+                32
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                64,
+                32
+              ],
+              "at": [
+                800,
+                32
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                0,
+                64
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                80,
+                64
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                160,
+                64
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                240,
+                64
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                320,
+                64
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                400,
+                64
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                480,
+                64
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                560,
+                64
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                640,
+                64
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                720,
+                64
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                64,
+                32
+              ],
+              "at": [
+                800,
+                64
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                0,
+                96
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                80,
+                96
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                160,
+                96
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                240,
+                96
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                320,
+                96
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                400,
+                96
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                480,
+                96
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                560,
+                96
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                640,
+                96
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                720,
+                96
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                64,
+                32
+              ],
+              "at": [
+                800,
+                96
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                0,
+                128
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                80,
+                128
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                160,
+                128
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                240,
+                128
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                320,
+                128
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                400,
+                128
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                480,
+                128
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                560,
+                128
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                640,
+                128
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                720,
+                128
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                64,
+                32
+              ],
+              "at": [
+                800,
+                128
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                0,
+                160
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                80,
+                160
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                160,
+                160
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                240,
+                160
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                320,
+                160
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                400,
+                160
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                480,
+                160
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                560,
+                160
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                640,
+                160
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                32
+              ],
+              "at": [
+                720,
+                160
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                64,
+                32
+              ],
+              "at": [
+                800,
+                160
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                8
+              ],
+              "at": [
+                0,
+                192
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                8
+              ],
+              "at": [
+                80,
+                192
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                8
+              ],
+              "at": [
+                160,
+                192
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                8
+              ],
+              "at": [
+                240,
+                192
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                8
+              ],
+              "at": [
+                320,
+                192
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                8
+              ],
+              "at": [
+                400,
+                192
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                8
+              ],
+              "at": [
+                480,
+                192
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                8
+              ],
+              "at": [
+                560,
+                192
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                8
+              ],
+              "at": [
+                640,
+                192
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                80,
+                8
+              ],
+              "at": [
+                720,
+                192
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                216,
+                176,
+                64,
+                8
+              ],
+              "at": [
+                800,
+                192
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                120,
+                128,
+                96,
+                200
+              ],
+              "at": [
+                96,
+                0
+              ],
+              "key": true
+            },
+            {
+              "crop": [
+                208,
+                176,
+                584,
+                128
+              ],
+              "at": [
+                184,
+                48
+              ],
+              "key": true
+            }
+          ]
+        },
+        {
+          "name": "sun-mural-0",
+          "crop": [
+            224,
+            64,
+            224,
+            104
+          ],
+          "position": [
+            240,
+            72
+          ],
+          "key": true
+        },
+        {
+          "name": "sumo-mural",
+          "crop": [
+            688,
+            64,
+            96,
+            104
+          ],
+          "position": [
+            464,
+            72
+          ],
+          "key": true
+        },
+        {
+          "name": "bath",
+          "crop": [
+            312,
+            312,
+            336,
+            56
+          ],
+          "position": [
+            240,
+            152
+          ],
+          "key": true
+        },
+        {
+          "name": "floor",
+          "crop": [
+            8,
+            376,
+            864,
+            88
+          ],
+          "position": [
+            -48,
+            176
+          ],
+          "key": true
+        },
+        {
+          "name": "sun-mural-1",
+          "crop": [
+            456,
+            64,
+            224,
+            104
+          ],
+          "position": [
+            240,
+            72
+          ],
+          "key": true,
+          "animationOnly": true
+        }
+      ],
+      "audit": "Ceiling, tiled wall, color sun mural, sumo mural, bath and floor extracted. Two sun mural frames available and cycled. Keyed outer floor edges preserve original stepped tiles. Sheet title does not specify edition. Plain original wall tiles are repeated behind the ceiling/wall join to close sheet-layout spacing."
+    },
+    {
+      "assetId": 246370,
+      "key": "blanka",
+      "title": "Blanka's Stage",
+      "sourcePage": "https://www.spriters-resource.com/arcade/streetfighter2/asset/246370/",
+      "contributor": "shezzor",
+      "sha256": "6574ec592e5400e6bceae986d3f5e63dd4653106e9a62c641df19db0a2f2d155",
+      "size": [
+        1024,
+        480
+      ],
+      "keyColor": [
+        63,
+        96,
+        57
+      ],
+      "clearColor": [
+        34,
+        153,
+        255,
+        255
+      ],
+      "layers": [
+        {
+          "name": "sky",
+          "canvas": [
+            1024,
+            160
+          ],
+          "position": [
+            -128,
+            -16
+          ],
+          "parts": [
+            {
+              "crop": [
+                8,
+                264,
+                512,
+                160
+              ],
+              "at": [
+                0,
+                0
+              ],
+              "key": false
+            },
+            {
+              "crop": [
+                8,
+                264,
+                512,
+                160
+              ],
+              "at": [
+                512,
+                0
+              ],
+              "key": false
+            }
+          ]
+        },
+        {
+          "name": "huts-river",
+          "crop": [
+            8,
+            24,
+            768,
+            160
+          ],
+          "position": [
+            0,
+            16
+          ],
+          "key": true
+        },
+        {
+          "name": "floor",
+          "crop": [
+            8,
+            192,
+            896,
+            64
+          ],
+          "position": [
+            -64,
+            176
+          ],
+          "key": false
+        },
+        {
+          "name": "tree-hut",
+          "crop": [
+            528,
+            264,
+            480,
+            192
+          ],
+          "position": [
+            448,
+            24
+          ],
+          "key": true
+        }
+      ],
+      "audit": "Cloud strip repeats at native scale; waterfront huts, river, dock and tree/hut are distinct layers. Initial onlookers embedded in huts remain static; loose audience/fish animation frames omitted. Sheet title does not specify edition."
+    }
+  ]
+}

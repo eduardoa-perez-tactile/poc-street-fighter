@@ -11,7 +11,7 @@ renderTest('arcade flow starts pauses resumes and restarts through real buttons'
   expect(world.resource(MatchState).remaining).toBe(remaining);
   await press(c, 'resume'); expect(world.resource(MatchState).phase).toBe(1);
   expect(world.resource(MatchState).remaining).toBeLessThan(remaining);
-  await press(c, 'pause'); await press(c, 'restart'); await step(92);
+  await press(c, 'pause'); await press(c, 'restart'); await step(182);
   expect(world.resource(MatchState).phase).toBe(1);
   expect(world.resource(MatchState).p1Health).toBe(144);
   expect(world.resource(MatchState).p2Health).toBe(144);
@@ -34,7 +34,7 @@ for (const [name, width, height, insets] of [
 }
 renderTest('health bars show full half and empty health in mirrored directions', async ({ input, loaded, step, world, render }) => {
   input.view(1152, 672, 1); await loaded(); input.emit(MatchIntent, { action: 8 }); await step(2);
-  input.emit(MatchIntent, { action: 0 }); await step(92);
+  input.emit(MatchIntent, { action: 0 }); await step(182);
   const points: [number, number][] = [[60, 38], [450, 38], [700, 38], [1080, 38]];
   for (const health of [144, 72, 0]) {
     world.setResource(MatchState, { p1Health: health, p2Health: health }); await step(1);

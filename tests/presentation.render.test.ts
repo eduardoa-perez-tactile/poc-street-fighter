@@ -6,7 +6,7 @@ import { ArrangeFight } from '../src/combat/fight.cheats.ts';
 renderTest('heavy impact adds camera trauma once and settles', async ({ loaded, input, step, world, render, cheat }) => {
   await loaded();
   input.emit(MatchIntent, { action: 8 }); await step(2);
-  input.action('start'); await step(95);
+  input.action('start'); await step(185);
   await cheat(ArrangeFight, { distance: 48 });
   const camera = world.entities(CameraImpact)[0]!;
   input.action('p1.hp'); await step(8); input.action('p1.hp', 0);
