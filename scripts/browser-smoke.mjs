@@ -44,7 +44,7 @@ const advance = async (steps = 8) => {
     return value && Number(value.step) >= Number(previous.step) + previous.steps && value.frames > previous.frames;
   }, { ...before, steps }, { timeout: 30000 });
 };
-async function shot(name, { art = false } = {}) {
+async function shot(name, { art = false, fight = false } = {}) {
   const path = join(out, `${name}.png`);
   const bytes = await page.screenshot({ path });
   const pixels = await page.evaluate(async base64 => {
@@ -60,9 +60,19 @@ async function shot(name, { art = false } = {}) {
       if (data[i] > 245 && data[i + 1] > 245 && data[i + 2] > 245) white++;
       center++;
     }
-    return { colors: colors.size, whiteFraction: white / center };
+    canvas.width = image.naturalWidth; canvas.height = image.naturalHeight;
+    context.drawImage(image, 0, 0);
+    const hud = context.getImageData(0, Math.floor(canvas.height * 0.055), canvas.width, 1).data;
+    let yellow = 0, barSamples = 0;
+    for (const [left, right] of [[0.08, 0.40], [0.60, 0.92]]) for (let x = Math.floor(canvas.width * left); x < canvas.width * right; x += 2) {
+      const i = x * 4;
+      if (hud[i] > 180 && hud[i + 1] > 180 && hud[i + 2] < 80) yellow++;
+      barSamples++;
+    }
+    return { colors: colors.size, whiteFraction: white / center, hudYellowFraction: yellow / barSamples };
   }, bytes.toString('base64'));
   if (art) { assert.ok(pixels.colors > 90, `${name}: arena lacks scene color diversity ${JSON.stringify(pixels)}`); assert.ok(pixels.whiteFraction < 0.35, `${name}: arena is covered by white sprite placeholders`); }
+  if (fight) assert.ok(pixels.hudYellowFraction > 0.12, `${name}: original yellow health bars are absent; expected an active arena, not a menu ${JSON.stringify(pixels)}`);
   const digest = createHash('sha256').update(bytes).digest('hex');
   report.screenshots.push({ name, path: relative(root, path), pixels, sha256: digest });
   return digest;
@@ -176,18 +186,26 @@ try {
   await page.setViewportSize({ width: 1152, height: 672 });
   check('browser fullscreen enters and exits', { persistedMilliseconds: 500, focus: 'Standard CDP focus during this check only; native visibility restored afterward.' });
   await page.keyboard.press('Escape'); await advance(4); // Options -> Main, focus OPTIONS.
-  await virtualPad(); await padPulse(12); await padPulse(12); // D-pad UP twice -> LOCAL.
-  await padPulse(0); await shot('01-local-setup');
+  await page.locator('canvas').focus();
+  for (let row = 0; row < 2; row++) { await page.keyboard.press('ArrowUp'); await advance(2); }
+  await page.keyboard.press('Enter'); await advance(4); await shot('01-local-setup');
   // Skip character and stage confirmations: Fight accepts the displayed selections.
-  for (let row = 0; row < 3; row++) await padPulse(13);
-  await padPulse(9); await advance(8); await shot('01-versus');
+  for (let row = 0; row < 3; row++) { await page.keyboard.press('ArrowDown'); await advance(2); }
+  await page.keyboard.press('Enter'); await advance(8); await shot('01-versus');
   await advance(200);
-  await shot('02-fight', { art: true });
+  await shot('02-fight', { art: true, fight: true });
+  await virtualPad(); await advance(4);
   assert.equal(await page.evaluate(() => globalThis.__sfBrowserOptions.controllers), 1);
   check('Fight starts local match without character or stage confirmation', await state());
-  await virtualPad([], [0.25, 0]); await advance(8); await virtualPad(); await advance(4);
-  await padPulse(14); await padPulse(0); await padPulse(8);
-  check('controller stick, D-pad, attack and throw input exercised', 'Real browser queue receives canonical SDL button/axis events from the virtual W3C device.');
+  // The control bridge intentionally gates pads on document.hasFocus(). An
+  // attached macOS Chrome needs standard CDP focus for this controller fixture.
+  await cdp.send('Emulation.setFocusEmulationEnabled', { enabled: true });
+  try {
+    await page.locator('canvas').focus(); await advance(4);
+    await virtualPad([], [0.25, 0]); await advance(8); await virtualPad(); await advance(4);
+    await padPulse(14); await padPulse(0); await padPulse(8);
+  } finally { await virtualPad(); await advance(4); await cdp.send('Emulation.setFocusEmulationEnabled', { enabled: false }); }
+  check('controller stick, D-pad, attack and throw input exercised', 'Real browser queue receives canonical SDL button/axis events from the virtual W3C device with standard CDP focus; native visibility restored afterward.');
   await hold(['d']); await hold(['ArrowLeft']);
   await hold(['w'], 70); await hold(['ArrowUp'], 70); await advance(60);
   await hold(['s'], 100); await hold(['ArrowDown'], 100);
@@ -197,6 +215,24 @@ try {
   await page.keyboard.down('s'); await page.waitForTimeout(55); await page.keyboard.down('d'); await page.waitForTimeout(55); await page.keyboard.up('s'); await page.waitForTimeout(55); await page.keyboard.down('f'); await page.waitForTimeout(55); await page.keyboard.up('f'); await page.keyboard.up('d'); await advance(15);
   await shot('04-quarter-circle', { art: true });
   check('quarter-circle input sequence exercised', 'down, down-forward, forward + light punch');
+  // Let the previous normal/fireball recover, then make room for real keyboard
+  // special inputs. advance observes the 60 Hz sim clock, avoiding wall-time
+  // assumptions about startup and travel; screenshots still need visual review.
+  await advance(70);
+  await page.keyboard.down('a'); await advance(24); await page.keyboard.up('a'); await advance(3);
+  await page.keyboard.down('d'); await advance(2); await page.keyboard.up('d');
+  await page.keyboard.down('s'); await advance(2);
+  await page.keyboard.down('d'); await page.keyboard.down('h'); await advance(2);
+  await page.keyboard.up('h'); await page.keyboard.up('s'); await page.keyboard.up('d');
+  await advance(18); await shot('04-dragon-airborne', { art: true, fight: true });
+  check('dragon punch keyboard input exercised with flight capture', 'forward, down, down-forward + heavy punch; captured near the expected apex. Inspect screenshot for airborne sprite/shadow separation; browser probe does not expose fighter positions.');
+  await advance(70);
+  await page.keyboard.down('s'); await advance(2);
+  await page.keyboard.down('a'); await advance(2); await page.keyboard.up('s'); await advance(2);
+  await page.keyboard.down('n'); await advance(2); await page.keyboard.up('n'); await page.keyboard.up('a');
+  await advance(18); await shot('04-hurricane-airborne', { art: true, fight: true });
+  check('hurricane keyboard input exercised with flight capture', 'down, down-back, back + heavy kick; captured during the expected flight. Inspect screenshot for airborne sprite/shadow separation; browser probe does not expose fighter positions.');
+  await advance(70);
   await page.keyboard.press('Escape'); await advance(5); await page.waitForTimeout(500);
   const paused = await shot('05-paused'); await page.waitForTimeout(250); const still = await shot('06-paused-still');
   assert.equal(still, paused, 'Paused scene or timer continued animating after transitions settled.');
@@ -228,17 +264,21 @@ try {
   check('tab lifecycle suspend/resume', { hidden, held, resumed: await state() });
   // Play a complete local first-to-two match through the browser input path.
   // P2 remains neutral; P1 walks into range and pulses heavy punch after recovery.
-  await virtualPad([], [1, 0]); await page.waitForTimeout(700);
-  for (let attack = 0; attack < 42; attack++) {
-    await virtualPad([4], [1, 0]); await page.waitForTimeout(90);
-    // Keep the physical stick held across automatic round transitions. A reset
-    // must preserve source input, rather than require the player to wiggle it.
-    await virtualPad([], [1, 0]); await page.waitForTimeout(740);
-  }
-  await virtualPad(); await advance(8);
-  await shot('11-first-to-two-result');
-  await padPulse(9); await advance(135);
-  await shot('12-controller-rematch', { art: true });
+  await cdp.send('Emulation.setFocusEmulationEnabled', { enabled: true });
+  try {
+    await page.locator('canvas').focus(); await advance(4);
+    await virtualPad([], [1, 0]); await page.waitForTimeout(700);
+    for (let attack = 0; attack < 42; attack++) {
+      await virtualPad([4], [1, 0]); await page.waitForTimeout(90);
+      // Keep the physical stick held across automatic round transitions. A reset
+      // must preserve source input, rather than require the player to wiggle it.
+      await virtualPad([], [1, 0]); await page.waitForTimeout(740);
+    }
+    await virtualPad(); await advance(8);
+    await shot('11-first-to-two-result');
+    await padPulse(9); await advance(200);
+    await shot('12-controller-rematch', { art: true, fight: true });
+  } finally { await virtualPad(); await advance(4); await cdp.send('Emulation.setFocusEmulationEnabled', { enabled: false }); }
   check('first-to-two local match and controller rematch exercised', 'Forty-two recovered heavy punches against neutral P2 with the stick continuously held across round resets, then actual controller START; result/rematch screenshots require visual verification.');
   await page.setViewportSize({ width: 1152, height: 672 }); await advance(5);
   await page.keyboard.press('Escape'); await advance(4);
@@ -248,7 +288,7 @@ try {
   await page.keyboard.press('Enter'); await advance(4); await shot('12-training-setup');
   for (let row = 0; row < 3; row++) { await page.keyboard.press('ArrowDown'); await advance(2); }
   await page.keyboard.press('Enter'); await advance(12);
-  await shot('12-training', { art: true });
+  await shot('12-training', { art: true, fight: true });
   await clickCanvas(0.908, 0.951); await shot('12-training-collision-boxes', { art: true });
   await clickCanvas(0.630, 0.951);
   await hold(['d'], 350); await hold(['s', 'n'], 100); await advance(55);
@@ -271,7 +311,7 @@ try {
   for (let row = 0; row < 3; row++) { await page.keyboard.press('ArrowDown'); await advance(2); } // Difficulty.
   await page.keyboard.press('ArrowRight'); await advance(2);
   await page.keyboard.press('ArrowDown'); await advance(2); // Difficulty -> Fight.
-  await page.keyboard.press('Enter'); await advance(440); await shot('14-solo-cpu', { art: true });
+  await page.keyboard.press('Enter'); await advance(440); await shot('14-solo-cpu', { art: true, fight: true });
   check('Fight starts solo without character or stage confirmation', 'Only difficulty changed; Enter on Fight starts the match, followed by five seconds of autonomous CPU.');
   check('pause, move list and options navigation', 'Actual keyboard routes through pause/moves/options/back/main; audio levels changed and restored.');
   const audioRunning = report.audio.some(value => value.contextType === 'realtime' && value.contextState === 'running');

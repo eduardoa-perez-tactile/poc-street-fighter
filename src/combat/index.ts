@@ -183,13 +183,31 @@ function applyContact(ctx: SystemContext, match: MatchStateViews, target: Fighte
   hp[0] = Math.max(0, hp[0]! - damage);
   const score = hit.source === 0 ? match.p1Score : match.p2Score;
   score[0] = score[0]! + (hit.thrown ? 300 : SCORE[hit.strength]!);
-  change(target, hit.knockdown ? KNOCKDOWN : HURT + (hit.region === 0 ? 0 : 3) + hit.strength);
-  target.frame = hit.knockdown ? 0 : 15;
-  target.stun = hit.knockdown ? 57 : duration(FIGHTERS[target.fighterId]!, target.state) - 15;
+  // Grounded hits stagger; sweeps, throws, air hits and lethal blows launch a fall.
+  const knockdown = hit.knockdown || target.y < 216 || hp[0] === 0;
+  change(target, knockdown ? KNOCKDOWN : HURT + (hit.region === 0 ? 0 : 3) + hit.strength);
+  target.frame = knockdown ? 0 : 15;
+  target.stun = knockdown ? 57 : duration(FIGHTERS[target.fighterId]!, target.state) - 15;
   target.strength = hit.strength; target.vx = hit.direction * (hit.thrown ? 220 : [1000 / 6, 200, 800 / 3][hit.strength]!);
-  target.y = 216; target.vy = 0; target.throwCooldown = 65;
+  target.vy = knockdown ? (hit.thrown ? -300 : hit.knockdown ? -240 : -280) : 0;
+  target.throwCooldown = 65;
   match.hitStop[0] = 15;
   ctx.events.emit(CombatEffect, { step: ctx.step, attack: hit.attack, kind: hit.thrown ? 7 : 1, player: target.player, strength: hit.strength, x: hit.x, y: hit.y });
+}
+
+/** Move the simulated feet, so sprites, shadows and every collision box share the arc. */
+function advanceFlight(f: FighterValue, def: FighterDefinition, launched = false): boolean {
+  // f32 storage can round a descending foot to the floor one step before crossing it.
+  if (f.y >= 216 && f.vy >= 0) { f.y = 216; f.vy = 0; return true; }
+  if (!launched) f.vy += def.gravity / 60;
+  f.y += f.vy / 60;
+  if (f.y < 216) return false;
+  f.y = 216; f.vy = 0;
+  return true;
+}
+function fallFrame(f: FighterValue): void {
+  // age remains the recovery clock; never draw the prone pose before the feet land.
+  f.frame = f.y < 216 || f.vy < 0 ? Math.min(f.age, 17) : Math.min(f.age, 44);
 }
 
 export const CombatRound = defineSystem({
@@ -210,18 +228,35 @@ export const CombatRound = defineSystem({
     if (match.phase[0] === 1) recordCommands(controls, fighters, ctx.step);
     if (match.phase[0] !== 1 || match.hitStop[0]! > 0) {
       if (match.phase[0] === 2 || match.phase[0] === 5) {
+        // A lethal contact keeps its impact freeze and ballistic fall in the result phase.
+        if (match.hitStop[0]! > 0) {
+          match.freezeStep[0] = ctx.step; match.hitStop[0] = match.hitStop[0]! - 1; return;
+        }
         for (const f of fighters) {
           const health = f.player === 0 ? match.p1Health[0]! : match.p2Health[0]!;
-          f.x = Math.max(24, Math.min(744, f.x)); f.y = 216; f.vx = 0; f.vy = 0;
           if (health === 0) {
             // KO owns the fall for the entire result; it never enters the normal wakeup path.
-            change(f, KNOCKDOWN);
-            f.frame = Math.min(duration(FIGHTERS[f.fighterId]!, KNOCKDOWN) - 1, f.frame + 1);
+            change(f, KNOCKDOWN); f.age++;
+            advanceFlight(f, FIGHTERS[f.fighterId]!);
+            f.x = Math.max(24, Math.min(744, f.x + f.vx / 60));
+            if (f.y === 216 && f.vy === 0) f.vx = 0;
+            fallFrame(f);
           } else if (match.winner[0] === f.player) {
+            const opponentHealth = f.player === 0 ? match.p2Health[0]! : match.p1Health[0]!;
+            if (opponentHealth === 0 && (f.y < 216 || f.vy !== 0)) {
+              // A winning airborne special finishes its flight before the victory pose.
+              f.frame++; f.age++; advanceFlight(f, FIGHTERS[f.fighterId]!);
+              if (f.state === KNOCKDOWN) fallFrame(f);
+              if (f.state === HURRICANE && f.frame >= 32) f.vx = 0;
+              f.x = Math.max(24, Math.min(744, f.x + f.vx / 60));
+              if (f.y < 216) continue;
+            }
+            f.x = Math.max(24, Math.min(744, f.x)); f.y = 216; f.vx = 0; f.vy = 0;
             change(f, 26);
             f.frame = Math.min(duration(FIGHTERS[f.fighterId]!, 26), f.frame + 1);
           } else {
             // A timeout does not leave the non-winner hanging in a jump or attack pose.
+            f.x = Math.max(24, Math.min(744, f.x)); f.y = 216; f.vx = 0; f.vy = 0;
             change(f, IDLE); f.frame = 0;
           }
         }
@@ -240,18 +275,18 @@ export const CombatRound = defineSystem({
         f.invulnerable = Math.max(0, f.invulnerable - 1); f.throwCooldown = Math.max(0, f.throwCooldown - 1); f.stun = Math.max(0, f.stun - 1);
         const end = duration(def, f.state);
         if ((f.state === BLOCK_HIGH || f.state === BLOCK_LOW) && f.stun === 0) { f.vx = 0; change(f, (held & DUCK) !== 0 ? CROUCH : IDLE); }
-        else if (f.state === KNOCKDOWN && f.frame >= end) { change(f, WAKEUP); f.invulnerable = 12; f.vx = 0; }
+        else if (f.state === KNOCKDOWN && f.age >= end && f.y === 216 && f.vy === 0) { change(f, WAKEUP); f.invulnerable = 12; f.vx = 0; }
         else if (isAirAttack(f.state) && f.frame >= end) change(f, f.airState);
         else if (looping(f.state) && f.frame >= end) f.frame = 0;
         else if (end === 0) f.frame = 0;
-        else if (f.frame >= end && f.state !== CROUCH && f.state !== JUMP_START && !(f.state >= JUMP_UP && f.state <= JUMP_BACK)) {
+        else if (f.frame >= end && f.state !== KNOCKDOWN && !((f.state === DRAGON || f.state === HURRICANE) && (f.y < 216 || f.vy < 0)) && f.state !== CROUCH && f.state !== JUMP_START && !(f.state >= JUMP_UP && f.state <= JUMP_BACK)) {
           change(f, f.state === DOWN || f.state === CROUCH_TURN ? CROUCH : IDLE);
           f.stun = 0;
         }
       }
       const horizontal = ((held & RIGHT) !== 0 ? 1 : 0) - ((held & LEFT) !== 0 ? 1 : 0), forward = horizontal * f.facing;
       const landingReady = f.state === LAND && f.frame >= 2;
-      const groundedAct = canAct(f.state) || f.state === CROUCH || f.state === DOWN || f.state === UP || f.state === TURN || f.state === CROUCH_TURN || landingReady;
+      const groundedAct = f.y === 216 && f.vy === 0 && (canAct(f.state) || f.state === CROUCH || f.state === DOWN || f.state === UP || f.state === TURN || f.state === CROUCH_TURN || landingReady);
       const airAct = f.state >= JUMP_UP && f.state <= JUMP_BACK;
       const buffered = controls.buffered[f.player]!;
       let button = -1;
@@ -300,19 +335,17 @@ export const CombatRound = defineSystem({
         f.airState = f.state; f.vy = def.initialVelocity.jump; f.vx = (def.initialVelocity.x[STATE_NAMES[f.state]!] ?? 0) * f.facing;
       }
       if (f.state === DRAGON && f.frame === 4) { f.vy = -330 - 25 * f.strength; f.vx = 95 * f.facing; launched = true; }
-      const airborne = (f.state >= JUMP_UP && f.state <= JUMP_BACK) || isAirAttack(f.state) || (f.state === DRAGON && (f.frame >= 4 && f.y < 216 || launched));
-      if (airborne) {
-        if (!launched) f.vy += def.gravity / 60;
-        f.y += f.vy / 60;
-        if (f.y >= 216) {
-          f.y = 216; f.vy = 0; f.vx = 0;
-          if (f.state !== DRAGON) change(f, LAND);
-          ctx.events.emit(CombatEffect, { step: ctx.step, attack: 0, kind: 5, player: f.player, strength: 0, x: f.x, y: f.y });
-        }
+      if (f.state === HURRICANE && f.frame === 8) { f.vy = -220 - 15 * f.strength; launched = true; }
+      const airborne = f.y < 216 || f.vy !== 0;
+      if (airborne && advanceFlight(f, def, launched)) {
+        f.vx = 0;
+        if (f.state !== DRAGON && f.state !== HURRICANE && f.state !== KNOCKDOWN) change(f, LAND);
+        ctx.events.emit(CombatEffect, { step: ctx.step, attack: 0, kind: 5, player: f.player, strength: 0, x: f.x, y: f.y });
       }
+      if (f.state === KNOCKDOWN) fallFrame(f);
       if (f.state === HURRICANE) f.vx = f.frame >= 8 && f.frame < 32 ? (150 + f.strength * 35) * f.facing : 0;
       f.x = Math.max(24, Math.min(744, f.x + f.vx / 60));
-      if (f.state >= HURT && f.state < SPECIAL || f.state === BLOCK_HIGH || f.state === BLOCK_LOW || f.state === KNOCKDOWN || f.state === THROW_TECH) {
+      if (f.state >= HURT && f.state < SPECIAL || f.state === BLOCK_HIGH || f.state === BLOCK_LOW || (f.state === KNOCKDOWN && f.y === 216 && f.vy === 0) || f.state === THROW_TECH) {
         const friction = f.strength === 2 ? 800 : 600; f.vx = Math.sign(f.vx) * Math.max(0, Math.abs(f.vx) - friction / 60);
       }
       if (f.state === SPECIAL && !f.projectileFired && animationEntry(def, f.state, f.frame) >= 3) {
