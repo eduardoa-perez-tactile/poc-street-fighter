@@ -21,7 +21,7 @@ function localPath(value, fallback) {
 }
 function toolchain() {
   const configPath = join(project, '.gameengine/web-toolchain.json');
-  requireFile(configPath, 'Create this ignored local JSON file with engineRoot (pinned v0.1.13 full source checkout), cargoHome, rustupHome, emsdkRoot, and rustToolchain. Paths may be relative to the project. Install Emscripten 6.0.10 and Rust 1.94.1 with wasm32-unknown-emscripten; build tools/wasm/build.mjs --host in that checkout.');
+  requireFile(configPath, 'Create this ignored local JSON file with engineRoot (full source checkout pinned to the installed SDK version), cargoHome, rustupHome, emsdkRoot, and rustToolchain. Paths may be relative to the project. Install Emscripten 6.0.10 and Rust 1.94.1 with wasm32-unknown-emscripten; build tools/wasm/build.mjs --host in that checkout.');
   const config = JSON.parse(readFileSync(configPath, 'utf8'));
   const engineRoot = realpathSync(localPath(config.engineRoot));
   const sdk = realpathSync(join(project, '.gameengine/engine'));
@@ -34,7 +34,7 @@ function toolchain() {
   const nativeHost = requireFile(join(sdk, 'target/release/gameengine-host'), 'Run npm run setup with the installed engine.');
   const cook = requireFile(join(sdk, 'target/release/gameengine-cook'), 'Install the engine SDK cooker.');
   requireFile(join(engineRoot, 'Cargo.toml'), 'engineRoot must point to full pinned engine sources, not the desktop SDK.');
-  requireFile(join(engineRoot, 'platform/web/player.ts'), 'Use a full v0.1.13 source checkout.');
+  requireFile(join(engineRoot, 'platform/web/player.ts'), 'Use a full source checkout matching the installed SDK version.');
   const sdkVersion = JSON.parse(readFileSync(requireFile(join(sdk, 'engine-version.json'), 'Install a versioned engine SDK.'), 'utf8')).version;
   const sourceTag = spawnSync('git', ['-C', engineRoot, 'describe', '--tags', '--exact-match', 'HEAD'], { encoding: 'utf8' });
   if (sourceTag.status !== 0 || sourceTag.stdout.trim() !== `v${sdkVersion}`) throw new Error(`engineRoot must be checked out at v${sdkVersion}, matching the installed SDK; rebuild the wasm host/player after changing versions.`);
@@ -108,7 +108,12 @@ function serve() {
 try {
   if (action === 'serve') serve();
   else if (['parity', 'export', 'inspect'].includes(action)) {
-    const { engineRoot, sdk, cli, env } = toolchain();
+    const { engineRoot, sdk, cli: sdkCli, env } = toolchain();
+    // The installed SDK omits browser-export dependencies (including es6-promise).
+    // Resolve the exporter and its dependencies from the matching full source checkout.
+    const cli = action === 'export'
+      ? requireFile(join(engineRoot, 'tools/cli/bin/gameengine.mjs'), 'Install dependencies in the matching engine source checkout.')
+      : sdkCli;
     // Simulation uses the installed SDK + native host and the genuine wasm lane. Export
     // uses the matching source tree for its browser shell/build, retaining SDK cook/native tools.
     env.GAMEENGINE_REPO = action === 'export' ? engineRoot : sdk;

@@ -17,11 +17,14 @@ export async function extendWebShell({ project, engineRoot, sdk }) {
   if (!visibility) throw new Error('Pinned browser shell visibility handler changed.');
   source += '\n' + visibility[0].replace("'visibilitychange'", "'sf-controls-visibility'") + '\n';
   const { build } = await import(pathToFileURL(resolve(sdk, 'node_modules/esbuild/lib/main.js')).href);
-  await build({ stdin: { contents: source, resolveDir: project, sourcefile: 'streetfighter-browser-player.ts', loader: 'ts' }, outfile: join(site, 'player.js'), bundle: true, format: 'esm', platform: 'browser', target: 'es2022' });
+  await build({ stdin: { contents: source, resolveDir: join(engineRoot, 'platform/web'), sourcefile: 'streetfighter-browser-player.ts', loader: 'ts' }, outfile: join(site, 'player.js'), bundle: true, format: 'esm', platform: 'browser', target: 'es2022' });
   let html = readFileSync(join(site, 'index.html'), 'utf8');
   const replaceHtml = (before, after) => { if (!html.includes(before)) throw new Error(`Pinned browser launch screen changed: missing ${before}`); html = html.replace(before, after); };
-  replaceHtml('<title>Game Engine</title>', '<title>Street Fighter — local & solo playtest</title>');
-  replaceHtml('<h1 id="name">Game Engine</h1>', '<h1 id="name" aria-label="Street Fighter"><img src="./sf-wordmark.png" alt="Street Fighter"></h1>');
+  const title = html.match(/<title>[^<]*<\/title>/)?.[0];
+  const heading = html.match(/<h1 id="name">[^<]*<\/h1>/)?.[0];
+  if (!title || !heading) throw new Error('Pinned browser launch screen changed: missing title or game heading');
+  replaceHtml(title, '<title>Street Fighter — local & solo playtest</title>');
+  replaceHtml(heading, '<h1 id="name" aria-label="Street Fighter"><img src="./sf-wordmark.png" alt="Street Fighter"></h1>');
   replaceHtml('>Preparing game…</p>', '>Preparing arena…</p>');
   replaceHtml('>Start game</button>', '>ENTER THE ARENA</button>');
   replaceHtml('</head>', `<style>
