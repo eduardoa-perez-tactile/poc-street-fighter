@@ -1,0 +1,7 @@
+guid = "b8ef223d-54ee-5558-8c5f-eb46fed2e585"
+importer = "texture"
+
+[settings]
+atlas = "fighters-ken"
+compression = "none"
+mipmaps = false

@@ -276,7 +276,12 @@ export const CombatRound = defineSystem({
         const end = duration(def, f.state);
         if ((f.state === BLOCK_HIGH || f.state === BLOCK_LOW) && f.stun === 0) { f.vx = 0; change(f, (held & DUCK) !== 0 ? CROUCH : IDLE); }
         else if (f.state === KNOCKDOWN && f.age >= end && f.y === 216 && f.vy === 0) { change(f, WAKEUP); f.invulnerable = 12; f.vx = 0; }
-        else if (isAirAttack(f.state) && f.frame >= end) change(f, f.airState);
+        else if (isAirAttack(f.state) && f.frame >= end) {
+          // An air normal has its own animation clock. Resume the jump at its
+          // ballistic age, rather than replaying takeoff while already falling.
+          const jumpFrame = Math.max(0, Math.round((f.vy - def.initialVelocity.jump) * 60 / def.gravity));
+          change(f, f.airState); f.frame = jumpFrame; f.age = jumpFrame;
+        }
         else if (looping(f.state) && f.frame >= end) f.frame = 0;
         else if (end === 0) f.frame = 0;
         else if (f.frame >= end && f.state !== KNOCKDOWN && !((f.state === DRAGON || f.state === HURRICANE) && (f.y < 216 || f.vy < 0)) && f.state !== CROUCH && f.state !== JUMP_START && !(f.state >= JUMP_UP && f.state <= JUMP_BACK)) {

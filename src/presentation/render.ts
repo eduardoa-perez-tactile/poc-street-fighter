@@ -3,7 +3,6 @@ import { ArenaVisualState, Fighter, FighterShadow, HitSpark, MatchState, Project
 import { FIGHTERS } from '../data/fighters.ts';
 import { HIT_FRAMES } from '../data/effects.ts';
 import { frameForFighter } from '../combat/index.ts';
-import { KNOCKDOWN, WAKEUP } from '../combat/moves.ts';
 import { stagePieces, pieceImage, piecePosition } from './stage-parts.ts';
 
 export const DrawStage = defineSystem({
@@ -42,14 +41,11 @@ export const DrawFighters = defineSystem({
         const frame = frameForFighter(FIGHTERS[f.fighterId[i]!]!, f.state[i]!, f.frame[i]!);
         c.setField(Sprite, i, 'image', frame.sprite); s.flipX[i] = f.facing[i]! < 0 ? 1 : 0;
         o[i * 3] = match.hitStop[0]! > 0 && f.state[i]! >= 19 && f.state[i]! <= 24 ? (tick % 2 ? 0.02 : -0.02) : 0;
-        // Reused hurt/crouch poses rotate about their authored feet pivot; only the
-        // rendered body falls. Gameplay position, hit boxes and knockdown timing stay exact.
-        const authenticFall = frame.sprite.includes('/extra-');
-        const fall = authenticFall ? 0 : f.state[i] === KNOCKDOWN ? Math.min(1, f.frame[i]! / 10) : f.state[i] === WAKEUP ? Math.max(0, 1 - f.frame[i]! / 8) : 0;
-        const angle = f.facing[i]! * Math.PI * 0.5 * fall;
-        o[i * 3 + 1] = 0.3 * fall;
+        // Original fall and recovery poses already contain their authored rotation.
+        // Their feet follow the simulation; do not rotate/raise the image again.
+        o[i * 3 + 1] = 0;
         visual.rotation[i * 4] = 0; visual.rotation[i * 4 + 1] = 0;
-        visual.rotation[i * 4 + 2] = Math.sin(angle / 2); visual.rotation[i * 4 + 3] = Math.cos(angle / 2);
+        visual.rotation[i * 4 + 2] = 0; visual.rotation[i * 4 + 3] = 1;
 
       }
     }

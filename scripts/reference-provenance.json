@@ -1,10 +1,14 @@
 {
   "repository": "https://github.com/iuritorres/street-fighter-2-javascript",
   "commit": "e1c9d48a24f446972c941d4bc714f760908c76da",
+  "baseFrameOverrides": {
+    "manifest": "scripts/base-frame-overrides.json",
+    "sha256": "9caaae841738aa0999cb00a1d3e80085bc9a0367400e8541fbd0bf34313d8f2c"
+  },
   "extraFrames": {
     "manifest": "scripts/extra-frame-crops.json",
-    "sha256": "ae50bcc79ef11f9be91d635419bc78d5ef789e5201b7d4a68ecf5dc8f8bae547",
-    "count": 52
+    "sha256": "6533a24ad19a97e77e2948679fbf85377c7b72fc91e0c0417a2ee4df79bfd3fa",
+    "count": 89
   },
   "license": "No license file present at pinned commit; reuse permissions unresolved. Street Fighter characters/art/audio remain third-party material.",
   "conversion": {

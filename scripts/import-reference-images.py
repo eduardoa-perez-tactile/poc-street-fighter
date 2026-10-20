@@ -11,6 +11,19 @@ root, source = Path(args['root']), Path(args['source'])
 namespace = uuid.UUID('0969f3d6-d175-56ed-830e-e080d41d0784')
 images = {}
 
+# Validate all fighter crops before writing any images. A valid rectangle can still
+# point at empty sheet space; that caused Ryu's body-hit animation to disappear.
+for item in args['crops']:
+    if not item['sprite'].startswith('fighters/'):
+        continue
+    name = item['image']
+    if name not in images:
+        images[name] = Image.open(source / 'images' / name).convert('RGBA')
+    x, y, w, h = item['rect']
+    assert w > 0 and h > 0, f"Empty fighter rectangle: {item['sprite']}"
+    assert x >= 0 and y >= 0 and x+w <= images[name].width and y+h <= images[name].height, item
+    assert images[name].crop((x, y, x+w, y+h)).getchannel('A').getbbox(), f"Transparent fighter crop: {item['sprite']} {item['rect']}"
+
 def meta(path, importer, settings):
     relative = path.relative_to(root).as_posix()
     guid = uuid.uuid5(namespace, relative)

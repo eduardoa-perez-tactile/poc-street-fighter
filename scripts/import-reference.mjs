@@ -28,10 +28,16 @@ function field(text, key, end) {
   return vm.runInContext(`(${text.slice(from, to)})`, context);
 }
 const crops = [];
+// Correct inspected errors in the pinned source without modifying that checkout.
+const baseOverrideBytes = readFileSync(resolve(root, 'scripts/base-frame-overrides.json'));
+const baseOverrides = JSON.parse(baseOverrideBytes.toString('utf8'));
 const fighters = ['Ryu', 'Ken'].map(name => {
   const text = read(`src/entities/fighters/${name}.js`);
   const frames = Object.fromEntries([...field(text, 'frames', ']);')].map(([key, [geometry, push, hurt, hit]]) => {
-    const [rect, origin] = geometry;
+    const [sourceRect, origin] = geometry;
+    const override = baseOverrides[name.toLowerCase()]?.[key];
+    const rect = override?.rect ?? sourceRect;
+    if (override?.hurtHeadY !== undefined) hurt[0][1] = override.hurtHeadY;
     const sprite = `fighters/${name.toLowerCase()}/${key}`;
     crops.push({ sprite, image: `${name.toLowerCase()}.png`, rect, origin, canvas: [256, 256], pivot: [128, 224] });
     return [key, { sprite, rect, origin, push, hurt, hit: hit ?? [0, 0, 0, 0] }];
@@ -129,5 +135,5 @@ const python = spawnSync('python3', [resolve(root, 'scripts/import-reference-ima
 if (python.status !== 0) throw new Error(python.stderr || 'Image conversion failed');
 const imageInputs = [...new Set(crops.map(c => `images/${c.image}`)), ...sounds.map(s => `sounds/${s}`)];
 const inputs = [...new Set([...trackedInputs, ...imageInputs])].sort().map(path => ({ path, sha256: createHash('sha256').update(readFileSync(resolve(source, path))).digest('hex') }));
-writeFileSync(resolve(root, 'scripts/reference-provenance.json'), JSON.stringify({ repository: 'https://github.com/iuritorres/street-fighter-2-javascript', commit: sha, extraFrames, license: 'No license file present at pinned commit; reuse permissions unresolved. Street Fighter characters/art/audio remain third-party material.', conversion: { fighterCanvas: [256, 256], fighterFeetPivot: [128, 224], effectCanvas: [128, 128], effectPivot: [64, 64], resampling: 'none', stageBackgroundKey: [83, 103, 141], decalsBackgroundKey: [42, 81, 114], shadowBackgroundKey: [27, 2, 218] }, inputs }, null, 2) + '\n');
+writeFileSync(resolve(root, 'scripts/reference-provenance.json'), JSON.stringify({ repository: 'https://github.com/iuritorres/street-fighter-2-javascript', commit: sha, baseFrameOverrides: { manifest: 'scripts/base-frame-overrides.json', sha256: createHash('sha256').update(baseOverrideBytes).digest('hex') }, extraFrames, license: 'No license file present at pinned commit; reuse permissions unresolved. Street Fighter characters/art/audio remain third-party material.', conversion: { fighterCanvas: [256, 256], fighterFeetPivot: [128, 224], effectCanvas: [128, 128], effectPivot: [64, 64], resampling: 'none', stageBackgroundKey: [83, 103, 141], decalsBackgroundKey: [42, 81, 114], shadowBackgroundKey: [27, 2, 218] }, inputs }, null, 2) + '\n');
 console.log(`Imported ${fighters.map(f => Object.keys(f.frames).length).join(' + ')} fighter frames, ${Object.keys(stageFrames).length} stage frames, ${sounds.length} sounds; ${crops.length} cropped sprites.`);
