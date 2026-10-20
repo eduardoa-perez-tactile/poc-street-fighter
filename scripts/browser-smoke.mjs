@@ -178,15 +178,13 @@ try {
   await page.keyboard.press('Escape'); await advance(4); // Options -> Main, focus OPTIONS.
   await virtualPad(); await padPulse(12); await padPulse(12); // D-pad UP twice -> LOCAL.
   await padPulse(0); await shot('01-local-setup');
-  await padPulse(0); // Confirm P1, then P2 independently.
-  await padPulse(0);
-  await padPulse(15); // W3C D-pad RIGHT selects Guile's stage.
-  await padPulse(13); // Stage row -> Fight.
+  // Skip character and stage confirmations: Fight accepts the displayed selections.
+  for (let row = 0; row < 3; row++) await padPulse(13);
   await padPulse(9); await advance(8); await shot('01-versus');
   await advance(200);
   await shot('02-fight', { art: true });
   assert.equal(await page.evaluate(() => globalThis.__sfBrowserOptions.controllers), 1);
-  check('local match starts through standard controller START', await state());
+  check('Fight starts local match without character or stage confirmation', await state());
   await virtualPad([], [0.25, 0]); await advance(8); await virtualPad(); await advance(4);
   await padPulse(14); await padPulse(0); await padPulse(8);
   check('controller stick, D-pad, attack and throw input exercised', 'Real browser queue receives canonical SDL button/axis events from the virtual W3C device.');
@@ -248,8 +246,7 @@ try {
   await page.keyboard.press('Enter'); await advance(5); await shot('11-return-main');
   for (let i = 0; i < 2; i++) { await page.keyboard.press('ArrowDown'); await advance(2); }
   await page.keyboard.press('Enter'); await advance(4); await shot('12-training-setup');
-  await page.keyboard.press('Enter'); await advance(4); // Confirm the training fighter.
-  await page.keyboard.press('ArrowDown'); await advance(2); // Stage -> Fight.
+  for (let row = 0; row < 3; row++) { await page.keyboard.press('ArrowDown'); await advance(2); }
   await page.keyboard.press('Enter'); await advance(12);
   await shot('12-training', { art: true });
   await clickCanvas(0.908, 0.951); await shot('12-training-collision-boxes', { art: true });
@@ -257,7 +254,7 @@ try {
   await hold(['d'], 350); await hold(['s', 'n'], 100); await advance(55);
   await shot('13-training-attack', { art: true });
   await clickCanvas(0.771, 0.951); await clickCanvas(0.908, 0.951);
-  check('training mode selects and runs without round intro', await state());
+  check('Fight starts training without character or stage confirmation or round intro', await state());
   await page.keyboard.press('Escape'); await advance(4); await shot('13-pause-menu');
   await page.keyboard.press('ArrowDown'); await advance(2); await page.keyboard.press('Enter'); await advance(4);
   await shot('13-move-list'); await page.keyboard.press('Escape'); await advance(4);
@@ -271,12 +268,11 @@ try {
   await page.keyboard.press('ArrowDown'); await advance(2); await page.keyboard.press('ArrowDown'); await advance(2);
   await page.keyboard.press('Enter'); await advance(5); // Main menu, cursor SOLO.
   await page.keyboard.press('Enter'); await advance(4); await shot('14-solo-setup');
-  await page.keyboard.press('Enter'); await advance(2); // Lock P1; CPU is already ready.
-  await page.keyboard.press('ArrowDown'); await advance(2); // Stage -> Difficulty.
+  for (let row = 0; row < 3; row++) { await page.keyboard.press('ArrowDown'); await advance(2); } // Difficulty.
   await page.keyboard.press('ArrowRight'); await advance(2);
   await page.keyboard.press('ArrowDown'); await advance(2); // Difficulty -> Fight.
   await page.keyboard.press('Enter'); await advance(440); await shot('14-solo-cpu', { art: true });
-  check('solo difficulty setup and autonomous CPU exercised', 'Difficulty cycle then five seconds without P2 controls; CPU damage recorded in screenshot.');
+  check('Fight starts solo without character or stage confirmation', 'Only difficulty changed; Enter on Fight starts the match, followed by five seconds of autonomous CPU.');
   check('pause, move list and options navigation', 'Actual keyboard routes through pause/moves/options/back/main; audio levels changed and restored.');
   const audioRunning = report.audio.some(value => value.contextType === 'realtime' && value.contextState === 'running');
   assert.ok(audioRunning, 'No running real-time WebAudio context observed after user startup and match audio.');

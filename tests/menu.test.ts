@@ -5,6 +5,34 @@ function command(world: TestWorld, input: TestInput, action: number, value = 0, 
   input.emit(MenuIntent, { action, value, screen, id: world.resource(MenuState).lastIntent + 1 });
 }
 function first(world: TestWorld) { const e = world.entities(Fighter).find(e => world.get(e, Fighter).player === 0)!; return world.get(e, Fighter); }
+for (const [mode, name] of ['solo', 'local versus', 'training'].entries()) {
+  worldTest(`menu: physical Enter on Fight accepts current selections in ${name}`, async ({ loaded, world, input, step }) => {
+    await loaded(); await step(2);
+    const press = async (code: number) => { input.key(code, true); await step(2); input.key(code, false); await step(2); };
+    // A held Enter must open only the main menu, never confirm another screen.
+    input.key(38, true); await step(20);
+    expect(world.resource(MenuState).screen).toBe(MENU_SCREEN.main);
+    input.key(38, false); await step(2);
+    for (let row = 0; row < mode; row++) await press(53);
+    await press(38);
+    expect(world.resource(MenuState).screen).toBe(MENU_SCREEN.setup);
+    expect(world.resource(MatchState).mode).toBe(mode);
+    const selection = world.resource(MatchState);
+    expect(world.resource(MenuState).p1Ready).toBe(false);
+    if (mode === 1) expect(world.resource(MenuState).p2Ready).toBe(false);
+    const fightRow = mode === 0 ? 4 : 3;
+    for (let row = 0; row < fightRow; row++) await press(53);
+    expect(world.resource(MenuState).cursor).toBe(fightRow);
+    expect(world.resource(MenuState).p1Ready).toBe(false);
+    await press(38);
+    expect(world.resource(MatchState).phase).toBe(mode === 2 ? 1 : 6);
+    expect(world.resource(MenuState).p1Ready).toBe(true);
+    expect(world.resource(MenuState).p2Ready).toBe(true);
+    expect(world.resource(MatchState).p1Fighter).toBe(selection.p1Fighter);
+    expect(world.resource(MatchState).p2Fighter).toBe(selection.p2Fighter);
+    expect(world.resource(MatchState).stageId).toBe(selection.stageId);
+  });
+}
 worldTest('menu: physical Enter locks fighters before starting versus and round intro', async ({ loaded, world, input, step }) => {
   await loaded(); await step(2);
   const enter = async () => { input.key(38, true); await step(2); input.key(38, false); await step(2); };
@@ -121,7 +149,6 @@ worldTest('menu: pointer audio adjustments focus the edited row and remain bound
 
 worldTest('menu: local seats lock independently and swapping fighter unlocks both seats', async ({ loaded, world, input, step }) => {
   await loaded(); await step(2); command(world, input, 7, 1); await step(1); command(world, input, 6, 1); await step(2);
-  command(world, input, 6, 3); await step(2); expect(world.resource(MatchState).phase).toBe(0);
   command(world, input, 6, 0); await step(1); expect(world.resource(MenuState).p1Ready).toBe(true); expect(world.resource(MenuState).p2Ready).toBe(false);
   command(world, input, 6, 1); await step(1); expect(world.resource(MenuState).p2Ready).toBe(true);
   command(world, input, 2); await step(1); command(world, input, 4); await step(1);
