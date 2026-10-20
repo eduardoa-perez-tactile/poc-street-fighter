@@ -23,6 +23,15 @@ for item in args['crops']:
     assert w > 0 and h > 0, f"Empty fighter rectangle: {item['sprite']}"
     assert x >= 0 and y >= 0 and x+w <= images[name].width and y+h <= images[name].height, item
     assert images[name].crop((x, y, x+w, y+h)).getchannel('A').getbbox(), f"Transparent fighter crop: {item['sprite']} {item['rect']}"
+    if '/extra-air-' in item['sprite']:
+        # Air poses are tightly bounded source components. An opaque pair across
+        # a crop edge cuts a connected limb even when the resulting PNG is visible.
+        alpha = images[name].getchannel('A')
+        edges = [((x, yy), (x-1, yy)) for yy in range(y, y+h) if x > 0]
+        edges += [((x+w-1, yy), (x+w, yy)) for yy in range(y, y+h) if x+w < alpha.width]
+        edges += [((xx, y), (xx, y-1)) for xx in range(x, x+w) if y > 0]
+        edges += [((xx, y+h-1), (xx, y+h)) for xx in range(x, x+w) if y+h < alpha.height]
+        assert not any(alpha.getpixel(inside) and alpha.getpixel(outside) for inside, outside in edges), f"Clipped air pose: {item['sprite']} {item['rect']}"
 
 def meta(path, importer, settings):
     relative = path.relative_to(root).as_posix()

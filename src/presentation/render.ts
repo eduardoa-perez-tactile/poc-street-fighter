@@ -1,8 +1,7 @@
 import { defineSystem, query, read, Sprite, VisualOffset, WorldView, write } from '@gameengine/runtime';
 import { ArenaVisualState, Fighter, FighterShadow, HitSpark, MatchState, Projectile, StagePart } from '../schema.gen.ts';
-import { FIGHTERS } from '../data/fighters.ts';
 import { HIT_FRAMES } from '../data/effects.ts';
-import { frameForFighter } from '../combat/index.ts';
+import { fighterFrame } from '../combat/index.ts';
 import { stagePieces, pieceImage, piecePosition } from './stage-parts.ts';
 
 export const DrawStage = defineSystem({
@@ -38,7 +37,7 @@ export const DrawFighters = defineSystem({
     for (const c of q.chunks()) {
       const f = c.col(Fighter), s = c.col(Sprite), visual = c.col(VisualOffset), o = visual.position;
       for (let i = 0; i < c.length; i++) {
-        const frame = frameForFighter(FIGHTERS[f.fighterId[i]!]!, f.state[i]!, f.frame[i]!);
+        const frame = fighterFrame({ fighterId: f.fighterId[i]!, state: f.state[i]!, frame: f.frame[i]!, airState: f.airState[i]! });
         c.setField(Sprite, i, 'image', frame.sprite); s.flipX[i] = f.facing[i]! < 0 ? 1 : 0;
         o[i * 3] = match.hitStop[0]! > 0 && f.state[i]! >= 19 && f.state[i]! <= 24 ? (tick % 2 ? 0.02 : -0.02) : 0;
         // Original fall and recovery poses already contain their authored rotation.

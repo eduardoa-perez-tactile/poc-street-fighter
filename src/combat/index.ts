@@ -2,7 +2,7 @@
 import { defineSystem, query, read, write, type EntityId, type SystemContext } from '@gameengine/runtime';
 import { CombatEffect, CombatInput, Fighter, MatchIntent, MatchState, Projectile, type FighterValue, type ProjectileValue, type CombatInputViews, type MatchStateViews } from '../schema.gen.ts';
 import { FIGHTERS } from '../data/fighters.ts';
-import { AIR_ATTACK, BLOCK_HIGH, BLOCK_LOW, CROUCH_ATTACK, DRAGON, HURRICANE, KNOCKDOWN, THROW, THROW_TECH, WAKEUP, extendedDuration, extendedFrame, isAirAttack, isCrouchAttack, motionMatches, moveForState } from './moves.ts';
+import { AIR_ATTACK, BLOCK_HIGH, BLOCK_LOW, CROUCH_ATTACK, DRAGON, HURRICANE, KNOCKDOWN, THROW, THROW_TECH, WAKEUP, extendedDuration, extendedFrame, isAirAttack, isCrouchAttack, motionMatches, moveForState, type AirPoseContext } from './moves.ts';
 import type { Box, FighterDefinition, FighterFrame } from '../data/fighter-types.ts';
 
 export const STATE_NAMES = Object.freeze([
@@ -37,11 +37,15 @@ export function animationEntry(def: FighterDefinition, state: number, frame: num
   }
   return animation.length - 1;
 }
-export function frameForFighter(def: FighterDefinition, state: number, frame: number): FighterFrame {
-  const extra = extendedFrame(def, state, frame);
+export function frameForFighter(def: FighterDefinition, state: number, frame: number, context?: AirPoseContext): FighterFrame {
+  const extra = extendedFrame(def, state, frame, context);
   if (extra) return extra;
   const animation = def.animations[STATE_NAMES[state]!] ?? def.animations.idle!;
   return def.frames[animation[animationEntry(def, state, frame)]![0]]!;
+}
+/** Live fighters provide jump context to both drawing and collision selection. */
+export function fighterFrame(f: Pick<FighterValue, 'fighterId' | 'state' | 'frame' | 'airState'>): FighterFrame {
+  return frameForFighter(FIGHTERS[f.fighterId]!, f.state, f.frame, f);
 }
 function duration(def: FighterDefinition, state: number): number {
   const extra = extendedDuration(state);
@@ -69,7 +73,7 @@ export function overlaps(a: Box, b: Box): boolean {
 }
 function hitRegion(hit: Box, target: FighterValue): number {
   if (target.invulnerable > 0 || target.state === KNOCKDOWN) return -1;
-  const hurt = frameForFighter(FIGHTERS[target.fighterId]!, target.state, target.frame).hurt;
+  const hurt = fighterFrame(target).hurt;
   // Inspect every hurt box; a missed head does not skip a valid body/feet contact.
   for (let i = 0; i < hurt.length; i++) if (overlaps(hit, actualBox(hurt[i]!, target.x, target.y, target.facing))) return i;
   return -1;
@@ -276,12 +280,9 @@ export const CombatRound = defineSystem({
         const end = duration(def, f.state);
         if ((f.state === BLOCK_HIGH || f.state === BLOCK_LOW) && f.stun === 0) { f.vx = 0; change(f, (held & DUCK) !== 0 ? CROUCH : IDLE); }
         else if (f.state === KNOCKDOWN && f.age >= end && f.y === 216 && f.vy === 0) { change(f, WAKEUP); f.invulnerable = 12; f.vx = 0; }
-        else if (isAirAttack(f.state) && f.frame >= end) {
-          // An air normal has its own animation clock. Resume the jump at its
-          // ballistic age, rather than replaying takeoff while already falling.
-          const jumpFrame = Math.max(0, Math.round((f.vy - def.initialVelocity.jump) * 60 / def.gravity));
-          change(f, f.airState); f.frame = jumpFrame; f.age = jumpFrame;
-        }
+        // An air normal ends in its recovered aerial pose until landing. Resuming
+        // the somersault here would snap the body upside down and allow a second normal.
+        else if (isAirAttack(f.state)) f.frame = Math.min(f.frame, end);
         else if (looping(f.state) && f.frame >= end) f.frame = 0;
         else if (end === 0) f.frame = 0;
         else if (f.frame >= end && f.state !== KNOCKDOWN && !((f.state === DRAGON || f.state === HURRICANE) && (f.y < 216 || f.vy < 0)) && f.state !== CROUCH && f.state !== JUMP_START && !(f.state >= JUMP_UP && f.state <= JUMP_BACK)) {
@@ -359,7 +360,7 @@ export const CombatRound = defineSystem({
       }
     }
     const a = fighters[0]!, b = fighters[1]!;
-    const boxA = actualBox(frameForFighter(FIGHTERS[a.fighterId]!, a.state, a.frame).push, a.x, a.y, a.facing), boxB = actualBox(frameForFighter(FIGHTERS[b.fighterId]!, b.state, b.frame).push, b.x, b.y, b.facing);
+    const boxA = actualBox(fighterFrame(a).push, a.x, a.y, a.facing), boxB = actualBox(fighterFrame(b).push, b.x, b.y, b.facing);
     if (overlaps(boxA, boxB)) {
       const sign = a.x <= b.x ? 1 : -1, overlap = sign === 1 ? boxA[0] + boxA[2] - boxB[0] : boxB[0] + boxB[2] - boxA[0];
       const oldA = a.x, oldB = b.x;
@@ -375,7 +376,7 @@ export const CombatRound = defineSystem({
     for (const f of fighters) {
       const target = fighters[1 - f.player]!, move = moveForState(f.state);
       if (f.attackHit || !(f.state >= FIRST_ATTACK && f.state <= LAST_ATTACK || move)) continue;
-      const hit = actualBox(frameForFighter(FIGHTERS[f.fighterId]!, f.state, f.frame).hit, f.x, f.y, f.facing);
+      const hit = actualBox(fighterFrame(f).hit, f.x, f.y, f.facing);
       const thrown = f.state === THROW;
       const region = thrown ? (f.frame >= 5 && f.frame < 7 && target.y === 216 && target.throwCooldown === 0 && target.invulnerable === 0 && target.state !== KNOCKDOWN && target.state !== WAKEUP && Math.abs(target.x - f.x) <= 42 ? 1 : -1) : hitRegion(hit, target);
       if (region >= 0) {

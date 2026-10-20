@@ -206,6 +206,22 @@ try {
     await padPulse(14); await padPulse(0); await padPulse(8);
   } finally { await virtualPad(); await advance(4); await cdp.send('Emulation.setFocusEmulationEnabled', { enabled: false }); }
   check('controller stick, D-pad, attack and throw input exercised', 'Real browser queue receives canonical SDL button/axis events from the virtual W3C device with standard CDP focus; native visibility restored afterward.');
+  // Exercise every air normal through the real browser keyboard queue. Neutral
+  // and backward jumps select both original pose families without crossing seats.
+  await advance(70); // Finish the controller fixture's throw before the first jump.
+  for (const [player, jump, back, keys] of [[1, 'w', 'a', ['f', 'g', 'h', 'v', 'b', 'n']], [2, 'ArrowUp', 'ArrowRight', ['j', 'k', 'l', 'u', 'i', 'o']]]) {
+    for (const direction of ['neutral', 'back']) for (const [button, key] of keys.entries()) {
+      await page.keyboard.down(jump);
+      if (direction === 'back') await page.keyboard.down(back);
+      await advance(9);
+      await page.keyboard.up(jump);
+      if (direction === 'back') await page.keyboard.up(back);
+      await page.keyboard.down(key); await advance(6 + 2 * (button % 3)); await page.keyboard.up(key);
+      await shot(`02-air-p${player}-${direction}-${['lp', 'mp', 'hp', 'lk', 'mk', 'hk'][button]}`, { art: true, fight: true });
+      await advance(60);
+    }
+  }
+  check('all six air punches and kicks exercised for both fighters and pose families', 'Twenty-four actual keyboard jumps with reviewed strike captures; native/render tests assert every startup, strike, retraction and landing pose, including forward jumps.');
   await hold(['d']); await hold(['ArrowLeft']);
   await hold(['w'], 70); await hold(['ArrowUp'], 70); await advance(60);
   await hold(['s'], 100); await hold(['ArrowDown'], 100);

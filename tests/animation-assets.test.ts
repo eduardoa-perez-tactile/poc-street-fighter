@@ -1,5 +1,5 @@
 import { expect, worldTest } from '@gameengine/test';
-import { animationEntry, frameForFighter, STATE_NAMES } from '../src/combat/index.ts';
+import { animationEntry, fighterFrame, frameForFighter, STATE_NAMES } from '../src/combat/index.ts';
 import { AIR_ATTACK, BLOCK_HIGH, CROUCH_ATTACK, DRAGON, HURRICANE, THROW, WAKEUP, extendedDuration, moveForState } from '../src/combat/moves.ts';
 import { EXTENDED_FRAMES } from '../src/data/extended-frames.ts';
 import { FIGHTERS } from '../src/data/fighters.ts';
@@ -132,7 +132,7 @@ worldTest('animation assets: stomach recoil head regions remain above the floor'
   expect(errors).toEqual([]);
 });
 
-worldTest('animation assets: descending air normals resume descending jump poses', async ({ loaded, world, input, step }) => {
+worldTest('animation assets: descending air normals hold recovered attack poses until landing', async ({ loaded, world, input, step }) => {
   await loaded(); await step(2);
   world.setResource(MatchState, { mode: 1 }); input.emit(MatchIntent, { action: 0 }); await step(190);
   const fighters = world.entities(Fighter);
@@ -145,9 +145,12 @@ worldTest('animation assets: descending air normals resume descending jump poses
     await step(1);
     for (const entity of fighters) {
       const f = world.get(entity, Fighter);
-      expect(f.state).toBe(airState); expect(f.y).toBeGreaterThan(150); expect(f.y).toBeLessThan(216);
-      expect(f.frame).toBeGreaterThan(20);
-      expect(animationEntry(FIGHTERS[f.fighterId]!, f.state, f.frame)).toBeGreaterThan(2);
+      expect(f.state).toBe(AIR_ATTACK); expect(f.y).toBeGreaterThan(150); expect(f.y).toBeLessThan(216);
+      const family = airState === 4 ? 'neutral' : 'diagonal';
+      expect(fighterFrame(f).sprite.endsWith(`/extra-air-${family}-punch-ready`)).toBe(true);
+      expect(fighterFrame(f).hit).toEqual([0, 0, 0, 0]);
     }
+    await step(20);
+    for (const entity of fighters) expect(world.get(entity, Fighter).y).toBe(216);
   }
 });

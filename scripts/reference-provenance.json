@@ -7,8 +7,8 @@
   },
   "extraFrames": {
     "manifest": "scripts/extra-frame-crops.json",
-    "sha256": "6533a24ad19a97e77e2948679fbf85377c7b72fc91e0c0417a2ee4df79bfd3fa",
-    "count": 89
+    "sha256": "884c8e06a986794b8b0da5926cc8a90f463bd1ca58c7aeb1bd2243146a9829ec",
+    "count": 95
   },
   "license": "No license file present at pinned commit; reuse permissions unresolved. Street Fighter characters/art/audio remain third-party material.",
   "conversion": {

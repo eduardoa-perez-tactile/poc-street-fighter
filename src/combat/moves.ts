@@ -8,6 +8,7 @@ export interface Move {
   duration: number; startup: number; active: number; strength: number; attack: number;
   height: 'mid' | 'low' | 'high'; knockdown: boolean; hit: Box;
 }
+export interface AirPoseContext { airState: number }
 export function isAirAttack(state: number): boolean { return state >= AIR_ATTACK && state < THROW; }
 export function isCrouchAttack(state: number): boolean { return state >= CROUCH_ATTACK && state < AIR_ATTACK; }
 export function moveForState(state: number): Move | undefined {
@@ -25,7 +26,7 @@ export function moveForState(state: number): Move | undefined {
 export function extendedDuration(state: number): number | undefined {
   return moveForState(state)?.duration ?? (state === KNOCKDOWN ? 45 : state === WAKEUP ? 12 : state === THROW_TECH ? 18 : state === BLOCK_HIGH || state === BLOCK_LOW ? 9999 : undefined);
 }
-export function extendedFrame(def: FighterDefinition, state: number, frame: number): FighterFrame | undefined {
+export function extendedFrame(def: FighterDefinition, state: number, frame: number, context?: AirPoseContext): FighterFrame | undefined {
   const move = moveForState(state);
   let key: string;
   if (state === BLOCK_HIGH) key = 'extra-block-high';
@@ -45,16 +46,39 @@ export function extendedFrame(def: FighterDefinition, state: number, frame: numb
     } else key = button < 2 ? active ? 'extra-crouch-punch-3' : frame < move!.startup ? 'extra-crouch-punch-1' : 'extra-crouch-punch-2' : active ? `extra-crouch-kick-${button === 5 ? 3 : 2}` : 'extra-crouch-kick-1';
   }
   else if (isAirAttack(state)) {
-    const button = state - AIR_ATTACK;
-    key = frame < move!.startup ? 'jump-up-2' : frame >= move!.startup + move!.active ? 'jump-up-3' : button < 3 ? `extra-air-punch-${button + 1}` : `extra-air-kick-${button - 2}`;
+    const button = state - AIR_ATTACK, family = context?.airState === 5 || context?.airState === 6 ? 'diagonal' : 'neutral';
+    const retract = [3, 4, 5][move!.strength]!;
+    // Strength changes timing, not which preparation pose is mistaken for a strike.
+    // Keep the extended limb visible after contact, then retract for the rest of the flight.
+    let pose = frame < move!.startup || frame >= move!.duration - retract ? 'ready' : 'strike';
+    if (family === 'diagonal' && button >= 3 && pose === 'ready' &&
+        (frame < move!.startup ? frame >= Math.ceil(move!.startup / 2) : frame < move!.duration - Math.ceil(retract / 2))) pose = 'tuck';
+    key = `extra-air-${family}-${button < 3 ? 'punch' : 'kick'}-${pose}`;
   } else return undefined;
   const authored = (EXTENDED_FRAMES[def.name === 'Ken' ? 1 : 0] as Readonly<Record<string, Pick<FighterFrame, 'sprite' | 'rect' | 'origin'>>>)[key];
   const base = authored ? { ...def.frames['idle-1']!, ...authored } : def.frames[key];
   if (!base) throw new Error(`Missing authored fighter pose: ${def.name}/${key}`);
   const hit: Box = move && frame >= move.startup && frame < move.startup + move.active ? move.hit : [0, 0, 0, 0];
   // Hurt geometry follows posture with separately authored collision geometry for the newly playable source poses.
-  const posture = isCrouchAttack(state) || state === BLOCK_LOW ? def.frames['crouch-3']! : isAirAttack(state) ? def.frames['jump-up-2']! : base;
+  const posture = isCrouchAttack(state) || state === BLOCK_LOW ? def.frames['crouch-3']! : base;
+  if (isAirAttack(state)) return { ...base, ...airGeometry(base, state - AIR_ATTACK, hit[2] > 0) };
   return { ...base, push: posture.push, hurt: posture.hurt, hit };
+}
+
+/** Gameplay boxes in the same hip-aligned coordinates as each inspected air pose. */
+function airGeometry(pose: FighterFrame, button: number, active: boolean): Pick<FighterFrame, 'push' | 'hurt' | 'hit'> {
+  const [, , width, height] = pose.rect, [ox, oy] = pose.origin;
+  const left = -ox, top = -oy, bottom = top + height, right = left + width;
+  const head: Box = [Math.max(left, -14), top + 2, Math.min(26, width - 4), 18];
+  const body: Box = [Math.max(left, -22), top + 20, Math.min(42, width - 4), Math.min(36, height - 22)];
+  const feet: Box = [Math.max(left, -24), Math.max(top + 40, bottom - 22), Math.min(width - 4, button >= 3 ? 62 : 38), 20];
+  // Follow the extended fist or shin; readiness/retraction never deal damage.
+  const hit: Box = !active ? [0, 0, 0, 0] : button < 3
+    ? [Math.max(8, right - 34), top + 20, Math.min(34, width - 8), 30]
+    : pose.sprite.includes('-neutral-kick-')
+      ? [8, top + 2, Math.max(0, right - 10), Math.min(60, height - 4)]
+      : [Math.max(8, right - 52), bottom - 38, Math.min(52, width - 8), 32];
+  return { push: [-16, Math.max(top + 20, -91), 32, Math.min(66, height - 20)], hurt: [head, body, feet], hit };
 }
 
 /** Match a bounded suffix, allowing repeated/neutral input but no unrelated directional inputs. */

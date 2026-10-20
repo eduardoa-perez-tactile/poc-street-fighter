@@ -1,7 +1,6 @@
 import { defineSystem, LocalTransform, PlayMusic, PlaySound, query, read, Sprite, VisualOffset, without, WorldViewFollow, write } from '@gameengine/runtime';
 import { ArenaFocus, ArenaVisualState, CombatEffect, Fighter, FighterShadow, HitSpark, DebugBox, MatchState, Projectile, RenderBound } from '../schema.gen.ts';
-import { FIGHTERS } from '../data/fighters.ts';
-import { frameForFighter } from '../combat/index.ts';
+import { fighterFrame } from '../combat/index.ts';
 import { stagePieces, STAGE_SLOT_COUNT, piecePosition } from './stage-parts.ts';
 
 export const SetupArena = defineSystem({
@@ -36,7 +35,7 @@ export const BindCombatSprites = defineSystem({
   runIf: { any: [{ query: query(read(Fighter), without(RenderBound)) }, { query: query(read(Projectile), without(RenderBound)) }] },
   run(ctx, q) {
     for (const c of q.fighters.chunks()) for (let i = 0; i < c.length; i++) {
-      const f = c.get(Fighter, i), frame = frameForFighter(FIGHTERS[f.fighterId]!, f.state, f.frame), entity = c.entity(i);
+      const f = c.get(Fighter, i), frame = fighterFrame(f), entity = c.entity(i);
       ctx.commands.insert(entity, RenderBound, { kind: 0 });
       ctx.commands.insert(entity, LocalTransform, { position: [f.x / 100, (216 - f.y) / 100, 0] });
       ctx.commands.insert(entity, VisualOffset, {});
